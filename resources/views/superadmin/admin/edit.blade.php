@@ -14,7 +14,7 @@
                 </div>
                 <a href="{{ url('admin') }}" class="btn btn-sm btn-default mt 2">Kembali</a>
             @else
-                <form method="POST" action="{{ url('/admin/' . $admin->no) }}" class="form-horizontal">
+                <form method="POST" action="{{ url('/admin/' . $admin->admin_id) }}" class="form-horizontal">
                     @csrf
                     {!! method_field('PUT') !!}
                     <div class="form-group row">

@@ -79,6 +79,7 @@
 
 @push('js')
 <script>
+    
     $(document).ready(function() {
         var dataTable = $('#table_m_cadangan_potensi').DataTable({
             serverSide: true,
@@ -87,6 +88,7 @@
                 "type": "POST",
                 "data": function(d) {
                     d._token = '{{ csrf_token() }}';
+                    d.name = '{{ request()->get("name", "tuban") }}';
                     d.komoditi = $('#komoditi').val(); // Use the correct filter value
                 }
             },

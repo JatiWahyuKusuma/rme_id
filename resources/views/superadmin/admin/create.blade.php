@@ -20,12 +20,16 @@
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Opco ID</label>
                     <div class="col-11">
-                        <select class="form-control" id="nama_opco" name="nama_opco" required>
+                        <select class="form-control" id="opco_id" name="opco_id" required>
                             <option value="">-- Pilih Opco --</option>
-                            <option value="2" {{ old('nama_opco') == '2' ? 'selected' : '' }}>Admin</option>
+                            <option value="1" {{ old('opco_id') == '1' ? 'selected' : '' }}>GHOPO Tuban</option>
+                            <option value="2" {{ old('opco_id') == '2' ? 'selected' : '' }}>SG Rembang</option>
                         </select>
-                        @error('level_id')
+                        @error('opco_id')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>

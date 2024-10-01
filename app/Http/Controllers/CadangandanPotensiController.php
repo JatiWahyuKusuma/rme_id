@@ -8,7 +8,7 @@ use Yajra\DataTables\DataTables;
 
 class CadangandanPotensiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $breadcrumb = (object) [
             'title' => 'Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
@@ -19,7 +19,13 @@ class CadangandanPotensiController extends Controller
             'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'
         ];
 
-        $activeMenu = 'cadpot';
+        $activeMenu = '';
+        $name = $request->get('name', 'tuban');
+        if ($name == 'tuban') {
+            $activeMenu = 'cadpot_tuban';
+        } elseif ($name == 'rembang') {
+            $activeMenu = 'cadpot_rembang';
+        }
 
         $cadpot = CadangandanPotensiModel::all();
 
@@ -29,7 +35,14 @@ class CadangandanPotensiController extends Controller
     public function list(Request $request)
     {
         
-        $cadpot = CadangandanPotensiModel::select('cadpot_id','opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan','sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
+        $name = $request->get('name');
+        $cadpot = CadangandanPotensiModel::select('cadpot_id', 'opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan', 'sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
+        if ($name == 'tuban') {
+            $cadpot->where('opco_id', 1); // For Tuban
+        } elseif ($name == 'rembang') {
+            $cadpot->where('opco_id', 2); // For Rembang
+        }
+
         if ($request->komoditi) {
             $cadpot->where('komoditi', $request->komoditi);
         }
@@ -59,15 +72,16 @@ class CadangandanPotensiController extends Controller
             'title' => 'Tambah data Cadangan / Potensi Bahan Baku baru'
         ];
 
-        $cadanganghopo = CadangandanPotensiModel::all();
-        $activeMenu = 'cadanganghopo';
+        $cadpot = CadangandanPotensiModel::all();
+        $activeMenu = 'cadpot';
 
-        return view('AdminGhopo.Cadangan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadanganghopo' => $cadanganghopo, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Cadangan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
             'latitude' => 'required|numeric', 
             'longitude' => 'required|numeric',
@@ -88,6 +102,7 @@ class CadangandanPotensiController extends Controller
         ]);
 
         CadangandanPotensiModel::create([
+            'opco_id' => $request->opco_id,
             'jarak' => $request->jarak,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
@@ -107,12 +122,12 @@ class CadangandanPotensiController extends Controller
 
         ]);
 
-        return redirect('/cadanganghopo')->with('success', 'Data berhasil ditambahkan');
+        return redirect('/cadpot')->with('success', 'Data berhasil ditambahkan');
     }
 
     public function show($id)
     {
-        $cadanganghopo = CadangandanPotensiModel::find($id);
+        $cadpot = CadangandanPotensiModel::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail Data GHOPO Cadangan dan Potensi Bahan Baku di SIG',
@@ -123,14 +138,14 @@ class CadangandanPotensiController extends Controller
             'title' => ''
         ];
 
-        $activeMenu = 'cadanganghopo';
+        $activeMenu = 'cadpot';
 
-        return view('AdminGhopo.Cadangan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadanganghopo' => $cadanganghopo, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Cadangan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu]);
     }
 
     public function edit($id)
     {
-        $cadanganghopo = CadangandanPotensiModel::find($id);
+        $cadpot = CadangandanPotensiModel::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Edit Data Cadangan atau Potensi Bahan Baku',
@@ -141,14 +156,15 @@ class CadangandanPotensiController extends Controller
             'title' => ''
         ];
 
-        $activeMenu = 'cadanganghopo';
+        $activeMenu = 'cadpot';
 
-        return view('AdminGhopo.Cadangan.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadanganghopo' => $cadanganghopo, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Cadangan.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
+            'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
             'latitude' => 'required|numeric', 
             'longitude' => 'required|numeric',
@@ -168,6 +184,7 @@ class CadangandanPotensiController extends Controller
         ]);
 
         CadangandanPotensiModel::find($id)->update([
+            'opco_id' => $request->opco_id,
             'jarak' => $request->jarak,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
@@ -185,21 +202,21 @@ class CadangandanPotensiController extends Controller
             'masa_berlaku_iup' => $request->masa_berlaku_iup,
             'masa_berlaku_ppkh' => $request->masa_berlaku_ppkh
         ]);
-        return redirect('/cadanganghopo')->with('success', 'Data berhasil diubah');
+        return redirect('/cadpot')->with('success', 'Data berhasil diubah');
     }
     public function destroy($id)
     {
         $check = CadangandanPotensiModel::find($id);
 
         if (!$check) {
-            return redirect('/cadanganghopo')->with('error', 'Data tidak ditemukan');
+            return redirect('/cadpot')->with('error', 'Data tidak ditemukan');
         }
 
         try {
             CadangandanPotensiModel::destroy($id);
 
-            return redirect('/cadanganghopo')->with('success', 'Data berhasil dihapus');
+            return redirect('/cadpot')->with('success', 'Data berhasil dihapus');
         } catch (\Exception $e) {
-            return redirect('/cadanganghopo')->with('error', 'Data gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+            return redirect('/cadpot')->with('error', 'Data gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }}

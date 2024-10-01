@@ -83,7 +83,7 @@ Route::group(['prefix' => 'cadpot'], function () {
     Route::put('/{id}', [CadangandanPotensiController::class, 'update']);
     Route::delete('/{id}', [CadangandanPotensiController::class, 'destroy']);
 });
-Route::group(['prefix' => 'vendor'], function () {
+Route::group(['prefix' => 'vendorbb'], function () {
     Route::get('/', [VendorController::class, 'index']);
     Route::post('/list', [VendorController::class, 'list']);
     Route::get('/create', [VendorController::class, 'create']);

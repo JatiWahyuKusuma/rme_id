@@ -47,14 +47,14 @@
             
             <li class="nav-header">Data Cadangan dan Potensi</li>
             <li class="nav-item">
-                <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
+                <a href="{{ url('/cadpot?name=tuban') }}" class="nav-link {{ $activeMenu == 'cadpot_tuban' ? 'active' : '' }}">
                     <i class="nav-icon far fa-address-card"></i>
                     <p>GHOPO Tuban</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
+                <a href="{{ url('/cadpot?name=rembang') }}" class="nav-link {{ $activeMenu == 'cadpot_rembang' ? 'active' : '' }}">
                     <i class="nav-icon far fa-address-card"></i>
                     <p>SG Rembang</p>
                 </a>
@@ -64,14 +64,14 @@
 
             <li class="nav-header">Data Vendor</li>
             <li class="nav-item">
-                <a href="{{ url('/vendor') }}" class="nav-link {{ $activeMenu == 'vendor' ? 'active' : '' }}">
+                <a href="{{ url('/vendorbb') }}" class="nav-link {{ $activeMenu == 'vendorbb' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-user-friends"></i>
                     <p>GHOPO Tuban</p>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a href="{{ url('/vendor') }}" class="nav-link {{ $activeMenu == 'vendor' ? 'active' : '' }}">
+                <a href="{{ url('/vendorbb') }}" class="nav-link {{ $activeMenu == 'vendorbb' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-user-friends"></i>
                     <p>SG Rembang</p>
                 </a>

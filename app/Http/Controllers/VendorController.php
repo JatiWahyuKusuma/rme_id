@@ -19,26 +19,26 @@ class VendorController extends Controller
             'title' => 'Daftar Vendor Bahan Baku yang terdaftar dalam sistem'
         ];
 
-        $activeMenu = 'vendor';
+        $activeMenu = 'vendorbb';
 
-        $vendor = VendorModel::all();
+        $vendorbb = VendorModel::all();
 
-        return view('superadmin.vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendor' => $vendor, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu]);
     }
 
     public function list(Request $request)
     {
-        $vendors = VendorModel::select('vendor_id','opco_id', 'jarak', 'latitude', 'longitude', 'vendor', 'komoditi', 'desa', 'kecamatan', 'kabupaten', 'kap_ton_thn', 'konsumsi_ton_thn');
+        $vendorbbs = VendorModel::select('vendor_id','opco_id', 'jarak', 'latitude', 'longitude', 'vendor', 'komoditi', 'desa', 'kecamatan', 'kabupaten', 'kap_ton_thn', 'konsumsi_ton_thn');
         if ($request->komoditi) {
-            $vendors->where('komoditi', $request->komoditi);
+            $vendorbbs->where('komoditi', $request->komoditi);
         }
 
-        return Datatables::of($vendors)
+        return Datatables::of($vendorbbs)
             ->addIndexColumn()
-            ->addColumn('aksi', function ($vendor) {
-                $btn  = '<a href="' . url('/vendor/' . $vendor->vendor_id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<a href="' . url('/vendor/' . $vendor->vendor_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/vendor/' . $vendor->vendor_id) . '">'
+            ->addColumn('aksi', function ($vendorbb) {
+                $btn  = '<a href="' . url('/vendorbb/' . $vendorbb->vendor_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="' . url('/vendorbb/' . $vendorbb->vendor_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/vendorbb/' . $vendorbb->vendor_id) . '">'
                     . csrf_field() . method_field('DELETE') .
                     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 return $btn;
@@ -58,15 +58,16 @@ class VendorController extends Controller
             'title' => 'Tambah Vendor Bahan Baku baru'
         ];
 
-        $ghopoven = VendorModel::all();
-        $activeMenu = 'ghopoven';
+        $vendorbb = VendorModel::all();
+        $activeMenu = 'vendorbb';
 
-        return view('superadmin.ghopoven.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'ghopoven' => $ghopoven, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
+            'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
             'latitude' => 'required|numeric', 
             'longitude' => 'required|numeric',
@@ -80,6 +81,7 @@ class VendorController extends Controller
         ]);
 
         VendorModel::create([
+            'opco_id' => $request->opco_id,
             'jarak' => $request->jarak,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
@@ -92,12 +94,12 @@ class VendorController extends Controller
             'konsumsi_ton_thn' => $request->konsumsi_ton_thn,
         ]);
 
-        return redirect('/ghopoven')->with('success', 'Data Vendor berhasil ditambahkan');
+        return redirect('/vendorbb')->with('success', 'Data Vendor berhasil ditambahkan');
     }
 
     public function show($id)
     {
-        $ghopoven = VendorModel::find($id);
+        $vendorbb = VendorModel::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail Vendor Bahan Baku',
@@ -108,14 +110,14 @@ class VendorController extends Controller
             'title' => ''
         ];
 
-        $activeMenu = 'ghopoven';
+        $activeMenu = 'vendorbb';
 
-        return view('superadmin.ghopoven.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'ghopoven' => $ghopoven, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Vendor.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu]);
     }
 
     public function edit($id)
     {
-        $ghopoven = VendorModel::find($id);
+        $vendorbb = VendorModel::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Edit Data Vendor Bahan Baku',
@@ -126,14 +128,15 @@ class VendorController extends Controller
             'title' => ''
         ];
 
-        $activeMenu = 'ghopoven';
+        $activeMenu = 'vendorbb';
 
-        return view('superadmin.ghopoven.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'ghopoven' => $ghopoven, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Vendor.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
+            'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
             'latitude' => 'required|numeric', 
             'longitude' => 'required|numeric',
@@ -147,6 +150,7 @@ class VendorController extends Controller
         ]);
 
         VendorModel::find($id)->update([
+            'opco_id' => $request->opco_id,
             'jarak' => $request->jarak,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
@@ -158,7 +162,7 @@ class VendorController extends Controller
             'kap_ton_thn' => $request->kap_ton_thn,
             'konsumsi_ton_thn' => $request->konsumsi_ton_thn,
         ]);
-        return redirect('/ghopoven')->with('success', 'Data level berhasil diubah');
+        return redirect('/vendorbb')->with('success', 'Data level berhasil diubah');
     }
 
     public function destroy($id)
@@ -166,15 +170,15 @@ class VendorController extends Controller
         $check = VendorModel::find($id);
 
         if (!$check) {
-            return redirect('/ghopoven')->with('error', 'Datatidak ditemukan');
+            return redirect('/vendorbb')->with('error', 'Datatidak ditemukan');
         }
 
         try {
             VendorModel::destroy($id);
 
-            return redirect('/ghopoven')->with('success', 'Data berhasil dihapus');
+            return redirect('/vendorbb')->with('success', 'Data berhasil dihapus');
         } catch (\Exception $e) {
-            return redirect('/ghopoven')->with('error', 'Data  gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+            return redirect('/vendorbb')->with('error', 'Data  gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
     }
 }

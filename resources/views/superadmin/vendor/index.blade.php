@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('vendor/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('vendorbb/create') }}">Tambah</a>
             </div>
         </div>
         <div class="card-body">
@@ -82,7 +82,7 @@
             var dataLevel = $('#table_m_vendor').DataTable({
                 serverSide: true,
                 ajax: {
-                    url: "{{ url('vendor/list') }}",
+                    url: "{{ url('vendorbb/list') }}",
                     type: "POST",
                     data: function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token

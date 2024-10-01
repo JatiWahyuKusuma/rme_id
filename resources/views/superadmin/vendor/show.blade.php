@@ -7,7 +7,7 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            @empty($ghopoven)
+            @empty($vendorbb)
                 <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang Anda cari tidak ditemukan.
@@ -16,51 +16,55 @@
                 <table class="table-bordered table-striped table-hover sm table table">
                     <tr>
                         <th>No</th>
-                        <td>{{ $ghopoven->no }}</td>
+                        <td>{{ $vendorbb->vendor_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Opco ID</th>
+                        <td>{{ $vendorbb->opco_id }}</td>
                     </tr>
                     <tr>
                         <th>Jarak</th>
-                        <td>{{ $ghopoven->jarak }}</td>
+                        <td>{{ $vendorbb->jarak }}</td>
                     </tr>
                     <tr>
                         <th>Latitude</th>
-                        <td>{{ $ghopoven->latitude }}</td>
+                        <td>{{ $vendorbb->latitude }}</td>
                     </tr>
                     <tr>
                         <th>Longitude</th>
-                        <td>{{ $ghopoven->longitude }}</td>
+                        <td>{{ $vendorbb->longitude }}</td>
                     </tr>
                     <tr>
                         <th>Vendor</th>
-                        <td>{{ $ghopoven->vendor }}</td>
+                        <td>{{ $vendorbb->vendor }}</td>
                     </tr>
                     <tr>
                         <th>Komoditi</th>
-                        <td>{{ $ghopoven->komoditi }}</td>
+                        <td>{{ $vendorbb->komoditi }}</td>
                     </tr>
                     <tr>
                         <th>Desa</th>
-                        <td>{{ $ghopoven->desa }}</td>
+                        <td>{{ $vendorbb->desa }}</td>
                     </tr>
                     <tr>
                         <th>Kecamatan</th>
-                        <td>{{ $ghopoven->kecamatan }}</td>
+                        <td>{{ $vendorbb->kecamatan }}</td>
                     </tr>
                     <tr>
                         <th>Kabupaten</th>
-                        <td>{{ $ghopoven->kabupaten }}</td>
+                        <td>{{ $vendorbb->kabupaten }}</td>
                     </tr>
                     <tr>
                         <th>Kap (ton/thn)</th>
-                        <td>{{ $ghopoven->kap_ton_thn }}</td>
+                        <td>{{ $vendorbb->kap_ton_thn }}</td>
                     </tr>
                     <tr>
                         <th>Konsumsi(ton/thn)</th>
-                        <td>{{ $ghopoven->konsumsi_ton_thn }}</td>
+                        <td>{{ $vendorbb->konsumsi_ton_thn }}</td>
                     </tr>
                 </table>
             @endempty
-            <a href="{{ url('ghopoven') }}" class="btn btn-sm btn-primary mt-4 mb-2">Kembali</a>
+            <a href="{{ url('vendorbb') }}" class="btn btn-sm btn-primary mt-4 mb-2">Kembali</a>
         </div>
     </div>
 @endsection
