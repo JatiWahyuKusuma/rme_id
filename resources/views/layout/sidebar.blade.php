@@ -47,7 +47,7 @@
             
             <li class="nav-header">Data Cadangan dan Potensi</li>
             <li class="nav-item">
-                <a href="{{ url('/cadpottuban') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
+                <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
                     <i class="nav-icon far fa-address-card"></i>
                     <p>GHOPO Tuban</p>
                 </a>
@@ -99,7 +99,7 @@
                     <p>Data Admin</p>
                 </a>
             </li>
-            {{-- <li class="nav-item">
+            <li class="nav-item">
                 <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                     @csrf
                     <button class="nav-link {{ $activeMenu == 'logout' ? 'active' : '' }} mt-3"> <!-- Tambahkan kelas mt-3 -->
@@ -107,7 +107,7 @@
                         <p>Keluar</p>
                     </button>
                 </form>
-            </li> --}}
+            </li>
         </ul>
     </nav>
 </div>

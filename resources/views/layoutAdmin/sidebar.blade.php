@@ -49,7 +49,37 @@
                 </a> 
             </li> 
 
+            {{-- @if (Auth::user()->id_opco == '1')
+                <li class="nav-header">SG Rembang</li> 
+                <li class="nav-item"> 
+                    <a href="{{ url('/cadangansg') }}" class="nav-link {{ $activeMenu == 'cadangansg' ? 'active' : '' }}"> 
+                        <i class="nav-icon far fa-address-card"></i> 
+                        <p>Cadangan dan Potensi</p> 
+                    </a> 
+                </li> 
+                <li class="nav-item"> 
+                    <a href="{{ url('/vendorsg') }}" class="nav-link {{ $activeMenu == 'vendorsg' ? 'active' : '' }}"> 
+                        <i class="nav-icon far fa-address-card"></i> 
+                        <p>Vendor</p> 
+                    </a> 
+                </li> 
+            @elseif (Auth::user()->id_opco == '2')
+                <li class="nav-header">SG Tuban</li> 
+                <li class="nav-item"> 
+                    <a href="{{ url('/cadangantuban') }}" class="nav-link {{ $activeMenu == 'cadangantuban' ? 'active' : '' }}"> 
+                        <i class="nav-icon far fa-address-card"></i> 
+                        <p>Cadangan dan Potensi Tuban</p> 
+                    </a> 
+                </li> 
+                <li class="nav-item"> 
+                    <a href="{{ url('/vendortuban') }}" class="nav-link {{ $activeMenu == 'vendortuban' ? 'active' : '' }}"> 
+                        <i class="nav-icon far fa-address-card"></i> 
+                        <p>Vendor Tuban</p> 
+                    </a> 
+                </li>
+            @endif --}}
+
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 20px 0;"> <!-- Horizontal line after Data Cadangan dan Potensi -->  
         </ul> 
-    </nav> 
-</div> 
+    </nav> 
+</div>

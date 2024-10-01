@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\SuperadminController;
 use App\Http\Controllers\OpcoController;
 use App\Http\Controllers\CadangandanPotensiController;
 use App\Http\Controllers\VendorController;
@@ -25,6 +24,24 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route Login
+Route::group(['prefix' => 'login'], function () {
+    Route::get('/', [LoginController::class, 'index'])->name('login');
+    Route::post('/', [LoginController::class, 'login_process'])->name('login');
+});
+Route::group(['middleware' => 'auth:web'], function () {
+    Route::get('/dashboard_user', function () {
+        return view('user.dashboard');
+    });
+});
+Route::group(['middleware' => ['auth:superadmin']], function () {
+    Route::get('/cadpot', [CadangandanPotensiController::class, 'index'])->name('superadmin.cadangan');
+});
+
+//Route Logout
+Route::post('/logout', [LogoutController::class, 'index'])->name('logout');
+
+
 Route::group(['prefix' => 'level'], function () {
     Route::get('/', [LevelController::class, 'index']);
     Route::post('/list', [LevelController::class, 'list']);
@@ -45,16 +62,6 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/{id}/edit', [AdminController::class, 'edit']);
     Route::put('/{id}', [AdminController::class, 'update']);
     Route::delete('/{id}', [AdminController::class, 'destroy']);
-});
-Route::group(['prefix' => 'superadmin'], function () {
-    Route::get('/', [SuperadminController::class, 'index']);
-    Route::post('/list', [SuperadminController::class, 'list']);
-    Route::get('/create', [SuperadminController::class, 'create']);
-    Route::post('/', [SuperadminController::class, 'store']);
-    Route::get('/{id}', [SuperadminController::class, 'show']);
-    Route::get('/{id}/edit', [SuperadminController::class, 'edit']);
-    Route::put('/{id}', [SuperadminController::class, 'update']);
-    Route::delete('/{id}', [SuperadminController::class, 'destroy']);
 });
 Route::group(['prefix' => 'opco'], function () {
     Route::get('/', [OpcoController::class, 'index']);
