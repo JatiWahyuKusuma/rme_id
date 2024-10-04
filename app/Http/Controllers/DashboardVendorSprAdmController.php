@@ -22,16 +22,22 @@ class DashboardVendorSprAdmController extends Controller
 
         // Active menu identifier
         $activeMenu = 'dashboardvendor';
-
-        // Fetch total SD Cadangan (ton)
+        //Card TotalKapTon, Unit Potensi, Total Vendor
         $totalKapTonThn = VendorModel::sum('kap_ton_thn');
-
-        // Fetch total unique komoditi
         $unitPotensiBB = VendorModel::whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
-
-        // Fetch total unique vendor
         $totalVendor = VendorModel::whereNotNull('vendor')->distinct('vendor')->count('vendor');
 
+        $data = VendorModel::select('komoditi', VendorModel::raw('SUM(kap_ton_thn) as total_kap_ton_thn'))
+        ->groupBy('komoditi')
+        ->orderBy('total_kap_ton_thn', 'desc')
+        ->limit(3) // Limit to 6 unique commodities
+        ->get();
+
+    // Prepare the data for the chart
+    $komoditiLabels = $data->pluck('komoditi');
+    $kapTonThn = $data->pluck('total_kap_ton_thn');
+
+        
         // Pass totals to the view
         return view('superadmin.dashboardVendor.index', [
             'breadcrumb' => $breadcrumb,
@@ -40,6 +46,8 @@ class DashboardVendorSprAdmController extends Controller
             'totalKapTonThn' => number_format($totalKapTonThn, 0, '.', '.'), // Format as needed
             'unitPotensiBB' => $unitPotensiBB,
             'totalVendor' => $totalVendor,
+            'komoditiLabels' => $komoditiLabels,
+            'kapTonThn' => $kapTonThn,
         ]);
     }
 }
