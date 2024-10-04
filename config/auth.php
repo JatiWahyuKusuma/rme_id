@@ -35,17 +35,23 @@ return [
     |
     */
 
-    'guards' => [
-        'superadmin' => [
-            'driver' => 'session',
-            'provider' => 'superadmins',
-        ],
-
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admins',
-        ],
+   'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+
+    'superadmin' => [
+        'driver' => 'session',
+        'provider' => 'm_superadmin', // Ensure this provider matches your Superadmin model
+    ],
+
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'm_admin', // Ensure this provider matches your Admin model
+    ],
+],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -65,9 +71,13 @@ return [
     */
 
     'providers' => [
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\User::class,
+        ],
         'superadmins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\SuperAdminModel::class,
+           'model' => App\Models\SuperadminModel::class, 
         ],
 
         'admins' => [

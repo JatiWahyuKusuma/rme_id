@@ -14,20 +14,10 @@
                 </div>
                 <a href="{{ url('admin') }}" class="btn btn-sm btn-default mt 2">Kembali</a>
             @else
-                <form method="POST" action="{{ url('/admin/' . $admin->admin_id) }}" class="form-horizontal">
+                <form method="POST" action="{{ url('/admin/' . $admin->id) }}" class="form-horizontal">
                     @csrf
                     {!! method_field('PUT') !!}
-                    <div class="form-group row">
-                        <label class="col-1 control-label col-form-label">Level ID</label>
-                        <div class="col-11">
-                            <input type="text" class="form-control" id="level_id" name="level_id"
-                                value="{{ old('level_id', $admin->level_id) }}" required>
-                            @error('level_id')
-                                <small class="form-text text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Opco ID</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="opco_id" name="opco_id"
@@ -36,13 +26,13 @@
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Nama</label>
                         <div class="col-11">
-                            <input type="text" class="form-control" id="nama" name="nama"
-                                value="{{ old('admin_name', $admin->nama) }}" required>
-                            @error('nama')
+                            <input type="text" class="form-control" id="name" name="name"
+                                value="{{ old('admin_name', $admin->name) }}" required>
+                            @error('name')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>

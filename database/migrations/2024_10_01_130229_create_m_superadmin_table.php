@@ -12,13 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('m_superadmin', function (Blueprint $table) {
-            $table->id('superadmin_id');
+            $table->id();
             $table->unsignedBigInteger('level_id')->index();
-            $table->string('nama');
-            $table->string('email');
-            $table->string('password');
+            $table->unsignedBigInteger('user_id')->index(); 
             $table->timestamps();
-
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); 
             $table->foreign('level_id')->references('level_id')->on('m_level');
         });
     }

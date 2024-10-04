@@ -7,7 +7,7 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            @empty($ghopocad)
+            @empty($admincadpot)
                 <div class="alert alert-danger alert-dismissible">
                     <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
                     Data yang Anda cari tidak ditemukan.
@@ -16,75 +16,75 @@
                 <table class="table-bordered table-striped table-hover sm table table">
                     <tr>
                         <th>No</th>
-                        <td>{{ $ghopocad->no }}</td>
+                        <td>{{ $admincadpot->cadpot_id }}</td>
                     </tr>
                     <tr>
                         <th>Jarak</th>
-                        <td>{{ $ghopocad->jarak }}</td>
+                        <td>{{ $admincadpot->jarak }}</td>
                     </tr>
                     <tr>
                         <th>latitude</th>
-                        <td>{{ $ghopocad->latitude }}</td>
+                        <td>{{ $admincadpot->latitude }}</td>
                     </tr>
                     <tr>
                         <th>longitude</th>
-                        <td>{{ $ghopocad->longitude }}</td>
+                        <td>{{ $admincadpot->longitude }}</td>
                     </tr>
                     <tr>
                         <th>No ID</th>
-                        <td>{{ number_format($ghopocad->no_id, 0, ',', '.') }}</td>
+                        <td>{{ number_format($admincadpot->no_id, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <th>Komoditi</th>
-                        <td>{{ $ghopocad->komoditi }}</td>
+                        <td>{{ $admincadpot->komoditi }}</td>
                     </tr>
                     <tr>
                         <th>Lokasi IUP</th>
-                        <td>{{ $ghopocad->lokasi_iup }}</td>
+                        <td>{{ $admincadpot->lokasi_iup }}</td>
                     </tr>
                     <tr>
                         <th>Tipe SD/Cadangan</th>
-                        <td>{{ $ghopocad->tipe_sd_cadangan }}</td>
+                        <td>{{ $admincadpot->tipe_sd_cadangan }}</td>
                     </tr>
                     <tr>
                         <th>SD/Cadangan(ton)</th>
-                        <td>{{ number_format($ghopocad->sd_cadangan_ton, 0, ',', '.') }}</td>
+                        <td>{{ number_format($admincadpot->sd_cadangan_ton, 0, ',', '.') }}</td>
                     </tr>
                     <tr>
                         <th>catatan</th>
-                        <td>{{ $ghopocad->catatan }}</td>
+                        <td>{{ $admincadpot->catatan }}</td>
                     </tr>
                     <tr>
                         <th>Status Penyelidikan</th>
-                        <td>{{ $ghopocad->status_penyelidikan }}</td>
+                        <td>{{ $admincadpot->status_penyelidikan }}</td>
                     </tr>
                     <tr>
                         <th>Acuan</th>
-                        <td>{{ $ghopocad->acuan }}</td>
+                        <td>{{ $admincadpot->acuan }}</td>
                     </tr>
                     <tr>
                         <th>Kabupaten</th>
-                        <td>{{ $ghopocad->kabupaten }}</td>
+                        <td>{{ $admincadpot->kabupaten }}</td>
                     </tr>
                     <tr>
                         <th>Kecamatan</th>
-                        <td>{{ $ghopocad->kecamatan }}</td>
+                        <td>{{ $admincadpot->kecamatan }}</td>
                     </tr>
                     <tr>
                         <th>Luas(ha)</th>
-                        <td>{{ $ghopocad->luas_ha}}</td>
+                        <td>{{ $admincadpot->luas_ha}}</td>
                     </tr>
                     <tr>
                         <th>Masa Berlaku IUP</th>
-                        <td>{{ $ghopocad->masa_berlaku_iup }}</td>
+                        <td>{{ $admincadpot->masa_berlaku_iup }}</td>
                     </tr>
                     <tr>
                         <th>Masa Berlaku PPKH</th>
-                        <td>{{ $ghopocad->masa_berlaku_ppkh }}</td>
+                        <td>{{ $admincadpot->masa_berlaku_ppkh }}</td>
                     </tr>
                 </table>
             @endempty
-            <a href="{{ url('ghopocad') }}" class="btn btn-sm btn-primary mt-4 mb-2">Kembali</a>
+            <a href="{{ url('admincadpot') }}" class="btn btn-sm btn-primary mt-4 mb-2">Kembali</a>
         </div>
     </div>
 @endsection

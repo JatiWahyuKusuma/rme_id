@@ -9,7 +9,8 @@ class LogoutController extends Controller
 {
     public function index(Request $request)
     {
-        Auth::guard('superadmin')->logout();
+        // Auth::guard('superadmin')->logout();
+        Auth::logout();
     
         $request->session()->invalidate();
 

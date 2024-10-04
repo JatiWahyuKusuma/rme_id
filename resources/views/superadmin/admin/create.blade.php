@@ -9,19 +9,7 @@
         <div class="card-body">
             <form method="POST" action="{{ url('admin') }}" class="form-horizontal">
                 @csrf
-                <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Level ID</label>
-                    <div class="col-11">
-                        <select class="form-control" id="level_id" name="level_id" required>
-                            <option value="">-- Pilih Level --</option>
-                            <option value="2" {{ old('level_id') == '2' ? 'selected' : '' }}>Admin</option>
-                        </select>
-                        @error('level_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-                <div class="form-group row">
+                {{-- <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Opco ID</label>
                     <div class="col-11">
                         <select class="form-control" id="opco_id" name="opco_id" required>
@@ -33,13 +21,13 @@
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Nama</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="nama" name="nama"
-                            value="{{ old('nama') }}" required>
-                        @error('nama')
+                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"
+                            required>
+                        @error('name')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
@@ -47,8 +35,8 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Email</label>
                     <div class="col-11">
-                        <input type="email" class="form-control" id="email" name="email"
-                            value="{{ old('email') }}" required>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}"
+                            required>
                         @error('email')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror

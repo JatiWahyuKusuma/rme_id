@@ -8,9 +8,9 @@ use App\Models\CadanganDanPotensiModel; // Adjust the actual namespace
 
 class DashboardCadpotSprAdmController extends Controller
 {
-    public function index(sdCadanganChart $chart)
+    public function index()
     {
-        $data['chart'] = $chart->build();
+        // $data['chart'] = $chart->build();
         // Breadcrumb data
         $breadcrumb = (object) [
             'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG',
@@ -25,14 +25,22 @@ class DashboardCadpotSprAdmController extends Controller
         // Active menu identifier
         $activeMenu = 'dashboardcadangan';
 
-        // Fetch total SD Cadangan (ton)
+
+        //Card Total SD/Cadangan,IUP DAN PPKH
         $totalSdCadanganTon = CadangandanPotensiModel::sum('sd_cadangan_ton');
-
-        // Fetch total valid IUP
         $totalValidIUP = CadangandanPotensiModel::whereNotNull('masa_berlaku_iup')->count();
-
-        // Fetch total valid PPKH
         $totalValidPPKH = CadangandanPotensiModel::whereNotNull('masa_berlaku_ppkh')->count();
+
+        //Chart SD/Cadangan by Komoditi
+        $data = CadangandanPotensiModel::select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
+            ->groupBy('komoditi')
+            ->orderBy('total_sd_cadangan_ton', 'desc')
+            ->limit(6) // Limit to 6 unique commodities
+            ->get();
+
+        // Prepare the data for the chart
+        $komoditiLabels = $data->pluck('komoditi');
+        $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
 
         // Pass totals to the view
         return view('superadmin.DashboardCadangan.index', [
@@ -42,7 +50,9 @@ class DashboardCadpotSprAdmController extends Controller
             'sdCadanganTon' => number_format($totalSdCadanganTon, 0, '.', '.'), // Format as needed
             'totalberlakuIUP' => $totalValidIUP,
             'totalberlakuPPKH' => $totalValidPPKH,
-            'chart' => $chart->build()
+            'komoditiLabels' =>   $komoditiLabels,
+            'sdCadanganTons' =>   $sdCadanganTons,
+            // 'chart' => $chart->build()
         ]);
     }
 }

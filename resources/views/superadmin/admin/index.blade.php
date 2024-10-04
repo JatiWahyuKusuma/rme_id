@@ -20,24 +20,22 @@
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
-                            <select class="form-control" name="nama" id="nama">
+                            <select class="form-control" name="name" id="name">
                                 <option value="">-- Semua --</option>
                                 @foreach ($admin as $i)
-                                    <option value="{{ $i->nama }}">{{ $i->nama }}</option>
+                                    <option value="{{ $i->name }}">{{ $i->name }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-text text-muted">Nama</small>
+                            <small class="form-text text-muted">name</small>
                         </div>
                     </div>
                 </div>
             </div>
-            <table class="table-bordered table-striped table-hover table-sm table" id="table_admin">
+            <table class="table-bordered table-striped table-hover table-sm table" id="table_users">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Level Id</th>
-                        <th>Opco Id</th>
-                        <th>Nama</th>
+                        <th>name</th>
                         <th>Email</th>
                         <th>Aksi</th>
                     </tr>
@@ -58,14 +56,14 @@
 @push('js')
     <script>
         $(document).ready(function() {
-            var dataLevel = $('#table_admin').DataTable({
+            var dataLevel = $('#table_users').DataTable({
                 serverSide: true,
                 ajax: {
                     "url": "{{ url('admin/list') }}",
                     "type": "POST",
                     "data": function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token
-                        d.nama = $('#nama').val();
+                        d.name = $('#name').val();
                     }
                 },
                 columns: [
@@ -76,19 +74,7 @@
                         searchable: false
                     },
                     {
-                        data: "level_id",
-                        className: "",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "opco_id",
-                        className: "",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "nama",
+                        data: "name",
                         className: "",
                         orderable: true,
                         searchable: true
@@ -107,7 +93,7 @@
                     }
                 ]
             });
-            $('#nama').on('change', function() {
+            $('#name').on('change', function() {
                 dataLevel.ajax.reload();
             });
         });

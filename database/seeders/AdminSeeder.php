@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -14,26 +15,16 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
-            [
-                'admin_id' => 1,
-                'level_id' => 2,
-                'opco_id' => 1,
-                'nama' => 'Admin GHOPO',
-                'email' => 'adminghopo@gmail.com',
-                'password' => Hash::make('adminghopo123'),
-            ],
-            [
-                'admin_id' => 2,
-                'level_id' => 2,
-                'opco_id' => 2,
-                'nama' => 'Admin SG',
-                'email' => 'adminsg@gmail.com',
-                'password' => Hash::make('adminsg123'),
-            ],
+        User::create([
+            'name' => 'Admin GHOPO',
+            'email' => 'adminghopo@gmail.com',
+            'password' => Hash::make('adminghopo123'),
+        ]);
 
-        ];
-
-        DB::table('m_admin')->insert($data);
+        User::create([
+            'name' => 'Admin SG',
+            'email' => 'adminsg@gmail.com',
+            'password' => Hash::make('adminsg123'),
+        ]);
     }
 }

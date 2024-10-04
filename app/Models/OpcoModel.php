@@ -16,4 +16,6 @@ class OpcoModel extends Model
         'kode_opco',
         'nama_opco',
     ];
+
+    
 }

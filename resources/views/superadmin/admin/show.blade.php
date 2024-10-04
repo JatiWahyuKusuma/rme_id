@@ -16,27 +16,15 @@
                 <table class="table-bordered table-striped table-hover sm table table">
                     <tr>
                         <th>ID</th>
-                        <td>{{ $admin->admin_id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Level Id</th>
-                        <td>{{ $admin->level_id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Opco Id</th>
-                        <td>{{ $admin->opco_id }}</td>
+                        <td>{{ $admin->id }}</td>
                     </tr>
                     <tr>
                         <th>Nama </th>
-                        <td>{{ $admin->nama}}</td>
+                        <td>{{ $admin->name}}</td>
                     </tr>
                     <tr>
                         <th>Email </th>
                         <td>{{ $admin->email}}</td>
-                    </tr>
-                    <tr>
-                        <th>Opco </th>
-                        <td>{{ $admin->opco}}</td>
                     </tr>
                     <tr>
                         <th>Password </th>

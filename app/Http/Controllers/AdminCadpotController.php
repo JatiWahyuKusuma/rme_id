@@ -19,13 +19,13 @@ class AdminCadpotController extends Controller
             'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'
         ];
 
-        // $activeMenu = 'admincadpot';
-        $name = $request->get('name', 'tuban');
-        if ($name == 'tuban') {
-            $activeMenu = 'admincadpot_tuban';
-        } elseif ($name == 'rembang') {
-            $activeMenu = 'admincadpot_rembang';
-        }
+        $activeMenu = 'admincadpot';
+        // $name = $request->get('name', 'tuban');
+        // if ($name == 'tuban') {
+        //     $activeMenu = 'admincadpot_tuban';
+        // } elseif ($name == 'rembang') {
+        //     $activeMenu = 'admincadpot_rembang';
+        // }
 
         $admincadpot = CadangandanPotensiModel::all();
 
@@ -35,13 +35,13 @@ class AdminCadpotController extends Controller
     public function list(Request $request)
     {
         
-        $name = $request->get('name');
+        // $name = $request->get('name');
         $admincadpot = CadangandanPotensiModel::select('cadpot_id', 'opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan', 'sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
-        if ($name == 'tuban') {
-            $admincadpot->where('opco_id', 1); // For Tuban
-        } elseif ($name == 'rembang') {
-            $admincadpot->where('opco_id', 2); // For Rembang
-        }
+        // if ($name == 'tuban') {
+        //     $admincadpot->where('opco_id', 1); // For Tuban
+        // } elseif ($name == 'rembang') {
+        //     $admincadpot->where('opco_id', 2); // For Rembang
+        // }
 
         if ($request->opco_id) {
             $admincadpot->where('opco_id', $request->opco_id);

@@ -12,14 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('m_admin', function (Blueprint $table) {
-            $table->id('admin_id');
+            $table->id();
+            $table->unsignedBigInteger('user_id')->index(); 
             $table->unsignedBigInteger('level_id')->index();
             $table->unsignedBigInteger('opco_id')->index();
-            $table->string('nama');
-            $table->string('email');
-            $table->string('password')->nullable();
-            $table->timestamps();
 
+            $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); 
             $table->foreign('level_id')->references('level_id')->on('m_level');
             $table->foreign('opco_id')->references('opco_id')->on('m_opco');
         });
@@ -32,4 +31,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('m_admin');
     }
+
 };

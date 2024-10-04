@@ -14,16 +14,15 @@ class SuperadminSeeder extends Seeder
      */
     public function run(): void
     {
-        $data = [
-            [
-                'superadmin_id' => 1,
-                'level_id' => 1,
-                'nama' => 'Superadmin1',
-                'email' => 'superadmin1@gmail.com',
-                'password' => Hash::make('1234567890'),
-            ],
-        ];
+        DB::table('users')->insert([
+            'name' => 'Superadmin',
+            'email' => 'superadmin1@gmail.com',
+            'password' => Hash::make('1234567890'),
+        ]);
 
-        DB::table('m_superadmin')->insert($data);
+        DB::table('m_superadmin')->insert([
+            'level_id' => 1,
+            'user_id' => 3
+        ]);
     }
 }

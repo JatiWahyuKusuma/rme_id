@@ -1,98 +1,83 @@
-<div class="sidebar"> 
+<div class="sidebar">
 
-    <!-- SidebarSearch Form --> 
-    <div class="form-inline mt-2"></div> 
+    <!-- SidebarSearch Form -->
+    <div class="form-inline mt-2"></div>
 
-    <!-- Sidebar Menu --> 
-    <nav class="mt-2"> 
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false"> 
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
-            <!-- Brand Logo --> 
-            <a href="{{ url('/') }}" class="brand-link d-flex justify-content-center">
-                <img src="{{ asset('images/logoSIGputih.png') }}" alt="AdminLTE Logo"
-                class="brand-image elevation-3" style="width: 170px; height: auto; max-height: 100px;">                
-            </a>
+            <!-- Sidebar user panel (optional) -->
+            @if (Auth::user()->admin->opco_id === 1 || Auth::user()->admin->opco_id === 2)
+                <!-- Brand Logo -->
+                <a href="{{ url('/') }}" class="brand-link d-flex justify-content-center">
+                    <img src="{{ asset('images/logoSIGputih.png') }}" alt="AdminLTE Logo" class="brand-image elevation-3"
+                        style="width: 170px; height: auto; max-height: 100px;">
+                </a>
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="{{ asset('images/admin.png') }}" class="elevation-2" alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">
+                            @if (Auth::user()->admin->opco_id === 1)
+                                Admin GHOPO Tuban
+                            @elseif (Auth::user()->admin->opco_id === 2)
+                                Admin SG Rembang
+                            @endif
+                        </a>
+                    </div>
+                </div>
 
-            <!-- Sidebar user panel (optional) --> 
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex"> 
-                <div class="image"> 
-                    <img src="{{ asset('images/admin.png') }}" class="elevation-2" alt="User Image"> <!-- Removed img-circle -->
-                </div> 
-                <div class="info"> 
-                    <a href="#" class="d-block">Admin GHOPO Tuban</a> 
-                </div> 
-            </div> 
+                <li class="nav-header">Dashboard</li>
+                <li class="nav-item">
+                    <a href="{{ url('/dashboardcadangan') }}"
+                        class="nav-link {{ $activeMenu == 'dashboardcadangan' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Cadangan dan Potensi</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/dashboardvendor') }}"
+                        class="nav-link {{ $activeMenu == 'dashboardvendor' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Vendor</p>
+                    </a>
+                </li>
 
-            <!-- Removed the horizontal line after the user panel --> 
+                <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;">
 
-            <li class="nav-item"> 
-                <a href="{{ url('/') }}" class="nav-link {{ $activeMenu == 'dashboard' ? 'active' : '' }}"> 
-                    <i class="nav-icon fas fa-tachometer-alt"></i> 
-                    <p>Dashboard</p> 
-                </a> 
-            </li> 
-
-            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> <!-- Horizontal line after Dashboard --> 
-
-            <li class="nav-header">GHOPO Tuban</li> 
-            <li class="nav-item"> 
-                <a href="{{ url('/cadpot?name=tuban') }}" class="nav-link {{ $activeMenu == 'cadpot_tuban' ? 'active' : '' }}"> 
-                    <i class="nav-icon far fa-address-card"></i> 
-                    <p>Cadangan dan Potensi</p> 
-                </a> 
-            </li> 
-
-            <li class="nav-item"> 
-                <a href="{{ url('//vendorbb?name=tuban') }}" class="nav-link {{ $activeMenu == 'vendorbb_tuban' ? 'active' : '' }}"> 
-                    <i class="nav-icon far fa-address-card"></i> 
-                    <p>Vendor</p> 
-                </a> 
-            </li>
-            
-            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> <!-- Horizontal line after Dashboard --> 
-            
+                <li class="nav-header">
+                    @if (Auth::user()->admin->opco_id === 1)
+                        Data GHOPO Tuban
+                    @elseif (Auth::user()->admin->opco_id === 2)
+                        Data SG Rembang
+                    @endif
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/admincadpot') }}"
+                        class="nav-link {{ $activeMenu == 'admincadpot' ? 'active' : '' }}">
+                        <i class="nav-icon far fa-address-card"></i>
+                        <p>Cadangan dan Potensi</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/adminvendorbb') }}"
+                        class="nav-link {{ $activeMenu == 'adminvendorbb' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-friends"></i>
+                        <p>Vendor</p>
+                    </a>
+                </li>
+            @endif
             <li class="nav-item">
                 <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                     @csrf
-                    <button class="nav-link {{ $activeMenu == 'logout' ? 'active' : '' }} mt-3"> <!-- Tambahkan kelas mt-3 -->
+                    <button class="nav-link {{ $activeMenu == 'logout' ? 'active' : '' }} mt-3">
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>Keluar</p>
                     </button>
                 </form>
             </li>
         </ul>
-        
-            {{-- @if (Auth::user()->opco_id == '1')
-                <li class="nav-header">SG Rembang</li> 
-                <li class="nav-item"> 
-                    <a href="{{ url('/admincadpot') }}" class="nav-link {{ $activeMenu == 'admincadpot' ? 'active' : '' }}"> 
-                        <i class="nav-icon far fa-address-card"></i> 
-                        <p>Cadangan dan Potensi</p> 
-                    </a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a href="{{ url('/vendorsg') }}" class="nav-link {{ $activeMenu == 'vendorsg' ? 'active' : '' }}"> 
-                        <i class="nav-icon far fa-address-card"></i> 
-                        <p>Vendor</p> 
-                    </a> 
-                </li> 
-            @elseif (Auth::user()->opco_id == '2')
-                <li class="nav-header">SG Tuban</li> 
-                <li class="nav-item"> 
-                    <a href="{{ url('/admincadpot') }}" class="nav-link {{ $activeMenu == 'admincadpot' ? 'active' : '' }}"> 
-                        <i class="nav-icon far fa-address-card"></i> 
-                        <p>Cadangan dan Potensi Tuban</p> 
-                    </a> 
-                </li> 
-                <li class="nav-item"> 
-                    <a href="{{ url('/vendortuban') }}" class="nav-link {{ $activeMenu == 'vendortuban' ? 'active' : '' }}"> 
-                        <i class="nav-icon far fa-address-card"></i> 
-                        <p>Vendor Tuban</p> 
-                    </a> 
-                </li>
-            @endif --}}
-
-            {{-- <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 20px 0;"> <!-- Horizontal line after Data Cadangan dan Potensi -->   --}}
-        </ul> 
     </nav>
 </div>

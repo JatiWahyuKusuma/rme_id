@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdminModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,24 +21,24 @@ class AdminController extends Controller
 
         $activeMenu = 'admin';
 
-        $admin = AdminModel::all();
+        $admin = User::all();
 
         return view('superadmin.admin.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admin' => $admin, 'activeMenu' => $activeMenu]);
     }
 
     public function list(Request $request)
     {
-        $admins = AdminModel::select('admin_id', 'level_id','opco_id', 'nama', 'email', 'password');
-        if ($request->nama) {
-            $admins->where('nama', $request->nama);
+        $admins = User::select('id','name', 'email', 'password');
+        if ($request->name) {
+            $admins->where('name', $request->name);
         }
 
         return Datatables::of($admins)
             ->addIndexColumn()
             ->addColumn('aksi', function ($admin) {
-                $btn  = '<a href="' . url('/admin/' . $admin->admin_id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<a href="' . url('/admin/' . $admin->admin_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/admin/' . $admin->admin_id) . '">'
+                $btn  = '<a href="' . url('/admin/' . $admin->id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                $btn .= '<a href="' . url('/admin/' . $admin->id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
+                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/admin/' . $admin->id) . '">'
                     . csrf_field() . method_field('DELETE') .
                     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 return $btn;
@@ -58,7 +58,7 @@ class AdminController extends Controller
             'title' => 'Tambah admin baru'
         ];
 
-        $admin = AdminModel::all();
+        $admin = User::all();
         $activeMenu = 'admin';
 
         return view('superadmin.admin.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admin' => $admin, 'activeMenu' => $activeMenu]);
@@ -67,19 +67,16 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'level_id' => 'required|integer',
-            'opco_id' => 'required|integer',
-            'nama' => 'required|string',
+            // 'level_id' => 'required|integer',
+            // 'opco_id' => 'required|integer',
+            'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|string|min:8'
         ]);
 
-        AdminModel::create([
-            'level_id' => $request->level_id,
-            'opco_id' => $request->opco_id,
-            'nama' => $request->nama,
+        User::create([
+            'name' => $request->name,
             'email' => $request->email,
-            'opco' =>$request->opco,
             'password' => $request->password,
         ]);
 
@@ -88,7 +85,7 @@ class AdminController extends Controller
 
     public function show($id)
     {
-        $admin = AdminModel::find($id);
+        $admin = User::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Detail admin',
@@ -106,7 +103,7 @@ class AdminController extends Controller
 
     public function edit($id)
     {
-        $admin = AdminModel::find($id);
+        $admin = User::find($id);
 
         $breadcrumb = (object) [
             'title' => 'Edit admin',
@@ -125,19 +122,18 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'level_id' => 'required|integer',
-            'opco_id' => 'required|integer',
-            'nama' => 'required|string',
+            // 'level_id' => 'required|integer',
+            // 'opco_id' => 'required|integer',
+            'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'nullable'
         ]);
 
-        AdminModel::find($id)->update([
-            'level_id' => $request->level_id,
-            'opco_id' => $request->opco_id,
-            'nama' => $request->nama,
+        User::find($id)->update([
+            // 'level_id' => $request->level_id,
+            // 'opco_id' => $request->opco_id,
+            'name' => $request->name,
             'email' => $request->email,
-            'opco' =>$request->opco,
             'password' => $request->password,
         ]);
         return redirect('/admin')->with('success', 'Data admin berhasil diubah');
@@ -145,14 +141,14 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        $check = AdminModel::find($id);
+        $check = User::find($id);
 
         if (!$check) {
             return redirect('/admin')->with('error', 'Data admin tidak ditemukan');
         }
 
         try {
-            AdminModel::destroy($id);
+            User::destroy($id);
 
             return redirect('/admin')->with('success', 'Data admin berhasil dihapus');
         } catch (\Exception $e) {

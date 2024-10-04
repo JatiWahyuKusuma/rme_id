@@ -42,4 +42,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public static function isSuperAdmin($userId)
+    {
+        return self::where('user_id', $userId)->exists();
+    }
+
+    public function admin() // Add this relationship
+    {
+        return $this->hasOne(AdminModel::class, 'user_id', 'id');
+    }
 }

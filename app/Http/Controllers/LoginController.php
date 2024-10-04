@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SuperadminModel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,27 +22,22 @@ class LoginController extends Controller
         ]);
     
         $credentials = $request->only('email', 'password');
-        // dd($request);
-
-        if (Auth::guard('superadmin')->attempt($credentials)) {
-            $superadmin = Auth::guard('superadmin')->user(); // Retrieve the authenticated user
     
-            // Optional: Store user information in the session
-            session()->put('superadmin.nama', $superadmin->nama);
-            session()->put('superadmin.email', $superadmin->email);
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user(); // Retrieve the authenticated user
+            // Check if the user is a super admin
+            if (SuperadminModel::isSuperAdmin($user->id)) {
+                session()->put('superadmin.nama', $user->name);
+                session()->put('superadmin.email', $user->email);
+                return redirect('/cadpot')->with('success', 'Berhasil Masuk sebagai Super Admin!');
+            }
     
-            return redirect('/cadpot')->with('success', 'Berhasil Masuk!');
+            // For regular admin
+            session()->put('admin.nama', $user->name);
+            session()->put('admin.email', $user->email);
+            return redirect('/admincadpot')->with('success', 'Berhasil Masuk sebagai Admin!');
         }
-        
-        if (Auth::guard('admin')->attempt($credentials)) {
-            $admin = Auth::guard('admin')->user();
-            session()->put('admin.nama', $admin->nama);
-            session()->put('admin.email', $admin->email);
-            //dd($admin);
-            return redirect('/admincadpot')->with('success', 'Berhasil Masuk!');
-        }
-
-
-        return redirect('/login')->with('failed', 'No Induk atau Password Salah');
-    } 
+    
+        return redirect('/login')->with('failed', 'Email atau Password Salah');
+    }
 }

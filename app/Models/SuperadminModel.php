@@ -16,10 +16,8 @@ class SuperadminModel extends Authenticatable
     public $timestamps = false;
 
     protected $fillable = [
+        'user_id',
         'level_id',
-        'nama',
-        'email',
-        'password',
     ];
     protected $hidden = [
         'password',
@@ -35,6 +33,11 @@ class SuperadminModel extends Authenticatable
        public function level(): BelongsTo
     {
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
+    }
+
+    public static function isSuperAdmin($userId)
+    {
+        return self::where('user_id', $userId)->exists();
     }
 }
 

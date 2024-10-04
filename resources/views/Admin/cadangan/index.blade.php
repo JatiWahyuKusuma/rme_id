@@ -5,7 +5,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('cadpot/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('admincadpot/create') }}">Tambah</a>
             </div>
         </div>
         <div class="card-body">
@@ -83,11 +83,10 @@
         var dataTable = $('#table_m_cadangan_potensi').DataTable({
             serverSide: true,
             ajax: {
-                "url": "{{ url('cadpot/list') }}",
+                "url": "{{ url('admincadpot/list') }}",
                 "type": "POST",
                 "data": function(d) {
                     d._token = '{{ csrf_token() }}';
-                    d.name = '{{ request()->get("name", "tuban") }}';
                     d.komoditi = $('#komoditi').val(); // Use the correct filter value
                 }
             },

@@ -17,9 +17,7 @@ class AdminModel extends Authenticatable
     protected $fillable = [
         'level_id',
         'opco_id',
-        'nama',
-        'email',
-        'password',
+        'user_id',
     ];
 
     public function level(): BelongsTo
