@@ -37,7 +37,7 @@ class LoginController extends Controller
             session()->put('admin.nama', $admin->nama);
             session()->put('admin.email', $admin->email);
             //dd($admin);
-            return redirect('/dashboard')->with('success', 'Berhasil Masuk!');
+            return redirect('/admincadpot')->with('success', 'Berhasil Masuk!');
         }
 
 

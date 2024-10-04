@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\AdminCadpotController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminVendorController;
 use App\Http\Controllers\OpcoController;
 use App\Http\Controllers\CadangandanPotensiController;
+use App\Http\Controllers\DashboardCadpotSprAdmController;
+use App\Http\Controllers\DashboardVendorSprAdmController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -29,8 +33,8 @@ Route::group(['prefix' => 'login'], function () {
     Route::get('/', [LoginController::class, 'index'])->name('login');
     Route::post('/', [LoginController::class, 'login_process'])->name('login');
 });
-Route::group(['middleware' => 'auth:web'], function () {
-    Route::get('/dashboard_user', function () {
+Route::group(['middleware' => 'auth:admin'], function () {
+    Route::get('/admincadpot', function () {
         return view('user.dashboard');
     });
 });
@@ -41,7 +45,7 @@ Route::group(['middleware' => ['auth:superadmin']], function () {
 //Route Logout
 Route::post('/logout', [LogoutController::class, 'index'])->name('logout');
 
-
+//Route Superadmin
 Route::group(['prefix' => 'level'], function () {
     Route::get('/', [LevelController::class, 'index']);
     Route::post('/list', [LevelController::class, 'list']);
@@ -93,4 +97,35 @@ Route::group(['prefix' => 'vendorbb'], function () {
     Route::put('/{id}', [VendorController::class, 'update']);
     Route::delete('/{id}', [VendorController::class, 'destroy']);
 });
+//Routes Superadmin
+Route::group(['prefix' => 'dashboardcadangan'], function () {
+    Route::get('/', [DashboardCadpotSprAdmController::class, 'index']);
+    Route::post('/list', [DashboardCadpotSprAdmController::class, 'list']);
+});
+Route::group(['prefix' => 'dashboardvendor'], function () {
+    Route::get('/', [DashboardVendorSprAdmController::class, 'index']);
+    Route::post('/list', [DashboardVendorSprAdmController::class, 'list']);
+});
 
+
+//Route Admin
+Route::group(['prefix' => 'admincadpot'], function () {
+    Route::get('/', [AdminCadpotController::class, 'index']);
+    Route::post('/list', [AdminCadpotController::class, 'list']);
+    Route::get('/create', [AdminCadpotController::class, 'create']);
+    Route::post('/', [AdminCadpotController::class, 'store']);
+    Route::get('/{id}', [AdminCadpotController::class, 'show']);
+    Route::get('/{id}/edit', [AdminCadpotController::class, 'edit']);
+    Route::put('/{id}', [AdminCadpotController::class, 'update']);
+    Route::delete('/{id}', [AdminCadpotController::class, 'destroy']);
+});
+Route::group(['prefix' => 'adminvendorbb'], function () {
+    Route::get('/', [AdminVendorController::class, 'index']);
+    Route::post('/list', [AdminVendorController::class, 'list']);
+    Route::get('/create', [AdminVendorController::class, 'create']);
+    Route::post('/', [AdminVendorController::class, 'store']);
+    Route::get('/{id}', [AdminVendorController::class, 'show']);
+    Route::get('/{id}/edit', [AdminVendorController::class, 'edit']);
+    Route::put('/{id}', [AdminVendorController::class, 'update']);
+    Route::delete('/{id}', [AdminVendorController::class, 'destroy']);
+});

@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('content')
     <div class="card card-outline card-primary">
@@ -7,8 +7,18 @@
             <div class="card-tools"></div>
         </div>
         <div class="card-body">
-            <form method="POST" action="{{ url('ghopocad') }}" class="form-horizontal">
+            <form method="POST" action="{{ url('admincadpot') }}" class="form-horizontal">
                 @csrf
+                <div class="form-group row">
+                    <label class="col-1 control-label col-form-label">Opco ID</label>
+                    <div class="col-11">
+                        <input type="text" class="form-control" id="opco_id" name="opco_id"
+                            value="{{ old('opco_id') }}" required>
+                        @error('opco_id')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                </div>
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Jarak</label>
                     <div class="col-11">
@@ -173,7 +183,7 @@
                     <label class="col-1 control-label col-form-label"></label>
                     <div class="col-11">
                         <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-                        <a class="btn btn-sm btn-default ml-1" href="{{ url('ghopocad') }}">Kembali</a>
+                        <a class="btn btn-sm btn-default ml-1" href="{{ url('admincadpot') }}">Kembali</a>
                     </div>
                 </div>
             </form>

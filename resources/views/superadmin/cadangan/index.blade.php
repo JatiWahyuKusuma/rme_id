@@ -20,15 +20,12 @@
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
-                            <select class="form-control" name="komoditi" id="komoditi">
+                            <select class="form-control" name="opco_id" id="opco_id">
                                 <option value="">-- Semua --</option>
-                                <option value="Cad Batugamping">Cad Batugamping</option>
-                                <option value="Pot Batugamping">Pot Batugamping</option>
-                                <option value="Cad Lempung">Cad Lempung</option>
-                                <option value="Pot Lempung">Pot Lempung</option>
-                                <option value="Pot Pasirkuarsa">Pot Pasirkuarsa</option>
+                                <option value="1">Ghopo Tuban</option>
+                                <option value="2">SG Rembang</option>
                             </select>
-                            <small class="form-text text-muted">Komoditi</small>
+                            <small class="form-text text-muted">Opco</small>
                         </div>
                     </div>
                 </div>
@@ -89,7 +86,7 @@
                 "data": function(d) {
                     d._token = '{{ csrf_token() }}';
                     d.name = '{{ request()->get("name", "tuban") }}';
-                    d.komoditi = $('#komoditi').val(); // Use the correct filter value
+                    d.opco_id = $('#opco_id').val(); // Use the correct filter value
                 }
             },
             columns: [
@@ -179,11 +176,12 @@
                     searchable: false,
                     width: "170px"
                 }
+                
             ]
         });
 
         // Event listener for filter
-        $('#komoditi').on('change', function() {
+        $('#opco_id').on('change', function() {
             dataTable.ajax.reload(); // Reload data when filter changes
         });
     });

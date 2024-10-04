@@ -19,7 +19,7 @@
                     <img src="{{ asset('images/admin.png') }}" class="elevation-2" alt="User Image"> <!-- Removed img-circle -->
                 </div> 
                 <div class="info"> 
-                    <a href="#" class="d-block">Admin SG Rembang</a> 
+                    <a href="#" class="d-block">Admin GHOPO Tuban</a> 
                 </div> 
             </div> 
 
@@ -34,25 +34,38 @@
 
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> <!-- Horizontal line after Dashboard --> 
 
-            <li class="nav-header">SG Rembang</li> 
+            <li class="nav-header">GHOPO Tuban</li> 
             <li class="nav-item"> 
-                <a href="{{ url('/cadangansg') }}" class="nav-link {{ $activeMenu == 'cadangansg' ? 'active' : '' }}"> 
+                <a href="{{ url('/cadpot?name=tuban') }}" class="nav-link {{ $activeMenu == 'cadpot_tuban' ? 'active' : '' }}"> 
                     <i class="nav-icon far fa-address-card"></i> 
                     <p>Cadangan dan Potensi</p> 
                 </a> 
             </li> 
 
             <li class="nav-item"> 
-                <a href="{{ url('/vendorsg') }}" class="nav-link {{ $activeMenu == 'vendorsg' ? 'active' : '' }}"> 
+                <a href="{{ url('//vendorbb?name=tuban') }}" class="nav-link {{ $activeMenu == 'vendorbb_tuban' ? 'active' : '' }}"> 
                     <i class="nav-icon far fa-address-card"></i> 
                     <p>Vendor</p> 
                 </a> 
-            </li> 
-
-            {{-- @if (Auth::user()->id_opco == '1')
+            </li>
+            
+            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> <!-- Horizontal line after Dashboard --> 
+            
+            <li class="nav-item">
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button class="nav-link {{ $activeMenu == 'logout' ? 'active' : '' }} mt-3"> <!-- Tambahkan kelas mt-3 -->
+                        <i class="nav-icon fas fa-power-off"></i>
+                        <p>Keluar</p>
+                    </button>
+                </form>
+            </li>
+        </ul>
+        
+            {{-- @if (Auth::user()->opco_id == '1')
                 <li class="nav-header">SG Rembang</li> 
                 <li class="nav-item"> 
-                    <a href="{{ url('/cadangansg') }}" class="nav-link {{ $activeMenu == 'cadangansg' ? 'active' : '' }}"> 
+                    <a href="{{ url('/admincadpot') }}" class="nav-link {{ $activeMenu == 'admincadpot' ? 'active' : '' }}"> 
                         <i class="nav-icon far fa-address-card"></i> 
                         <p>Cadangan dan Potensi</p> 
                     </a> 
@@ -63,10 +76,10 @@
                         <p>Vendor</p> 
                     </a> 
                 </li> 
-            @elseif (Auth::user()->id_opco == '2')
+            @elseif (Auth::user()->opco_id == '2')
                 <li class="nav-header">SG Tuban</li> 
                 <li class="nav-item"> 
-                    <a href="{{ url('/cadangantuban') }}" class="nav-link {{ $activeMenu == 'cadangantuban' ? 'active' : '' }}"> 
+                    <a href="{{ url('/admincadpot') }}" class="nav-link {{ $activeMenu == 'admincadpot' ? 'active' : '' }}"> 
                         <i class="nav-icon far fa-address-card"></i> 
                         <p>Cadangan dan Potensi Tuban</p> 
                     </a> 
@@ -79,7 +92,7 @@
                 </li>
             @endif --}}
 
-            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 20px 0;"> <!-- Horizontal line after Data Cadangan dan Potensi -->  
+            {{-- <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 20px 0;"> <!-- Horizontal line after Data Cadangan dan Potensi -->   --}}
         </ul> 
-    </nav> 
+    </nav>
 </div>

@@ -35,7 +35,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/') }}" class="nav-link {{ $activeMenu == 'dashboard' ? 'active' : '' }}">
+                    <a href="{{ url('/dashboardvendor') }}" class="nav-link {{ $activeMenu == 'dashboardvendor' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Vendor</p>
                     </a>
@@ -45,21 +45,27 @@
 
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;">
             
-            <li class="nav-header">Data Cadangan dan Potensi</li>
+            <li class="nav-header">Data All Opco</li>
             <li class="nav-item">
-                <a href="{{ url('/cadpot?name=tuban') }}" class="nav-link {{ $activeMenu == 'cadpot_tuban' ? 'active' : '' }}">
+                <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
                     <i class="nav-icon far fa-address-card"></i>
-                    <p>GHOPO Tuban</p>
+                    <p>Cadangan dan Potensi</p>
                 </a>
             </li>
-
             <li class="nav-item">
-                <a href="{{ url('/cadpot?name=rembang') }}" class="nav-link {{ $activeMenu == 'cadpot_rembang' ? 'active' : '' }}">
+                <a href="{{ url('/vendorbb') }}" class="nav-link {{ $activeMenu == 'vendorbb' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-user-friends"></i>
+                    <p>Vendor</p>
+                </a>
+            </li>
+{{-- 
+            <li class="nav-item">
+                <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
                     <i class="nav-icon far fa-address-card"></i>
                     <p>SG Rembang</p>
                 </a>
-            </li>
-
+            </li> --}}
+{{-- 
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> 
 
             <li class="nav-header">Data Vendor</li>
@@ -75,7 +81,7 @@
                     <i class="nav-icon fas fa-user-friends"></i>
                     <p>SG Rembang</p>
                 </a>
-            </li>
+            </li> --}}
 
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> 
 

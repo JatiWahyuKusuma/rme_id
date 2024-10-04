@@ -26,7 +26,7 @@
   <!-- Site wrapper -->
   <div class="wrapper">
     <!-- Navbar -->
-    @include('layoutSG.header')
+    @include('layoutAdmin.header')
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
@@ -39,14 +39,14 @@
       </a> --}}
 
       <!-- Sidebar -->
-      @include('layoutSG.sidebar')
+      @include('layoutAdmin.sidebar')
       <!-- /.sidebar -->
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
-      @include('layoutSG.breadcrumb')
+      @include('layoutAdmin.breadcrumb')
 
       <!-- Main content -->
       <section class="content">
@@ -56,7 +56,7 @@
     </div>
     <!-- /.content-wrapper -->
 
-    @include('layoutSG.footer')
+    @include('layoutAdmin.footer')
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">

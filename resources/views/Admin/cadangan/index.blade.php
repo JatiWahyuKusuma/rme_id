@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('content')
     <div class="card card-outline card-primary">
@@ -87,6 +87,7 @@
                 "type": "POST",
                 "data": function(d) {
                     d._token = '{{ csrf_token() }}';
+                    d.name = '{{ request()->get("name", "tuban") }}';
                     d.komoditi = $('#komoditi').val(); // Use the correct filter value
                 }
             },
