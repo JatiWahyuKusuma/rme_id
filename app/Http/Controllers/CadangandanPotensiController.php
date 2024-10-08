@@ -20,13 +20,6 @@ class CadangandanPotensiController extends Controller
         ];
 
         $activeMenu = 'cadpot';
-        // $name = $request->get('name', 'tuban');
-        // if ($name == 'tuban') {
-        //     $activeMenu = 'cadpot_tuban';
-        // } elseif ($name == 'rembang') {
-        //     $activeMenu = 'cadpot_rembang';
-        // }
-
         $cadpot = CadangandanPotensiModel::all();
 
         return view('superadmin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu]);
@@ -34,14 +27,9 @@ class CadangandanPotensiController extends Controller
 
     public function list(Request $request)
     {
-        
-        // $name = $request->get('name');
+
         $cadpot = CadangandanPotensiModel::select('cadpot_id', 'opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan', 'sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
-        // if ($name == 'tuban') {
-        //     $cadpot->where('opco_id', 1); // For Tuban
-        // } elseif ($name == 'rembang') {
-        //     $cadpot->where('opco_id', 2); // For Rembang
-        // }
+
 
         if ($request->opco_id) {
             $cadpot->where('opco_id', $request->opco_id);

@@ -12,8 +12,8 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Opco ID</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="opco_id" name="opco_id"
-                            value="{{ old('opco_id') }}" required>
+                        <input type="hidden" class="form-control" id="opco_id" name="opco_id" value="{{ $opcoId }}" readonly>
+                        <input type="text" class="form-control" value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : '') }}" readonly>
                         @error('opco_id')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror

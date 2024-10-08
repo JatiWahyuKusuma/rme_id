@@ -97,11 +97,14 @@ Route::group(['prefix' => 'vendorbb'], function () {
     Route::put('/{id}', [VendorController::class, 'update']);
     Route::delete('/{id}', [VendorController::class, 'destroy']);
 });
-//Routes Superadmin
+//Routes Dashboard
 Route::group(['prefix' => 'dashboardcadangan'], function () {
     Route::get('/', [DashboardCadpotSprAdmController::class, 'index']);
     Route::post('/list', [DashboardCadpotSprAdmController::class, 'list']);
 });
+Route::get('/dashboard', [DashboardCadpotSprAdmController::class, 'index'])->name('dashboard');
+Route::get('/maps', [DashboardCadpotSprAdmController::class, 'map'])->name('maps');
+
 Route::group(['prefix' => 'dashboardvendor'], function () {
     Route::get('/', [DashboardVendorSprAdmController::class, 'index']);
     Route::post('/list', [DashboardVendorSprAdmController::class, 'list']);

@@ -28,16 +28,25 @@ class DashboardVendorSprAdmController extends Controller
         $totalVendor = VendorModel::whereNotNull('vendor')->distinct('vendor')->count('vendor');
 
         $data = VendorModel::select('komoditi', VendorModel::raw('SUM(kap_ton_thn) as total_kap_ton_thn'))
-        ->groupBy('komoditi')
-        ->orderBy('total_kap_ton_thn', 'desc')
-        ->limit(3) // Limit to 6 unique commodities
-        ->get();
+            ->groupBy('komoditi')
+            ->orderBy('total_kap_ton_thn', 'desc')
+            ->limit(3) // Limit to 6 unique commodities
+            ->get();
 
-    // Prepare the data for the chart
-    $komoditiLabels = $data->pluck('komoditi');
-    $kapTonThn = $data->pluck('total_kap_ton_thn');
+        // Prepare the data for the chart
+        $komoditiLabels = $data->pluck('komoditi');
+        $kapTonThn = $data->pluck('total_kap_ton_thn');
 
-        
+        // Table Data
+        $tableData = VendorModel::select('komoditi', 'vendor', 'kap_ton_thn', 'kabupaten', 'jarak')
+            ->get();
+
+        $locationsVen = VendorModel::select('komoditi', 'latitude', 'longitude')
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get();
+
+
         // Pass totals to the view
         return view('superadmin.dashboardVendor.index', [
             'breadcrumb' => $breadcrumb,
@@ -48,6 +57,13 @@ class DashboardVendorSprAdmController extends Controller
             'totalVendor' => $totalVendor,
             'komoditiLabels' => $komoditiLabels,
             'kapTonThn' => $kapTonThn,
+            'tableData' => $tableData,
+            'locationsVen' => $locationsVen,
         ]);
+    }
+
+    public function maps()
+    {
+        return view('superadmin.DashboardVendor.index');
     }
 }

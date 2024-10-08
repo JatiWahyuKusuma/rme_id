@@ -1,7 +1,6 @@
 @extends('LayoutAdmin.template')
 
 @section('content')
-
     <div class="card card-outline card-primary">
 
         <div class="card-header">
@@ -9,7 +8,7 @@
             <h3 class="card-title">{{ $page->title }}</h3>
 
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('vendorbb/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('adminvendorbb/create') }}">Tambah</a>
             </div>
 
         </div>
@@ -63,7 +62,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @push('css')
@@ -71,16 +69,19 @@
         th {
             text-align: center;
         }
+
         .aksi-buttons {
             display: flex;
             justify-content: center;
             gap: 5px;
         }
+
         .aksi-buttons a,
         .aksi-buttons button {
             flex-grow: 1;
             text-align: center;
         }
+
         table th {
             text-align: center;
             vertical-align: middle;
@@ -96,15 +97,15 @@
             var dataLevel = $('#table_m_vendor').DataTable({
                 serverSide: true,
                 ajax: {
-                    url: "{{ url('vendorbb/list') }}",
+                    url: "{{ url('adminvendorbb/list') }}",
                     type: "POST",
                     data: function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token
                         d.opco_id = $('#opco_id').val(); // Get the selected filter value
+                        d.opco_id = {{ auth()->user()->admin->opco_id }}
                     }
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "DT_RowIndex",
                         className: "text-center",
                         orderable: false,

@@ -64,12 +64,14 @@
         th {
             text-align: center;
         }
+
         .aksi-buttons {
             display: flex;
             gap: 2px;
         }
 
-        .aksi-buttons a, .aksi-buttons button {
+        .aksi-buttons a,
+        .aksi-buttons button {
             flex-grow: 1;
             width: 75px;
             text-align: center;
@@ -78,112 +80,112 @@
 @endpush
 
 @push('js')
-<script>
-    $(document).ready(function() {
-        var dataTable = $('#table_m_cadangan_potensi').DataTable({
-            serverSide: true,
-            ajax: {
-                "url": "{{ url('admincadpot/list') }}",
-                "type": "POST",
-                "data": function(d) {
-                    d._token = '{{ csrf_token() }}';
-                    d.komoditi = $('#komoditi').val(); // Use the correct filter value
-                }
-            },
-            columns: [
-                {
-                    data: "DT_RowIndex",
-                    className: "text-center",
-                    orderable: false,
-                    searchable: false
+    <script>
+        $(document).ready(function() {
+            var dataTable = $('#table_m_cadangan_potensi').DataTable({
+                serverSide: true,
+                ajax: {
+                    "url": "{{ url('admincadpot/list') }}",
+                    "type": "POST",
+                    "data": function(d) {
+                        d._token = '{{ csrf_token() }}';
+                        d.komoditi = $('#komoditi').val(); // Use the correct filter value
+                        d.opco_id = {{ auth()->user()->admin->opco_id }}
+                    }
                 },
-                {
-                    data: "opco_id",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "jarak",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "komoditi",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "lokasi_iup",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "tipe_sd_cadangan",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "sd_cadangan_ton",
-                    orderable: true,
-                    searchable: true,
-                    render: function(data, type, row){
-                        return new Intl.NumberFormat('id-ID').format(data);
+                columns: [{
+                        data: "DT_RowIndex",
+                        className: "text-center",
+                        orderable: false,
+                        searchable: false
                     },
-                    width: "150px"
-                },
-                {
-                    data: "catatan",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "status_penyelidikan",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "acuan",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "kabupaten",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "kecamatan",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "luas_ha",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "masa_berlaku_iup",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "masa_berlaku_ppkh",
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: "aksi",
-                    orderable: false,
-                    searchable: false,
-                    width: "170px"
-                }
-            ]
-        });
+                    {
+                        data: "opco_id",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "jarak",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "komoditi",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "lokasi_iup",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "tipe_sd_cadangan",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "sd_cadangan_ton",
+                        orderable: true,
+                        searchable: true,
+                        render: function(data, type, row) {
+                            return new Intl.NumberFormat('id-ID').format(data);
+                        },
+                        width: "150px"
+                    },
+                    {
+                        data: "catatan",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "status_penyelidikan",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "acuan",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "kabupaten",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "kecamatan",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "luas_ha",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "masa_berlaku_iup",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "masa_berlaku_ppkh",
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: "aksi",
+                        orderable: false,
+                        searchable: false,
+                        width: "170px"
+                    }
+                ]
+            });
 
-        // Event listener for filter
-        $('#komoditi').on('change', function() {
-            dataTable.ajax.reload(); // Reload data when filter changes
+            // Event listener for filter
+            $('#komoditi').on('change', function() {
+                dataTable.ajax.reload(); // Reload data when filter changes
+            });
         });
-    });
-</script>
+    </script>
 @endpush

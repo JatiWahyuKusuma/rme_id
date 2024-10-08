@@ -1,5 +1,16 @@
 @extends('layout.template')
 
+@section('css')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
+    <style>
+        #map {
+            height: 730px;
+        }
+    </style>
+@endsection
+
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.53.0/apexcharts.min.js"
         integrity="sha512-QbaChpzUJcRVsOFtDhh/VZMuljqvlPRIhIXsvfREDZcdqzIKdNvAhwrgW+flSxtbxK/BFpdX1y5NSO6bSYHlOA=="
@@ -39,7 +50,7 @@
             dataLabels: {
                 enabled: false,
                 style: {
-                    colors: ['#000000']
+                    colors: ['#FFFFFF']
                 },
                 formatter: function(val) {
                     // Format the value with a period as a thousand separator
@@ -53,7 +64,7 @@
                 }
             },
             xaxis: {
-                categories: @json($komoditiLabels), // Ensure this matches the data length
+                categories: @json($komoditiLabels),
                 labels: {
                     formatter: function(val) {
                         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -142,45 +153,20 @@
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-            <!-- Left col -->
             <section class="col-lg-7 connectedSortable">
-                <!-- Custom tabs (Charts with tabs)-->
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="fas fa-chart-pie mr-1"></i>
-                            Sales
-                        </h3>
-                        <div class="card-tools">
-                            <ul class="nav nav-pills ml-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#revenue-chart" data-toggle="tab">Area</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#sales-chart" data-toggle="tab">Donut</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="tab-content p-0">
-                            <!-- Morris chart - Sales -->
-                            <div class="chart tab-pane active" id="revenue-chart"
-                                style="position: relative; height: 300px;">
-                                <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
-                            </div>
-                            <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                                <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header" style="text-align: center">Maps </div>
+                                <div class="card-body">
+                                    <div id="map"></div>
+                                </div>
                             </div>
                         </div>
-                    </div><!-- /.card-body -->
+                    </div>
                 </div>
-                <!-- /.card -->
-
-                <!-- /.card -->
             </section>
-            <!-- /.Left col -->
-            <!-- right col (We are only adding the ID to make the widgets sortable)-->
             <section class="col-lg-5 connectedSortable">
 
                 <!-- BAR CHART -->
@@ -192,6 +178,33 @@
                 </div>
                 <div class="card bg-gradient-info">
                 </div>
+                {{-- DETAIL TABLE --}}
+                <div class="container mt-4">
+                    <div class="p-6 m-20 bg-white rounded shadow" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Komoditi</th>
+                                    <th class="text-center">Vendor</th>
+                                    <th class="text-center">Kap(ton/thn)</th>
+                                    <th class="text-center">Kabupaten</th>
+                                    <th class="text-center">Jarak</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($tableData as $data)
+                                    <tr>
+                                        <td>{{ $data->komoditi }}</td>
+                                        <td>{{ $data->vendor }}</td>
+                                        <td>{{ number_format($data->kap_ton_thn, 0, '.', '.') }}</td>
+                                        <td>{{ $data->kabupaten }}</td>
+                                        <td>{{ $data->jarak }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
             <!-- right col -->
         </div>
@@ -199,5 +212,45 @@
         </div><!-- /.container-fluid -->
     </section>
 @endsection
-@section('script')
-@endsection
+@push('javascript')
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script>
+        const map = L.map('map').setView([-5.129541583080711, 113.62957770241515], 4);
+
+        const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        // Data lokasi dari backend (laravel) locations dalam format JSON
+        const locationsVen = @json($locationsVen);
+
+        // Mapping komoditi ke warna
+        const iconMapping = {
+            'Purified Gypsum': 'images/PurifiedGypsum.png',
+            'Copper Slag': 'images/CopperSlag.png',
+            'Fly Ash': 'images/FlyAsh.png',
+            // Add other commodities and their corresponding icons as needed
+        };
+
+        locationsVen.forEach(location => {
+            if (location.latitude && location.longitude) {
+                const commodityIconUrl = iconMapping[location.komoditi] ||
+                    'images/user.png'; // Use a default icon if not found
+                const commodityIcon = L.icon({
+                    iconUrl: commodityIconUrl,
+                    iconSize: [30, 30], // Adjust the size as needed
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([location.latitude, location.longitude], {
+                        icon: commodityIcon
+                    })
+                    .bindPopup(`<strong>Komoditi:</strong> ${location.komoditi}`)
+                    .addTo(map);
+            }
+        });
+    </script>
+@endpush

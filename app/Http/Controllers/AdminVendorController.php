@@ -10,10 +10,19 @@ class AdminVendorController extends Controller
 {
     public function index()
     {
-        $breadcrumb = (object) [
-            'title' => 'Vendor Bahan Baku di SIG -GHOPO Tuban',
-            'list' => ['Home', 'Vendor']
-        ];
+        $userOpcoId = auth()->user()->admin->opco_id;
+
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Vendor Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Vendor Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang']
+            ];
+        }
 
         $page = (object)[
             'title' => 'Daftar Vendor Bahan Baku yang terdaftar dalam sistem'
@@ -22,6 +31,8 @@ class AdminVendorController extends Controller
         $activeMenu = 'adminvendorbb';
 
         $adminvendorbb = VendorModel::all();
+         // Fetch all cadpot data, but in the DataTable method, filtering is applied based on opco_id
+         $adminvendorbb = VendorModel::where('opco_id', $userOpcoId)->get();
 
         return view('admin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu]);
     }
@@ -30,9 +41,12 @@ class AdminVendorController extends Controller
     {
         $adminvendorbb = VendorModel::select('vendor_id','opco_id', 'jarak', 'latitude', 'longitude', 'vendor', 'komoditi', 'desa', 'kecamatan', 'kabupaten', 'kap_ton_thn', 'konsumsi_ton_thn');
 
-        // if ($request->komoditi) {
-        //     $adminvendorbb->where('komoditi', $request->komoditi);
-        // }
+        $userOpcoId = auth()->user()->admin->opco_id;
+
+        // Filter the data based on the user's company (opco_id)
+        if ($userOpcoId) {
+            $adminvendorbb->where('opco_id', $userOpcoId);
+        }
         if ($request->opco_id) {
             $adminvendorbb->where('opco_id', $request->opco_id);
         }
@@ -65,8 +79,9 @@ class AdminVendorController extends Controller
 
         $adminvendorbb = VendorModel::all();
         $activeMenu = 'adminvendorbb';
+        $opcoId = auth()->user()->admin->opco_id;
 
-        return view('admin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu]);
+        return view('admin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu,'opcoId'=> $opcoId]);
     }
 
     public function store(Request $request)
@@ -84,6 +99,12 @@ class AdminVendorController extends Controller
             'kap_ton_thn' => 'required',
             'konsumsi_ton_thn' => 'required|string',      
         ]);
+        $loggedOpcoId = auth()->user()->admin->opco_id;
+
+        // Ensure the form's opco_id matches the logged-in user's opco_id
+        if ($request->opco_id != $loggedOpcoId) {
+            return redirect()->back()->withErrors('You are not authorized to add data for this Opco.');
+        }
 
         VendorModel::create([
             'opco_id' => $request->opco_id,
@@ -132,10 +153,13 @@ class AdminVendorController extends Controller
         $page = (object)[
             'title' => ''
         ];
-
+        if (!$adminvendorbb || $adminvendorbb->opco_id != auth()->user()->admin->opco_id) {
+            return redirect('/adminvendorbb')->withErrors('Anda tidak diizinkan untuk mengedit data ini.');
+        }
+        $opcoId = auth()->user()->admin->opco_id;
         $activeMenu = 'adminvendorbb';
 
-        return view('admin.Vendor.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu]);
+        return view('admin.Vendor.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
     }
 
     public function update(Request $request, $id)
@@ -153,6 +177,18 @@ class AdminVendorController extends Controller
             'kap_ton_thn' => 'required',
             'konsumsi_ton_thn' => 'required|string',  
         ]);
+        $loggedOpcoId = auth()->user()->admin->opco_id;
+        $adminvendorbb = VendorModel::find($id);
+
+        if (!$adminvendorbb || $adminvendorbb->opco_id != $loggedOpcoId) {
+            return redirect('/adminvend$adminvendorbb')->withErrors('Anda tidak diizinkan untuk mengedit data ini.');
+        }
+
+
+        // Ensure the form's opco_id matches the logged-in user's opco_id
+        if ($request->opco_id != $loggedOpcoId) {
+            return redirect()->back()->withErrors('You are not authorized to add data for this Opco.');
+        }
 
         VendorModel::find($id)->update([
             'opco_id' => $request->opco_id,

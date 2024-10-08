@@ -10,38 +10,43 @@ class AdminCadpotController extends Controller
 {
     public function index(Request $request)
     {
-        $breadcrumb = (object) [
-            'title' => 'Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
-            'list' => ['Home', 'Cadangan']
-        ];
+        $userOpcoId = auth()->user()->admin->opco_id;
+
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang']
+            ];
+        }
 
         $page = (object)[
             'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'
         ];
 
         $activeMenu = 'admincadpot';
-        // $name = $request->get('name', 'tuban');
-        // if ($name == 'tuban') {
-        //     $activeMenu = 'admincadpot_tuban';
-        // } elseif ($name == 'rembang') {
-        //     $activeMenu = 'admincadpot_rembang';
-        // }
-
         $admincadpot = CadangandanPotensiModel::all();
+        // Fetch all cadpot data, but in the DataTable method, filtering is applied based on opco_id
+        $admincadpot = CadangandanPotensiModel::where('opco_id', $userOpcoId)->get();
 
         return view('admin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu]);
     }
 
     public function list(Request $request)
     {
-        
-        // $name = $request->get('name');
+
         $admincadpot = CadangandanPotensiModel::select('cadpot_id', 'opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan', 'sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
-        // if ($name == 'tuban') {
-        //     $admincadpot->where('opco_id', 1); // For Tuban
-        // } elseif ($name == 'rembang') {
-        //     $admincadpot->where('opco_id', 2); // For Rembang
-        // }
+
+        $userOpcoId = auth()->user()->admin->opco_id;
+
+        // Filter the data based on the user's company (opco_id)
+        if ($userOpcoId) {
+            $admincadpot->where('opco_id', $userOpcoId);
+        }
 
         if ($request->opco_id) {
             $admincadpot->where('opco_id', $request->opco_id);
@@ -74,8 +79,9 @@ class AdminCadpotController extends Controller
 
         $admincadpot = CadangandanPotensiModel::all();
         $activeMenu = 'admincadpot';
+        $opcoId = auth()->user()->admin->opco_id;
 
-        return view('admin.cadangan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu]);
+        return view('admin.cadangan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
     }
 
     public function store(Request $request)
@@ -83,7 +89,7 @@ class AdminCadpotController extends Controller
         $request->validate([
             'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric', 
+            'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
@@ -98,8 +104,15 @@ class AdminCadpotController extends Controller
             'luas_ha' => 'nullable|numeric',
             'masa_berlaku_iup' => 'nullable',
             'masa_berlaku_ppkh' => 'nullable',
-            
+
         ]);
+
+        $loggedOpcoId = auth()->user()->admin->opco_id;
+
+        // Ensure the form's opco_id matches the logged-in user's opco_id
+        if ($request->opco_id != $loggedOpcoId) {
+            return redirect()->back()->withErrors('You are not authorized to add data for this Opco.');
+        }
 
         CadangandanPotensiModel::create([
             'opco_id' => $request->opco_id,
@@ -131,7 +144,7 @@ class AdminCadpotController extends Controller
 
         $breadcrumb = (object) [
             'title' => 'Detail Data GHOPO Cadangan dan Potensi Bahan Baku di SIG',
-            'list' => ['Home', 'GHOPO Tuban', 'Detail']
+            'list' => ['Home', 'Cadangan & Potensi', 'Detail']
         ];
 
         $page = (object)[
@@ -156,9 +169,16 @@ class AdminCadpotController extends Controller
             'title' => ''
         ];
 
+        if (!$admincadpot || $admincadpot->opco_id != auth()->user()->admin->opco_id) {
+            return redirect('/admincadpot')->withErrors('Anda tidak diizinkan untuk mengedit data ini.');
+        }
+
+        $opcoId = auth()->user()->admin->opco_id;
+
         $activeMenu = 'admincadpot';
 
-        return view('admin.Cadangan.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu]);
+
+        return view('admin.Cadangan.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
     }
 
     public function update(Request $request, $id)
@@ -166,7 +186,7 @@ class AdminCadpotController extends Controller
         $request->validate([
             'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric', 
+            'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
@@ -182,6 +202,18 @@ class AdminCadpotController extends Controller
             'masa_berlaku_iup' => 'nullable',
             'masa_berlaku_ppkh' => 'nullable',
         ]);
+        $loggedOpcoId = auth()->user()->admin->opco_id;
+        $admincadpot = CadangandanPotensiModel::find($id);
+
+        if (!$admincadpot || $admincadpot->opco_id != $loggedOpcoId) {
+            return redirect('/admincadpot')->withErrors('Anda tidak diizinkan untuk mengedit data ini.');
+        }
+
+
+        // Ensure the form's opco_id matches the logged-in user's opco_id
+        if ($request->opco_id != $loggedOpcoId) {
+            return redirect()->back()->withErrors('You are not authorized to add data for this Opco.');
+        }
 
         CadangandanPotensiModel::find($id)->update([
             'opco_id' => $request->opco_id,
