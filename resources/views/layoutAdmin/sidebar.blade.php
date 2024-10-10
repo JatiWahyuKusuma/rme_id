@@ -31,15 +31,15 @@
 
                 <li class="nav-header">Dashboard</li>
                 <li class="nav-item">
-                    <a href="{{ url('/dashboardcadangan') }}"
-                        class="nav-link {{ $activeMenu == 'dashboardcadangan' ? 'active' : '' }}">
+                    <a href="{{ url('/dashboardcadpot') }}"
+                        class="nav-link {{ $activeMenu == 'dashboardcadpot' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Cadangan dan Potensi</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/dashboardvendor') }}"
-                        class="nav-link {{ $activeMenu == 'dashboardvendor' ? 'active' : '' }}">
+                    <a href="{{ url('/dashboardvendorbb') }}"
+                        class="nav-link {{ $activeMenu == 'dashboardvendorbb' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Vendor</p>
                     </a>

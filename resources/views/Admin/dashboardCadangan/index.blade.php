@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('css')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -22,14 +22,14 @@
     <script>
         var options = {
             series: [{
-                data: @json($kapTonThn) // Ensure this data aligns with the colors
+                data: @json($sdCadanganTons) // Ensure this data aligns with the colors
             }],
             chart: {
                 type: 'bar',
                 height: 380
             },
             title: {
-                text: 'Kap(ton/thn) Bahan Baku by Komoditi',
+                text: 'SD/Cadangan dan Potensi Bahan Baku by Komoditi',
                 align: 'center',
                 floating: false,
                 style: {
@@ -46,11 +46,11 @@
                     distributed: true, // Enable distributed colors
                 }
             },
-            colors: ['#9B9B9B', '#000000', '#FF0000'], // Define your colors here
+            colors: ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D'], // Define your colors here
             dataLabels: {
                 enabled: false,
                 style: {
-                    colors: ['#FFFFFF']
+                    colors: ['#000000']
                 },
                 formatter: function(val) {
                     // Format the value with a period as a thousand separator
@@ -65,6 +65,9 @@
             },
             xaxis: {
                 categories: @json($komoditiLabels),
+                min: 1000000,
+                max: 3500000000, // Set the minimum value to 1,000,000
+                // Ensure this matches the data length
                 labels: {
                     formatter: function(val) {
                         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -79,7 +82,7 @@
                 y: {
                     title: {
                         formatter: function() {
-                            return 'Kap(ton/thn) = ';
+                            return 'SD/Cadangan (ton) = ';
                         }
                     },
                     formatter: function(value) {
@@ -107,9 +110,9 @@
                     <div class="col-lg-4 col-6">
                         <div class="small-box bg-success text-center">
                             <div class="inner" style="font-size: 50px;"> <!-- Increase font size for value -->
-                                <h3>{{ $totalKapTonThn }}</h3> <!-- Total SD/Cadangan (ton) -->
+                                <h3>{{ $sdCadanganTon }}</h3> <!-- Total SD/Cadangan (ton) -->
                             </div>
-                            <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total Kap(ton/thn)</p>
+                            <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total SD/Cadangan (ton)</p>
                             <!-- Increased font size for label -->
                             <div class="icon">
                                 <i class="ion ion-cube"></i>
@@ -121,9 +124,9 @@
                     <div class="col-lg-4 col-6">
                         <div class="small-box bg-warning text-center">
                             <div class="inner" style="font-size: 50px;"> <!-- Increased font size for value -->
-                                <h3>{{ $unitPotensiBB }}</h3> <!-- Total Valid IUP -->
+                                <h3>{{ $totalberlakuIUP }}</h3> <!-- Total Valid IUP -->
                             </div>
-                            <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Unit Produksi BB</p>
+                            <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total IUP</p>
                             <!-- Increased font size for label -->
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
@@ -135,9 +138,9 @@
                     <div class="col-lg-4 col-6">
                         <div class="small-box bg-info text-center">
                             <div class="inner" style="font-size: 50px;"> <!-- Increased font size for value -->
-                                <h3>{{ $totalVendor }}</h3> <!-- Total Valid PPKH -->
+                                <h3>{{ $totalberlakuPPKH }}</h3> <!-- Total Valid PPKH -->
                             </div>
-                            <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total Vendor BB</p>
+                            <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total PPKH</p>
                             <!-- Increased font size for label -->
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
@@ -159,7 +162,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header" style="text-align: center; font-size: 20px; font-weight: bold;">
-                                    Peta Vendor Bahan Baku
+                                    Peta Cadangan dan Potensi Bahan Baku
                                 </div>
                                 <div class="legend" style="margin-bottom: 5px; display: flex; align-items: center;">
                                     <!-- Jarak di sini diperkecil -->
@@ -183,6 +186,7 @@
                     </div>
                 </div>
             </section>
+
             <section class="col-lg-5 connectedSortable">
 
                 <!-- BAR CHART -->
@@ -194,6 +198,7 @@
                 </div>
                 <div class="card bg-gradient-info">
                 </div>
+
                 {{-- DETAIL TABLE --}}
                 <div class="container mt-4">
                     <div class="p-6 m-20 bg-white rounded shadow" style="max-height: 400px; overflow-y: auto;">
@@ -201,9 +206,10 @@
                             <thead style="position: sticky; top: 0; background-color: white; z-index: 10;">
                                 <tr>
                                     <th class="text-center">Komoditi</th>
-                                    <th class="text-center">Vendor</th>
-                                    <th class="text-center">Kap(ton/thn)</th>
-                                    <th class="text-center">Kabupaten</th>
+                                    <th class="text-center">Lokasi IUP</th>
+                                    <th class="text-center">SD/Cadangan (ton)</th>
+                                    <th class="text-center">Masa Berlaku IUP</th>
+                                    <th class="text-center">Masa Berlaku PPKH</th>
                                     <th class="text-center">Jarak</th>
                                 </tr>
                             </thead>
@@ -211,19 +217,28 @@
                                 @foreach ($tableData as $data)
                                     <tr>
                                         <td>{{ $data->komoditi }}</td>
-                                        <td>{{ $data->vendor }}</td>
-                                        <td>{{ number_format($data->kap_ton_thn, 0, '.', '.') }}</td>
-                                        <td>{{ $data->kabupaten }}</td>
+                                        <td>{{ $data->lokasi_iup }}</td>
+                                        <td>{{ number_format($data->sd_cadangan_ton, 0, '.', '.') }}</td>
+                                        <td class="{{ $data->warning ? 'bg-warning' : '' }}">
+                                            {{ $data->masa_berlaku_iup }}
+                                        </td>
+                                        <td>{{ $data->masa_berlaku_ppkh }}</td>
                                         <td>{{ $data->jarak }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                </div>
+                    <style>
+                        .bg-warning {
+                            background-color: yellow;
+                            /* or any other color you prefer */
+                        }
+                    </style>
             </section>
             <!-- right col -->
         </div>
+
         <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->
     </section>
@@ -233,36 +248,50 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const map = L.map('map').setView([-7.120465639317109, 111.64157576065331], 9);
+            const map = L.map('map').setView([-6.956579976082929, 111.69833373298265], 10);
 
             const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
+                maxZoom: 50,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
 
             // Data lokasi dari backend (laravel) locations dalam format JSON
-            const locationsVen = @json($locationsVen);
+            const locations = @json($locations);
+            const iconsLegend = @json($iconsLegend);
 
             // Mapping komoditi ke warna
             const iconMapping = {
-                'Purified Gypsum': 'images/PurifiedGypsum.png',
-                'Copper Slag': 'images/CopperSlag.png',
-                'Fly Ash': 'images/FlyAsh.png',
-                'PT. Semen Indonesia (Persero) Tbk': 'images/ghopotuban.png', // Icon for Tuban factory
-                'PT. Semen Gresik Rembang': 'images/sgrembang.png'
+                'Cad Batugamping': 'images/CadBatugamping.png',
+                'Cad Lempung': 'images/CadLempung.png',
+                'Pot Batugamping': 'images/PotBatugamping.png',
+                'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
+                'Pot Lempung': 'images/PotLempung.png',
+                'Pot Tras': 'images/PotTras.png',
+                'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
+                'Pabrik SG Rembang': 'images/sgrembang.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
-            locationsVen.forEach(location => {
+            function getIconSize(sdCadanganTon) {
+                const minSize = 10; // Ukuran minimal
+                const maxSize = 25; // Ukuran maksimal
+                const normalizedSize = Math.min(Math.max(sdCadanganTon * 0.02, minSize),
+                    maxSize); // Normalisasi ukuran
+                return normalizedSize;
+            }
+            // Tambahkan marker untuk setiap lokasi berdasarkan koordinat latitude dan longitude
+            locations.forEach(location => {
                 if (location.latitude && location.longitude) {
+                    const iconSize = getIconSize(location.sd_cadangan_ton);
                     const commodityIconUrl = iconMapping[location.komoditi] ||
                         'images/user.png'; // Use a default icon if not found
                     const commodityIcon = L.icon({
                         iconUrl: commodityIconUrl,
-                        iconSize: [25, 25], // Adjust the size as needed
-                        iconAnchor: [15, 30],
-                        popupAnchor: [0, -30]
+                        iconSize: [iconSize, iconSize], // Adjust the size as needed
+                        iconAnchor: [iconSize / 2, iconSize],
+                        popupAnchor: [0, -iconSize]
                     });
+
                     L.marker([location.latitude, location.longitude], {
                             icon: commodityIcon
                         })
@@ -274,19 +303,31 @@
                             <td>${location.komoditi}</td>
                         </tr>
                         <tr>
-                            <td><strong> Kap(ton/thn) </strong></td>
-                            <td>${numberWithCommas(location.kap_ton_thn)}</td>
+                            <td><strong> SD/Cadangan (ton) </strong></td>
+                            <td>${numberWithCommas(location.sd_cadangan_ton)}</td>
                         </tr>
                         <tr>
-                            <td><strong> Vendor </strong></td>
-                            <td>${location.vendor}</td>
+                            <td><strong> Tipe SD/Cadangan </strong></td>
+                            <td>${location.tipe_sd_cadangan}</td>
                         </tr>
                         <tr>
-                            <td><strong> Kabupaten </strong></td>
-                            <td>${location.kabupaten}</td>
+                            <td><strong> Lokasi/IUP </strong></td>
+                            <td>${location.lokasi_iup}</td>
                         </tr>
                         <tr>
-                            <td><strong> Jarak </strong></td>
+                            <td><strong> Masa Berlaku IUP </strong></td>
+                            <td>${location.masa_berlaku_iup}</td>
+                        </tr>
+                        <tr>
+                            <td><strong> Masa Berlaku PPKH </strong></td>
+                            <td>${location.masa_berlaku_ppkh}</td>
+                        </tr>
+                           <tr>
+                            <td><strong>Luas (ha) </strong></td>
+                            <td>${location.luas_ha}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jarak (km) </strong></td>
                             <td>${location.jarak}</td>
                         </tr>
                     </table>
@@ -295,36 +336,39 @@
                         .addTo(map);
                 }
             });
-            const tubanIcon = L.icon({
-                iconUrl: 'images/ghopotuban.png',
-                iconSize: [65, 65], // Adjust the size as needed
-                iconAnchor: [30, 30],
-                popupAnchor: [0, -30]
-            });
+            @if ($OpcoId == 1)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                const tubanIcon = L.icon({
+                    iconUrl: 'images/ghopotuban.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
 
-            L.marker([-6.863603138698599, 111.91686228064258], {
-                icon: tubanIcon
-            }).bindPopup(`
+                L.marker([-6.8638896542228105, 111.91690249608592], {
+                    icon: tubanIcon
+                }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Indonesia (Persero) Tbk</h5>
         </div>
     `).addTo(map);
+            @elseif ($OpcoId == 2)
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                const rembangIcon = L.icon({
+                    iconUrl: 'images/sgrembang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
 
-            // Tambah marker untuk Pabrik SG Rembang
-            const rembangIcon = L.icon({
-                iconUrl: 'images/sgrembang.png',
-                iconSize: [70, 70], // Adjust the size as needed
-                iconAnchor: [15, 30],
-                popupAnchor: [0, -30]
-            });
-
-            L.marker([-6.862084537748621, 111.45844893831284], {
-                icon: rembangIcon
-            }).bindPopup(`
+                L.marker([-6.862084537748621, 111.45844893831284], {
+                    icon: rembangIcon
+                }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Gresik Rembang, Tbk</h5>
         </div>
     `).addTo(map);
+            @endif
 
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

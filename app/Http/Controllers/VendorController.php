@@ -167,7 +167,7 @@ class VendorController extends Controller
             'kap_ton_thn' => $request->kap_ton_thn,
             'konsumsi_ton_thn' => $request->konsumsi_ton_thn,
         ]);
-        return redirect('/vendorbb')->with('success', 'Data level berhasil diubah');
+        return redirect('/vendorbb')->with('success', 'Data Vendor berhasil diubah');
     }
 
     public function destroy($id)

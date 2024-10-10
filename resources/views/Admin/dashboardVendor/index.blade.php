@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('css')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -6,7 +6,7 @@
 
     <style>
         #map {
-            height: 685px;
+            height: 600px;
         }
     </style>
 @endsection
@@ -248,8 +248,8 @@
                 'Purified Gypsum': 'images/PurifiedGypsum.png',
                 'Copper Slag': 'images/CopperSlag.png',
                 'Fly Ash': 'images/FlyAsh.png',
-                'PT. Semen Indonesia (Persero) Tbk': 'images/ghopotuban.png', // Icon for Tuban factory
-                'PT. Semen Gresik Rembang': 'images/sgrembang.png'
+                'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
+                'Pabrik SG Rembang': 'images/sgrembang.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -295,36 +295,38 @@
                         .addTo(map);
                 }
             });
-            const tubanIcon = L.icon({
-                iconUrl: 'images/ghopotuban.png',
-                iconSize: [65, 65], // Adjust the size as needed
-                iconAnchor: [30, 30],
-                popupAnchor: [0, -30]
-            });
+            @if ($OpcoId == 1)
+                const tubanIcon = L.icon({
+                    iconUrl: 'images/ghopotuban.png',
+                    iconSize: [50, 50], // Adjust the size as needed
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
 
-            L.marker([-6.863603138698599, 111.91686228064258], {
-                icon: tubanIcon
-            }).bindPopup(`
+                L.marker([-6.863603138698599, 111.91686228064258], {
+                    icon: tubanIcon
+                }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Indonesia (Persero) Tbk</h5>
         </div>
     `).addTo(map);
+            @elseif ($OpcoId == 2)
+                // Tambah marker untuk Pabrik SG Rembang
+                const rembangIcon = L.icon({
+                    iconUrl: 'images/sgrembang.png',
+                    iconSize: [50, 50], // Adjust the size as needed
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
 
-            // Tambah marker untuk Pabrik SG Rembang
-            const rembangIcon = L.icon({
-                iconUrl: 'images/sgrembang.png',
-                iconSize: [70, 70], // Adjust the size as needed
-                iconAnchor: [15, 30],
-                popupAnchor: [0, -30]
-            });
-
-            L.marker([-6.862084537748621, 111.45844893831284], {
-                icon: rembangIcon
-            }).bindPopup(`
+                L.marker([-6.862084537748621, 111.45844893831284], {
+                    icon: rembangIcon
+                }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Gresik Rembang, Tbk</h5>
         </div>
     `).addTo(map);
+            @endif
 
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

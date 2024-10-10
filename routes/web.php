@@ -9,6 +9,8 @@ use App\Http\Controllers\OpcoController;
 use App\Http\Controllers\CadangandanPotensiController;
 use App\Http\Controllers\DashboardCadpotSprAdmController;
 use App\Http\Controllers\DashboardVendorSprAdmController;
+use App\Http\Controllers\DashboardCadpotAdmController;
+use App\Http\Controllers\DashboardVendorAdmController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -25,7 +27,7 @@ use App\Http\Controllers\LogoutController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
 // Route Login
@@ -101,6 +103,8 @@ Route::group(['prefix' => 'vendorbb'], function () {
 Route::group(['prefix' => 'dashboardcadangan'], function () {
     Route::get('/', [DashboardCadpotSprAdmController::class, 'index']);
     Route::post('/list', [DashboardCadpotSprAdmController::class, 'list']);
+    Route::get('/dashboard', [DashboardCadpotSprAdmController::class, 'index']);
+    
 });
 Route::get('/dashboard', [DashboardCadpotSprAdmController::class, 'index'])->name('dashboard');
 Route::get('/maps', [DashboardCadpotSprAdmController::class, 'map'])->name('maps');
@@ -109,6 +113,20 @@ Route::group(['prefix' => 'dashboardvendor'], function () {
     Route::get('/', [DashboardVendorSprAdmController::class, 'index']);
     Route::post('/list', [DashboardVendorSprAdmController::class, 'list']);
 });
+
+//Routes Dashboard Admin
+Route::group(['prefix' => 'dashboardcadpot'], function () {
+    Route::get('/', [DashboardCadpotAdmController::class, 'index']);
+    Route::post('/list', [DashboardCadpotAdmController::class, 'list']);
+});
+Route::get('/dashboard', [DashboardCadpotAdmController::class, 'index'])->name('dashboard');
+Route::get('/maps', [DashboardCadpotAdmController::class, 'map'])->name('maps');
+
+Route::group(['prefix' => 'dashboardvendorbb'], function () {
+    Route::get('/', [DashboardVendorAdmController::class, 'index']);
+    Route::post('/list', [DashboardVendorAdmController::class, 'list']);
+});
+
 
 
 //Route Admin

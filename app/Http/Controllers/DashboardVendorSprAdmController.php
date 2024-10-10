@@ -41,7 +41,12 @@ class DashboardVendorSprAdmController extends Controller
         $tableData = VendorModel::select('komoditi', 'vendor', 'kap_ton_thn', 'kabupaten', 'jarak')
             ->get();
 
-        $locationsVen = VendorModel::select('komoditi', 'latitude', 'longitude')
+        $iconsLegend = [
+            'Purified Gypsum' => 'images/PurifiedGypsum.png',
+            'Copper Slag' => 'images/CopperSlag.png',
+            'Fly Ash' => 'images/FlyAsh.png',
+        ];
+        $locationsVen = VendorModel::select('komoditi', 'latitude', 'longitude','kap_ton_thn', 'vendor', 'kabupaten', 'jarak')
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->get();
@@ -59,6 +64,7 @@ class DashboardVendorSprAdmController extends Controller
             'kapTonThn' => $kapTonThn,
             'tableData' => $tableData,
             'locationsVen' => $locationsVen,
+            'iconsLegend' => $iconsLegend,
         ]);
     }
 
