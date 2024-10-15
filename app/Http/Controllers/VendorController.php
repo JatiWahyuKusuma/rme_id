@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OpcoModel;
 use App\Models\VendorModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,8 +23,9 @@ class VendorController extends Controller
         $activeMenu = 'vendorbb';
 
         $vendorbb = VendorModel::all();
+        $opco = OpcoModel::all();
 
-        return view('superadmin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu, 'opco' =>$opco]);
     }
 
     public function list(Request $request)
@@ -65,8 +67,9 @@ class VendorController extends Controller
 
         $vendorbb = VendorModel::all();
         $activeMenu = 'vendorbb';
+        $opco = OpcoModel::all();
 
-        return view('superadmin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'vendorbb' => $vendorbb, 'activeMenu' => $activeMenu, 'opco' =>$opco]);
     }
 
     public function store(Request $request)

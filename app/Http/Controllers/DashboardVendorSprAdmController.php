@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OpcoModel;
 use App\Models\VendorModel;
 use Illuminate\Http\Request;
 
 class DashboardVendorSprAdmController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Breadcrumb data
         $breadcrumb = (object) [
@@ -22,12 +23,40 @@ class DashboardVendorSprAdmController extends Controller
 
         // Active menu identifier
         $activeMenu = 'dashboardvendor';
-        //Card TotalKapTon, Unit Potensi, Total Vendor
-        $totalKapTonThn = VendorModel::sum('kap_ton_thn');
-        $unitPotensiBB = VendorModel::whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
-        $totalVendor = VendorModel::whereNotNull('vendor')->distinct('vendor')->count('vendor');
+        $opco = OpcoModel::all();
 
-        $data = VendorModel::select('komoditi', VendorModel::raw('SUM(kap_ton_thn) as total_kap_ton_thn'))
+        $opcoId = $request->input('opco_id', null);
+        $commoditiesByOpco = [
+            1 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash'],
+            2 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash']
+        ];
+        if (empty($opcoId)) {
+            $opcoIdList = [1, 2];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+        } else {
+            $opcoIdList = [$opcoId];
+            $validCommodities = $commoditiesByOpco[$opcoId];
+        }
+
+
+        // Get list of valid opco IDs to filter
+        if (empty($opcoId)) {
+            $opcoIdList = [1, 2];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+        } else {
+            $opcoIdList = [$opcoId];
+            $validCommodities = $commoditiesByOpco[$opcoId];
+        }
+
+
+        //Card TotalKapTon, Unit Potensi, Total Vendor
+        $totalKapTonThn = VendorModel::whereIn('opco_id', $opcoIdList)->sum('kap_ton_thn');
+        $unitPotensiBB = VendorModel::whereIn('opco_id', $opcoIdList)->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
+        $totalVendor = VendorModel::whereIn('opco_id', $opcoIdList)->whereNotNull('vendor')->distinct('vendor')->count('vendor');
+
+        $data = VendorModel::whereIn('opco_id', $opcoIdList)
+            ->whereIn('komoditi', $validCommodities)
+            ->select('komoditi', VendorModel::raw('SUM(kap_ton_thn) as total_kap_ton_thn'))
             ->groupBy('komoditi')
             ->orderBy('total_kap_ton_thn', 'desc')
             ->limit(3) // Limit to 6 unique commodities
@@ -38,15 +67,33 @@ class DashboardVendorSprAdmController extends Controller
         $kapTonThn = $data->pluck('total_kap_ton_thn');
 
         // Table Data
-        $tableData = VendorModel::select('komoditi', 'vendor', 'kap_ton_thn', 'kabupaten', 'jarak')
+        $tableData = VendorModel::whereIn('opco_id', $opcoIdList)
+            ->select('komoditi', 'vendor', 'kap_ton_thn', 'kabupaten', 'jarak')
             ->get();
 
-        $iconsLegend = [
-            'Purified Gypsum' => 'images/PurifiedGypsum.png',
-            'Copper Slag' => 'images/CopperSlag.png',
-            'Fly Ash' => 'images/FlyAsh.png',
-        ];
-        $locationsVen = VendorModel::select('komoditi', 'latitude', 'longitude','kap_ton_thn', 'vendor', 'kabupaten', 'jarak')
+        $iconsLegend = [];
+        if ($opcoId == null) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/FlyAsh.png',
+            ];
+        } elseif ($opcoId == 1) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/FlyAsh.png',
+            ];
+        } elseif ($opcoId == 2) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/Flyash.png',
+            ];
+        }
+        $locationsVen = VendorModel::whereIn('opco_id', $opcoIdList)
+            ->whereIn('komoditi', $validCommodities)
+            ->select('komoditi', 'latitude', 'longitude', 'kap_ton_thn', 'vendor', 'kabupaten', 'jarak')
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->get();
@@ -57,6 +104,7 @@ class DashboardVendorSprAdmController extends Controller
             'breadcrumb' => $breadcrumb,
             'page' => $page,
             'activeMenu' => $activeMenu,
+            'opco' => $opco,
             'totalKapTonThn' => number_format($totalKapTonThn, 0, '.', '.'), // Format as needed
             'unitPotensiBB' => $unitPotensiBB,
             'totalVendor' => $totalVendor,
@@ -65,6 +113,7 @@ class DashboardVendorSprAdmController extends Controller
             'tableData' => $tableData,
             'locationsVen' => $locationsVen,
             'iconsLegend' => $iconsLegend,
+            'OpcoId' => $opcoId,
         ]);
     }
 

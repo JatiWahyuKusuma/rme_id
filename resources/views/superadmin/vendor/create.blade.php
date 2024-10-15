@@ -10,13 +10,13 @@
             <form method="POST" action="{{ url('vendorbb') }}" class="form-horizontal">
                 @csrf
                 <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Opco ID</label>
+                    <label class="col-1 control-label col-form-label">Opco</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="opco_id" name="opco_id"
-                            value="{{ old('opco_id') }}" required>
-                        @error('opco_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
+                        <select name="opco_id" id="opco" class="form-control" required>
+                            @foreach($opco as $op)
+                                <option value="{{ $op->id }}">{{ $op->nama_opco }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">

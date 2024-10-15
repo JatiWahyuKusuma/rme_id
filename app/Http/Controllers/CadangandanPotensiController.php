@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CadangandanPotensiModel;
+use App\Models\OpcoModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -21,8 +22,9 @@ class CadangandanPotensiController extends Controller
 
         $activeMenu = 'cadpot';
         $cadpot = CadangandanPotensiModel::all();
+        $opco = OpcoModel::all();
 
-        return view('superadmin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu]);
+        return view('superadmin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
 
     public function list(Request $request)
@@ -30,11 +32,9 @@ class CadangandanPotensiController extends Controller
 
         $cadpot = CadangandanPotensiModel::select('cadpot_id', 'opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan', 'sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
 
-
         if ($request->opco_id) {
-            $cadpot->where('opco_id', $request->opco_id);
+            $cadpot->where('opco_id', $request->opco_id); 
         }
-
         return Datatables::of($cadpot)
             ->addIndexColumn()
             ->addColumn('aksi', function ($cadpot) {
@@ -62,8 +62,9 @@ class CadangandanPotensiController extends Controller
 
         $cadpot = CadangandanPotensiModel::all();
         $activeMenu = 'cadpot';
+        $opco = OpcoModel::all();
 
-        return view('superadmin.Cadangan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu]);
+        return view('superadmin.Cadangan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'cadpot' => $cadpot, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
 
     public function store(Request $request)
@@ -71,7 +72,7 @@ class CadangandanPotensiController extends Controller
         $request->validate([
             'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric', 
+            'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
@@ -86,7 +87,7 @@ class CadangandanPotensiController extends Controller
             'luas_ha' => 'nullable|numeric',
             'masa_berlaku_iup' => 'nullable',
             'masa_berlaku_ppkh' => 'nullable',
-            
+
         ]);
 
         CadangandanPotensiModel::create([
@@ -154,7 +155,7 @@ class CadangandanPotensiController extends Controller
         $request->validate([
             'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric', 
+            'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
@@ -207,4 +208,5 @@ class CadangandanPotensiController extends Controller
         } catch (\Exception $e) {
             return redirect('/cadpot')->with('error', 'Data gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
-    }}
+    }
+}

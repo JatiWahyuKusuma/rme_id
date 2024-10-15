@@ -14,6 +14,7 @@ use App\Http\Controllers\DashboardVendorAdmController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\RiwayatCadpotSprAdmController;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +114,13 @@ Route::group(['prefix' => 'dashboardvendor'], function () {
     Route::get('/', [DashboardVendorSprAdmController::class, 'index']);
     Route::post('/list', [DashboardVendorSprAdmController::class, 'list']);
 });
+
+//Riwayat Cadpot
+Route::group(['prefix' => 'riwayatcadpot'], function () {
+    Route::get('/', [RiwayatCadpotSprAdmController::class, 'index']);
+    Route::get('/list', [RiwayatCadpotSprAdmController::class, 'list']);
+});
+
 
 //Routes Dashboard Admin
 Route::group(['prefix' => 'dashboardcadpot'], function () {

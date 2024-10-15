@@ -104,6 +104,23 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-1 control-label col-form-label">Filter: </label>
+                            <div class="col-3">
+                                <select class="form-control" name="opco_id" id="opco_id">
+                                    <option value="">-- Semua --</option>
+                                    @foreach ($opco as $opcoItem)
+                                        <option value="{{ $opcoItem->opco_id }}"
+                                            {{ request('opco_id') == $opcoItem->opco_id ? 'selected' : '' }}>
+                                            {{ $opcoItem->nama_opco }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <small class="form-text text-muted">Opco</small>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-4 col-6">
                         <div class="small-box bg-success text-center">
                             <div class="inner" style="font-size: 50px;"> <!-- Increase font size for value -->
@@ -229,6 +246,14 @@
     </section>
 @endsection
 @push('javascript')
+    <script>
+        document.getElementById('opco_id').addEventListener('change', function() {
+            let selectedOpco = this.value;
+            // Redirect to the same page with query parameter ?opco_id=
+            window.location.href = `?opco_id=${selectedOpco}`;
+        });
+    </script>
+
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script>
@@ -242,6 +267,7 @@
 
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locationsVen = @json($locationsVen);
+            const iconsLegend = @json($iconsLegend);
 
             // Mapping komoditi ke warna
             const iconMapping = {
@@ -295,37 +321,71 @@
                         .addTo(map);
                 }
             });
-            const tubanIcon = L.icon({
-                iconUrl: 'images/ghopotuban.png',
-                iconSize: [65, 65], // Adjust the size as needed
-                iconAnchor: [30, 30],
-                popupAnchor: [0, -30]
-            });
 
-            L.marker([-6.863603138698599, 111.91686228064258], {
-                icon: tubanIcon
-            }).bindPopup(`
+            @if ($OpcoId == null)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                const tubanIcon = L.icon({
+                    iconUrl: 'images/ghopotuban.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.8638896542228105, 111.91690249608592], {
+                    icon: tubanIcon
+                }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Indonesia (Persero) Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                const rembangIcon = L.icon({
+                    iconUrl: 'images/sgrembang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
 
-            // Tambah marker untuk Pabrik SG Rembang
-            const rembangIcon = L.icon({
-                iconUrl: 'images/sgrembang.png',
-                iconSize: [70, 70], // Adjust the size as needed
-                iconAnchor: [15, 30],
-                popupAnchor: [0, -30]
-            });
-
-            L.marker([-6.862084537748621, 111.45844893831284], {
-                icon: rembangIcon
-            }).bindPopup(`
+                L.marker([-6.862084537748621, 111.45844893831284], {
+                    icon: rembangIcon
+                }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Gresik Rembang, Tbk</h5>
         </div>
     `).addTo(map);
+            @elseif ($OpcoId == 1)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                const tubanIcon = L.icon({
+                    iconUrl: 'images/ghopotuban.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
 
+                L.marker([-6.8638896542228105, 111.91690249608592], {
+                    icon: tubanIcon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Indonesia (Persero) Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 2)
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                const rembangIcon = L.icon({
+                    iconUrl: 'images/sgrembang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.862084537748621, 111.45844893831284], {
+                    icon: rembangIcon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Gresik Rembang, Tbk</h5>
+        </div>
+    `).addTo(map);
+            @endif
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }

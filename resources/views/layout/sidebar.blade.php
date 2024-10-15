@@ -9,11 +9,9 @@
 
             <!-- Brand Logo -->
             <a href="{{ url('/') }}" class="brand-link d-flex justify-content-center">
-                <img src="{{ asset('images/logoSIGputih.png') }}" alt="AdminLTE Logo"
-                class="brand-image elevation-3" style="width: 170px; height: auto; max-height: 100px;">                
+                <img src="{{ asset('images/logoSIGputih.png') }}" alt="AdminLTE Logo" class="brand-image elevation-3"
+                    style="width: 170px; height: auto; max-height: 100px;">
             </a>
-            
-
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
@@ -26,25 +24,38 @@
 
             <!-- Removed the horizontal line after the user panel -->
 
-             
+
             <li class="nav-header">Dashboard</li>
-                <li class="nav-item">
-                    <a href="{{ url('/dashboardcadangan') }}" class="nav-link {{ $activeMenu == 'dashboardcadangan' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Cadangan dan Potensi</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url('/dashboardvendor') }}" class="nav-link {{ $activeMenu == 'dashboardvendor' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Vendor</p>
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a href="{{ url('/dashboardcadangan') }}"
+                    class="nav-link {{ $activeMenu == 'dashboardcadangan' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Cadangan dan Potensi</p>
+                </a>
             </li>
-
-
+            <li class="nav-item">
+                <a href="{{ url('/dashboardvendor') }}"
+                    class="nav-link {{ $activeMenu == 'dashboardvendor' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Vendor</p>
+                </a>
+            </li>
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;">
-            
+            </li>
+            <li class="nav-header">Riwayat</li>
+            <li class="nav-item">
+                <a href="{{ url('/riwayatcadpot') }}" class="nav-link {{ $activeMenu == 'riwayatcadpot' ? 'active' : '' }}">
+                    <i class="nav-icon far fa-address-card"></i>
+                    <p>Cadangan dan Potensi</p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url('/') }}" class="nav-link {{ $activeMenu == '' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-user-friends"></i>
+                    <p>Vendor</p>
+                </a>
+            </li>
+            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;">
             <li class="nav-header">Data All Opco</li>
             <li class="nav-item">
                 <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
@@ -58,33 +69,7 @@
                     <p>Vendor</p>
                 </a>
             </li>
-{{-- 
-            <li class="nav-item">
-                <a href="{{ url('/cadpot') }}" class="nav-link {{ $activeMenu == 'cadpot' ? 'active' : '' }}">
-                    <i class="nav-icon far fa-address-card"></i>
-                    <p>SG Rembang</p>
-                </a>
-            </li> --}}
-{{-- 
-            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> 
-
-            <li class="nav-header">Data Vendor</li>
-            <li class="nav-item">
-                <a href="{{ url('/vendorbb') }}" class="nav-link {{ $activeMenu == 'vendorbb' ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-user-friends"></i>
-                    <p>GHOPO Tuban</p>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a href="{{ url('/vendorbb') }}" class="nav-link {{ $activeMenu == 'vendorbb' ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-user-friends"></i>
-                    <p>SG Rembang</p>
-                </a>
-            </li> --}}
-
-            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> 
-
+            <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;">
             <li class="nav-header">Data User</li>
             <li class="nav-item">
                 <a href="{{ url('/level') }}" class="nav-link {{ $activeMenu == 'level' ? 'active' : '' }}">
@@ -108,7 +93,8 @@
             <li class="nav-item">
                 <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                     @csrf
-                    <button class="nav-link {{ $activeMenu == 'logout' ? 'active' : '' }} mt-3"> <!-- Tambahkan kelas mt-3 -->
+                    <button class="nav-link {{ $activeMenu == 'logout' ? 'active' : '' }} mt-3">
+                        <!-- Tambahkan kelas mt-3 -->
                         <i class="nav-icon fas fa-power-off"></i>
                         <p>Keluar</p>
                     </button>

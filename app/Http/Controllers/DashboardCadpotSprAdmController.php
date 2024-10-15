@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CadangandanPotensiModel;
+use App\Models\OpcoModel;
 use Carbon\Carbon;
 
 
@@ -24,7 +25,9 @@ class DashboardCadpotSprAdmController extends Controller
 
         // Active menu identifier
         $activeMenu = 'dashboardcadangan';
+
         $opcoId = $request->input('opco_id', null);
+        $opco = OpcoModel::all();
         $commoditiesByOpco = [
             1 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Lempung', 'Pot Lempung', 'Pot Pasirkuarsa'],
             2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Lempung', 'Pot Lempung', 'Pot Pasirkuarsa', 'Pot Tras']
@@ -65,6 +68,14 @@ class DashboardCadpotSprAdmController extends Controller
         // Prepare the data for the chart
         $komoditiLabels = $data->pluck('komoditi');
         $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
+
+        if ($opcoId == null) {
+            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D']; //All Opco
+        } elseif ($opcoId == 1) {
+            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#009600', '#FF7D00']; // GHOPO Tuban
+        } else if ($opcoId == 2){
+            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D']; //SG Rembang
+        }
 
         $tableData = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
@@ -129,6 +140,7 @@ class DashboardCadpotSprAdmController extends Controller
             'breadcrumb' => $breadcrumb,
             'page' => $page,
             'activeMenu' => $activeMenu,
+            'opco' => $opco,
             'sdCadanganTon' => number_format($totalSdCadanganTon, 0, '.', '.'),
             'totalberlakuIUP' => $totalValidIUP,
             'totalberlakuPPKH' => $totalValidPPKH,
@@ -138,6 +150,7 @@ class DashboardCadpotSprAdmController extends Controller
             'locations' => $locations,
             'iconsLegend' => $iconsLegend,
             'OpcoId' => $opcoId,
+            'chartColors' => $chartColors,
         ]);
     }
 

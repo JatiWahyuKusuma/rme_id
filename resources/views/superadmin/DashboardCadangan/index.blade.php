@@ -46,7 +46,7 @@
                     distributed: true, // Enable distributed colors
                 }
             },
-            colors: ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D'], // Define your colors here
+            colors: @json($chartColors),
             dataLabels: {
                 enabled: false,
                 style: {
@@ -113,10 +113,12 @@
                             <div class="col-3">
                                 <select class="form-control" name="opco_id" id="opco_id">
                                     <option value="">-- Semua --</option>
-                                    <option value="1" {{ request('opco_id') == 1 ? 'selected' : '' }}>Ghopo Tuban
-                                    </option>
-                                    <option value="2" {{ request('opco_id') == 2 ? 'selected' : '' }}>SG Rembang
-                                    </option>
+                                    @foreach ($opco as $opcoItem)
+                                        <option value="{{ $opcoItem->opco_id }}"
+                                            {{ request('opco_id') == $opcoItem->opco_id ? 'selected' : '' }}>
+                                            {{ $opcoItem->nama_opco }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 <small class="form-text text-muted">Opco</small>
                             </div>

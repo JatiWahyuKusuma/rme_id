@@ -52,6 +52,10 @@ class AdminCadpotController extends Controller
             $admincadpot->where('opco_id', $request->opco_id);
         }
 
+        if (($request->komoditi)) {
+            $admincadpot->where('komoditi', $request->komoditi);
+        }
+
         return Datatables::of($admincadpot)
             ->addIndexColumn()
             ->addColumn('aksi', function ($admincadpot) {

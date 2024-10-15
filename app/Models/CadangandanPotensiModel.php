@@ -12,7 +12,7 @@ class CadangandanPotensiModel extends Model
 
     protected $table = 'm_cadangan_potensi'; //mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'cadpot_id'; //mendefinisikan primary key dari tabel yang digunakan
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $fillable = [
         'opco_id',

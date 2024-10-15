@@ -28,12 +28,19 @@
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
-                            <select class="form-control" name="opco_id" id="opco_id">
+                            <select class="form-control" name="komoditi" id="komoditi">
                                 <option value="">-- Semua --</option>
-                                <option value="1">Ghopo Tuban</option>
-                                <option value="2">SG Rembang</option>
+                                @if(auth()->user()->admin->opco_id == 1)
+                                    <option value="Purified Gypsum">Purified Gypsum</option>
+                                    <option value="Copper Slag">Copper Slag</option>
+                                    <option value="Fly Ash">Fly Ash</option>
+                                @elseif(auth()->user()->admin->opco_id == 2)
+                                    <option value="Purified Gypsum">Purified Gypsum</option>
+                                    <option value="Copper Slag">Copper Slag</option>
+                                    <option value="Fly Ash">Fly Ash</option>
+                                @endif
                             </select>
-                            <small class="form-text text-muted">Opco</small>
+                            <small class="form-text text-muted">Komoditi</small>
                         </div>
                     </div>
                 </div>
@@ -101,7 +108,7 @@
                     type: "POST",
                     data: function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token
-                        d.opco_id = $('#opco_id').val(); // Get the selected filter value
+                        d.komoditi = $('#komoditi').val(); // Get the selected filter value
                         d.opco_id = {{ auth()->user()->admin->opco_id }}
                     }
                 },
@@ -179,7 +186,7 @@
             });
 
             // Event listener for filter
-            $('#opco_id').on('change', function() {
+            $('#komoditi').on('change', function() {
                 dataLevel.ajax.reload(); // Reload DataTable with the selected filter
             });
 

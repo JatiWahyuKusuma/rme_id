@@ -51,6 +51,10 @@ class AdminVendorController extends Controller
             $adminvendorbb->where('opco_id', $request->opco_id);
         }
 
+        if (($request->komoditi)) {
+            $adminvendorbb->where('komoditi', $request->komoditi);
+        }
+
 
         return Datatables::of($adminvendorbb)
             ->addIndexColumn()

@@ -12,14 +12,11 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Opco</label>
                     <div class="col-11">
-                        <select class="form-control" id="opco_id" name="opco_id" required>
-                            <option value="" disabled selected>Pilih Opco</option>
-                            <option value="1" {{ old('opco_id') == '1' ? 'selected' : '' }}>GHOPO Tuban</option>
-                            <option value="2" {{ old('opco_id') == '2' ? 'selected' : '' }}>SG Rembang</option>
+                        <select name="opco_id" id="opco" class="form-control" required>
+                            @foreach($opco as $op)
+                                <option value="{{ $op->id }}">{{ $op->nama_opco }}</option>
+                            @endforeach
                         </select>
-                        @error('opco_id')
-                            <small class="form-text text-danger">{{ $message }}</small>
-                        @enderror
                     </div>
                 </div>
                 <div class="form-group row">

@@ -22,11 +22,20 @@
                         <div class="col-3">
                             <select class="form-control" name="komoditi" id="komoditi">
                                 <option value="">-- Semua --</option>
-                                <option value="Cad Batugamping">Cad Batugamping</option>
-                                <option value="Pot Batugamping">Pot Batugamping</option>
-                                <option value="Cad Lempung">Cad Lempung</option>
-                                <option value="Pot Lempung">Pot Lempung</option>
-                                <option value="Pot Pasirkuarsa">Pot Pasirkuarsa</option>
+                                @if(auth()->user()->admin->opco_id == 1)
+                                    <option value="Cad Batugamping">Cad Batugamping</option>
+                                    <option value="Pot Batugamping">Pot Batugamping</option>
+                                    <option value="Cad Lempung">Cad Lempung</option>
+                                    <option value="Pot Lempung">Pot Lempung</option>
+                                    <option value="Pot Pasirkuarsa">Pot Pasirkuarsa</option>
+                                @elseif(auth()->user()->admin->opco_id == 2)
+                                    <option value="Cad Batugamping">Cad Batugamping</option>
+                                    <option value="Pot Batugamping">Pot Batugamping</option>
+                                    <option value="Cad Lempung">Cad Lempung</option>
+                                    <option value="Pot Lempung">Pot Lempung</option>
+                                    <option value="Pot Pasirkuarsa">Pot Pasirkuarsa</option>
+                                    <option value="Pot Tras">Pot Tras</option>
+                                @endif
                             </select>
                             <small class="form-text text-muted">Komoditi</small>
                         </div>

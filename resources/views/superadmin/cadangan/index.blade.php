@@ -21,9 +21,10 @@
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
                             <select class="form-control" name="opco_id" id="opco_id">
-                                <option value="">-- Semua --</option>
-                                <option value="1">Ghopo Tuban</option>
-                                <option value="2">SG Rembang</option>
+                                <option value="">-- Semua --</option> <!-- Pastikan ini hanya muncul sekali -->
+                                @foreach ($opco as $opco)
+                                    <option value="{{$opco->opco_id }}">{{$opco->nama_opco }}</option>
+                                @endforeach
                             </select>
                             <small class="form-text text-muted">Opco</small>
                         </div>

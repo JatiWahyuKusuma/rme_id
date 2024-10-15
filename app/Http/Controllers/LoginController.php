@@ -29,13 +29,13 @@ class LoginController extends Controller
             if (SuperadminModel::isSuperAdmin($user->id)) {
                 session()->put('superadmin.nama', $user->name);
                 session()->put('superadmin.email', $user->email);
-                return redirect('/cadpot')->with('success', 'Berhasil Masuk sebagai Super Admin!');
+                return redirect('/dashboardcadangan')->with('success', 'Berhasil Masuk sebagai Super Admin!');
             }
     
             // For regular admin
             session()->put('admin.nama', $user->name);
             session()->put('admin.email', $user->email);
-            return redirect('/admincadpot')->with('success', 'Berhasil Masuk sebagai Admin!');
+            return redirect('/dashboardcadpot')->with('success', 'Berhasil Masuk sebagai Admin!');
         }
     
         return redirect('/login')->with('failed', 'Email atau Password Salah');
