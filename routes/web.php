@@ -15,6 +15,7 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\RiwayatCadpotSprAdmController;
+use App\Http\Controllers\RiwayatVendorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +121,13 @@ Route::group(['prefix' => 'riwayatcadpot'], function () {
     Route::get('/', [RiwayatCadpotSprAdmController::class, 'index']);
     Route::get('/list', [RiwayatCadpotSprAdmController::class, 'list']);
 });
+
+//Riwayat Vendor
+Route::group(['prefix' => 'riwayatvendor'], function () {
+    Route::get('/', [RiwayatVendorController::class, 'index']);
+    Route::get('/list', [RiwayatVendorController::class, 'list']);
+});
+
 
 
 //Routes Dashboard Admin

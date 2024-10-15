@@ -50,7 +50,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ url('/') }}" class="nav-link {{ $activeMenu == '' ? 'active' : '' }}">
+                <a href="{{ url('/riwayatvendor') }}" class="nav-link {{ $activeMenu == 'riwayatvendor' ? 'active' : '' }}">
                     <i class="nav-icon fas fa-user-friends"></i>
                     <p>Vendor</p>
                 </a>

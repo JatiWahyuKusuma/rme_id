@@ -2,21 +2,14 @@
 
 @section('content')
 <div class="card card-outline card-primary">
+
     <div class="card-body">
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div> <!-- Change class to 'alert-danger' -->
-        @endif
-        <div class="row">
-            <div class="col-md-12">
-            </div>
-        </div>
+   {{-- <button id="exportButton" class="btn btn-primary mb-3">Export to Excel</button> --}}
         <table class="table-bordered table-striped table-hover table-sm table" id="table_m_cadangan_potensi">
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Cadpot ID</th>
                     <th>Opco ID</th>
                     <th>Jarak</th>
                     <th>Komoditi</th>
@@ -34,6 +27,7 @@
                     <th>Last Update</th>
                 </tr>
             </thead>
+            
         </table>
     </div>
 </div>

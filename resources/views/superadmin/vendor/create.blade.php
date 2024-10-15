@@ -12,9 +12,10 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Opco</label>
                     <div class="col-11">
-                        <select name="opco_id" id="opco" class="form-control" required>
-                            @foreach($opco as $op)
-                                <option value="{{ $op->id }}">{{ $op->nama_opco }}</option>
+                        <select name="opco_id" id="opco_id" class="form-control" required>
+                            <option value="">--Pilih Opco--</option> <!-- Default option -->
+                            @foreach ($opco as $op)
+                                <option value="{{ $op->opco_id }}">{{ $op->nama_opco }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -22,8 +23,8 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Jarak</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="jarak" name="jarak"
-                            value="{{ old('jarak') }}" required>
+                        <input type="text" class="form-control" id="jarak" name="jarak" value="{{ old('jarak') }}"
+                            required>
                         @error('jarak')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror

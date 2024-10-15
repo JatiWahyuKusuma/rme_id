@@ -132,7 +132,7 @@
                             <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total SD/Cadangan (ton)</p>
                             <!-- Increased font size for label -->
                             <div class="icon">
-                                <i class="ion ion-cube"></i>
+                                <i class="bi bi-minecart-loaded"></i>
                             </div>
                             <a href="#" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
@@ -159,7 +159,7 @@
                             </div>
                             <p style="font-size: 20px; margin-top: -10px; margin-bottom: 10px;">Total PPKH</p>
                             <!-- Increased font size for label -->
-                            <div class="icon">
+                            <div class="icon" style="font-size: 60px;">
                                 <i class="ion ion-person-add"></i>
                             </div>
                             <a href="#" class="small-box-footer">More info <i

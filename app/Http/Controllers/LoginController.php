@@ -22,9 +22,9 @@ class LoginController extends Controller
         ]);
     
         $credentials = $request->only('email', 'password');
-    
+
         if (Auth::attempt($credentials)) {
-            $user = Auth::user(); // Retrieve the authenticated user
+            $user = Auth::user(); 
             // Check if the user is a super admin
             if (SuperadminModel::isSuperAdmin($user->id)) {
                 session()->put('superadmin.nama', $user->name);
