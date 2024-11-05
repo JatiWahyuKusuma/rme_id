@@ -89,7 +89,6 @@ class CadangandanPotensiController extends Controller
             'masa_berlaku_ppkh' => 'nullable',
 
         ]);
-
         CadangandanPotensiModel::create([
             'opco_id' => $request->opco_id,
             'jarak' => $request->jarak,

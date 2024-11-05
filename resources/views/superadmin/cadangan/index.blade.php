@@ -1,5 +1,21 @@
 @extends('layout.template')
 
+@section('css')
+
+    <style>
+         /* .card-outline.card-primary {
+            border-top: 4px solid #343a40; /* Warna hitam */
+        /* } */
+        /* .btn.btn-sm.btn-primary.mt-1{
+            background-color: #343a40;
+            border-bottom-color: #343a40;
+            border-left-color: #343a40;
+            border-right-color: #343a40;
+            border-top-color: #343a40;
+        } */ 
+    </style>
+@endsection
+
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
@@ -36,7 +52,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Opco ID</th>
-                        <th>Jarak</th>
+                        <th>Jarak(km)</th>
                         <th>Komoditi</th>
                         <th>Lokasi/IUP</th>
                         <th>Tipe SD/Cadangan</th>

@@ -7,10 +7,9 @@ use App\Models\CadangandanPotensiModel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-
 class DashboardCadpotAdmController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $OpcoId = auth()->user()->admin->opco_id;
@@ -18,12 +17,12 @@ class DashboardCadpotAdmController extends Controller
         if (auth()->user()->admin->opco_id === 1) {
             $breadcrumb = (object) [
                 'title' => 'Dashboard Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
-                'list' => ['Home', 'GHOPO Tuban']
+                'list' => ['Dashboard', 'GHOPO Tuban']
             ];
         } elseif (auth()->user()->admin->opco_id === 2) {
             $breadcrumb = (object) [
                 'title' => 'Dashboard Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
-                'list' => ['Home', 'SG Rembang']
+                'list' => ['Dashboard', 'SG Rembang']
             ];
         }
 
@@ -35,14 +34,27 @@ class DashboardCadpotAdmController extends Controller
         // Active menu identifier
         $activeMenu = 'dashboardcadpot';
 
+        $komoditi = CadangandanPotensiModel::where('opco_id', $OpcoId)
+            ->select('komoditi')
+            ->distinct()
+            ->get();
+
+        $selectedKomoditi = $request->input('komoditi');
+        $query = CadangandanPotensiModel::where('opco_id', $OpcoId);
+        if ($selectedKomoditi) {
+            $query->where('komoditi', $selectedKomoditi);
+        }
         if ($OpcoId == 1) {
             // Filter data by `opco_id`
-            $totalSdCadanganTon = CadangandanPotensiModel::where('opco_id', 1)->sum('sd_cadangan_ton');
-            $totalValidIUP = CadangandanPotensiModel::where('opco_id', 1)->whereNotNull('masa_berlaku_iup')->count();
-            $totalValidPPKH = CadangandanPotensiModel::where('opco_id', 1)->whereNotNull('masa_berlaku_ppkh')->count();
+            $totalSdCadanganTon = $query->sum('sd_cadangan_ton');
+            $totalValidIUP = $query->whereNotNull('masa_berlaku_iup')->count();
+            $totalValidPPKH = $query->whereNotNull('masa_berlaku_ppkh')->count();
 
             // Chart SD/Cadangan by Komoditi for `opco_id = 1`
-            $data = CadangandanPotensiModel::where('opco_id', 1)
+            $data = CadangandanPotensiModel::where('opco_id', $OpcoId)
+                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
+                    return $q->where('komoditi', $selectedKomoditi);
+                })
                 ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
                 ->groupBy('komoditi')
                 ->orderBy('total_sd_cadangan_ton', 'desc')
@@ -54,7 +66,10 @@ class DashboardCadpotAdmController extends Controller
             $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
 
             // Table Data for `opco_id = 1`
-            $tableData = CadangandanPotensiModel::where('opco_id', 1)
+            $tableData = CadangandanPotensiModel::where('opco_id', $OpcoId)
+                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
+                    return $q->where('komoditi', $selectedKomoditi);
+                })
                 ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
                 ->get()
                 ->map(function ($item) {
@@ -85,8 +100,16 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
 
+            if ($selectedKomoditi) {
+                $iconsLegend = [$selectedKomoditi => $iconsLegend[$selectedKomoditi]];
+            }
+
+
             // Filter locations for the map based on `opco_id = 1`
-            $locations = CadangandanPotensiModel::where('opco_id', 1)
+            $locations = CadangandanPotensiModel::where('opco_id', $OpcoId)
+                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
+                    return $q->where('komoditi', $selectedKomoditi);
+                })
                 ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
@@ -105,15 +128,20 @@ class DashboardCadpotAdmController extends Controller
                 'locations' => $locations,
                 'iconsLegend' => $iconsLegend,
                 'OpcoId' => $OpcoId,
+                'komoditi' => $komoditi,
+                'selectedKomoditi' => $selectedKomoditi,
             ]);
         } else if ($OpcoId == 2) {
             // Filter data by `opco_id`
-            $totalSdCadanganTon = CadangandanPotensiModel::where('opco_id', 2)->sum('sd_cadangan_ton');
-            $totalValidIUP = CadangandanPotensiModel::where('opco_id', 2)->whereNotNull('masa_berlaku_iup')->count();
-            $totalValidPPKH = CadangandanPotensiModel::where('opco_id', 2)->whereNotNull('masa_berlaku_ppkh')->count();
+            $totalSdCadanganTon = $query->sum('sd_cadangan_ton');
+            $totalValidIUP = $query->whereNotNull('masa_berlaku_iup')->count();
+            $totalValidPPKH = $query->whereNotNull('masa_berlaku_ppkh')->count();
 
             // Chart SD/Cadangan by Komoditi for `opco_id = 2`
-            $data = CadangandanPotensiModel::where('opco_id', 2)
+            $data = CadangandanPotensiModel::where('opco_id', $OpcoId)
+                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
+                    return $q->where('komoditi', $selectedKomoditi);
+                })
                 ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
                 ->groupBy('komoditi')
                 ->orderBy('total_sd_cadangan_ton', 'desc')
@@ -125,7 +153,10 @@ class DashboardCadpotAdmController extends Controller
             $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
 
             // Table Data for `opco_id = 2`
-            $tableData = CadangandanPotensiModel::where('opco_id', 2)
+            $tableData = CadangandanPotensiModel::where('opco_id', $OpcoId)
+                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
+                    return $q->where('komoditi', $selectedKomoditi);
+                })
                 ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
                 ->get()
                 ->map(function ($item) {
@@ -157,8 +188,16 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Tras' => 'images/PotTras.png',
             ];
 
+            if ($selectedKomoditi) {
+                $iconsLegend = [$selectedKomoditi => $iconsLegend[$selectedKomoditi]];
+            }
+
+
             // Filter locations for the map based on `opco_id = 2`
-            $locations = CadangandanPotensiModel::where('opco_id', 2)
+            $locations = CadangandanPotensiModel::where('opco_id', $OpcoId)
+                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
+                    return $q->where('komoditi', $selectedKomoditi);
+                })
                 ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
@@ -177,6 +216,8 @@ class DashboardCadpotAdmController extends Controller
                 'locations' => $locations,
                 'iconsLegend' => $iconsLegend,
                 'OpcoId' => $OpcoId,
+                'komoditi' => $komoditi,
+                'selectedKomoditi' => $selectedKomoditi,
             ]);
         }
     }

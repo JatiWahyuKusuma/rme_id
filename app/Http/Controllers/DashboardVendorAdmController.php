@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CadangandanPotensiModel;
 use App\Models\VendorModel;
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardVendorAdmController extends Controller
 {
-    public function index()
+    public function index(request $request)
     {
         $user = Auth::user();
         $OpcoId = auth()->user()->admin->opco_id;
@@ -31,15 +33,30 @@ class DashboardVendorAdmController extends Controller
 
         // Active menu identifier
         $activeMenu = 'dashboardvendorbb';
+
+        $komoditi = VendorModel::where('opco_id', $OpcoId)
+            ->select('komoditi')
+            ->distinct()
+            ->get();
+
+        $FilterKomoditi = $request->input('komoditi');
+        $query = VendorModel::where('opco_id', $OpcoId);
+        if ($FilterKomoditi) {
+            $query->where('komoditi', $FilterKomoditi);
+        }
+
+
         if ($OpcoId == 1) {
 
-
             //Card TotalKapTon, Unit Potensi, Total Vendor
-            $totalKapTonThn = VendorModel::where('opco_id', 1)->sum('kap_ton_thn');
-            $unitPotensiBB = VendorModel::where('opco_id', 1)->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
-            $totalVendor = VendorModel::where('opco_id', 1)->whereNotNull('vendor')->distinct('vendor')->count('vendor');
+            $totalKapTonThn = $query->sum('kap_ton_thn');
+            $unitProduksiBB = $query->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
+            $totalVendor = $query->whereNotNull('vendor')->distinct('vendor')->count('vendor');
 
-            $data = VendorModel::where('opco_id', 1)
+            $data = VendorModel::where('opco_id', $OpcoId)
+                ->when($FilterKomoditi, function ($q) use ($FilterKomoditi) {
+                    return $q->where('komoditi', $FilterKomoditi);
+                })
                 ->select('komoditi', VendorModel::raw('SUM(kap_ton_thn) as total_kap_ton_thn'))
                 ->groupBy('komoditi')
                 ->orderBy('total_kap_ton_thn', 'desc')
@@ -51,7 +68,10 @@ class DashboardVendorAdmController extends Controller
             $kapTonThn = $data->pluck('total_kap_ton_thn');
 
             // Table Data
-            $tableData = VendorModel::where('opco_id', 1)
+            $tableData = VendorModel::where('opco_id', $OpcoId)
+                ->when($FilterKomoditi, function ($q) use ($FilterKomoditi) {
+                    return $q->where('komoditi', $FilterKomoditi);
+                })
                 ->select('komoditi', 'vendor', 'kap_ton_thn', 'kabupaten', 'jarak')
                 ->get();
 
@@ -60,7 +80,13 @@ class DashboardVendorAdmController extends Controller
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/FlyAsh.png',
             ];
-            $locationsVen = VendorModel::where('opco_id', 1)
+            if($FilterKomoditi){
+                $iconsLegend = [$FilterKomoditi => $iconsLegend[$FilterKomoditi]];
+            }
+            $locationsVen = VendorModel::where('opco_id', $OpcoId)
+            ->when($FilterKomoditi, function ($q) use ($FilterKomoditi){
+                return $q->where('komoditi', $FilterKomoditi);
+            })
                 ->select('komoditi', 'latitude', 'longitude', 'kap_ton_thn', 'vendor', 'kabupaten', 'jarak')
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
@@ -73,7 +99,7 @@ class DashboardVendorAdmController extends Controller
                 'page' => $page,
                 'activeMenu' => $activeMenu,
                 'totalKapTonThn' => number_format($totalKapTonThn, 0, '.', '.'), // Format as needed
-                'unitPotensiBB' => $unitPotensiBB,
+                'unitProduksiBB' => $unitProduksiBB,
                 'totalVendor' => $totalVendor,
                 'komoditiLabels' => $komoditiLabels,
                 'kapTonThn' => $kapTonThn,
@@ -81,14 +107,19 @@ class DashboardVendorAdmController extends Controller
                 'locationsVen' => $locationsVen,
                 'iconsLegend' => $iconsLegend,
                 'OpcoId' => $OpcoId,
+                'komoditi' => $komoditi,
+                'filterKomoditi' => $FilterKomoditi,
             ]);
         } else if ($OpcoId == 2) {
             //Card TotalKapTon, Unit Potensi, Total Vendor
-            $totalKapTonThn = VendorModel::where('opco_id', 2)->sum('kap_ton_thn');
-            $unitPotensiBB = VendorModel::where('opco_id', 2)->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
-            $totalVendor = VendorModel::where('opco_id', 2)->whereNotNull('vendor')->distinct('vendor')->count('vendor');
+            $totalKapTonThn =$query->sum('kap_ton_thn');
+            $unitProduksiBB =$query->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
+            $totalVendor =$query->whereNotNull('vendor')->distinct('vendor')->count('vendor');
 
-            $data = VendorModel::where('opco_id', 2)
+            $data = VendorModel::where('opco_id', $OpcoId)
+            ->when($FilterKomoditi, function ($q) use ($FilterKomoditi){
+                return $q->where('komoditi', $FilterKomoditi);
+            })
                 ->select('komoditi', VendorModel::raw('SUM(kap_ton_thn) as total_kap_ton_thn'))
                 ->groupBy('komoditi')
                 ->orderBy('total_kap_ton_thn', 'desc')
@@ -100,7 +131,10 @@ class DashboardVendorAdmController extends Controller
             $kapTonThn = $data->pluck('total_kap_ton_thn');
 
             // Table Data
-            $tableData = VendorModel::where('opco_id', 2)
+            $tableData = VendorModel::where('opco_id', $OpcoId)
+            ->when($FilterKomoditi, function ($q) use ($FilterKomoditi){
+                return $q->where('komoditi', $FilterKomoditi);
+            })
                 ->select('komoditi', 'vendor', 'kap_ton_thn', 'kabupaten', 'jarak')
                 ->get();
 
@@ -109,7 +143,14 @@ class DashboardVendorAdmController extends Controller
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/FlyAsh.png',
             ];
-            $locationsVen = VendorModel::where('opco_id', 2)
+
+            if($FilterKomoditi){
+                $iconsLegend =[$FilterKomoditi => $iconsLegend[$FilterKomoditi]];
+            }
+            $locationsVen = VendorModel::where('opco_id', $OpcoId)
+            ->when($FilterKomoditi, function ($q) use ($FilterKomoditi){
+                return $q->where('komoditi', $FilterKomoditi);
+            })
                 ->select('komoditi', 'latitude', 'longitude', 'kap_ton_thn', 'vendor', 'kabupaten', 'jarak')
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
@@ -122,7 +163,7 @@ class DashboardVendorAdmController extends Controller
                 'page' => $page,
                 'activeMenu' => $activeMenu,
                 'totalKapTonThn' => number_format($totalKapTonThn, 0, '.', '.'), // Format as needed
-                'unitPotensiBB' => $unitPotensiBB,
+                'unitProduksiBB' => $unitProduksiBB,
                 'totalVendor' => $totalVendor,
                 'komoditiLabels' => $komoditiLabels,
                 'kapTonThn' => $kapTonThn,
@@ -130,6 +171,8 @@ class DashboardVendorAdmController extends Controller
                 'locationsVen' => $locationsVen,
                 'iconsLegend' => $iconsLegend,
                 'OpcoId' => $OpcoId,
+                'komoditi' => $komoditi,
+                'filterKomoditi' => $FilterKomoditi,
             ]);
         }
     }

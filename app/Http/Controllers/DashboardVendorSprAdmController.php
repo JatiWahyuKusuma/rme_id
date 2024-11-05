@@ -51,7 +51,7 @@ class DashboardVendorSprAdmController extends Controller
 
         //Card TotalKapTon, Unit Potensi, Total Vendor
         $totalKapTonThn = VendorModel::whereIn('opco_id', $opcoIdList)->sum('kap_ton_thn');
-        $unitPotensiBB = VendorModel::whereIn('opco_id', $opcoIdList)->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
+        $unitProduksiBB = VendorModel::whereIn('opco_id', $opcoIdList)->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
         $totalVendor = VendorModel::whereIn('opco_id', $opcoIdList)->whereNotNull('vendor')->distinct('vendor')->count('vendor');
 
         $data = VendorModel::whereIn('opco_id', $opcoIdList)
@@ -106,7 +106,7 @@ class DashboardVendorSprAdmController extends Controller
             'activeMenu' => $activeMenu,
             'opco' => $opco,
             'totalKapTonThn' => number_format($totalKapTonThn, 0, '.', '.'), // Format as needed
-            'unitPotensiBB' => $unitPotensiBB,
+            'unitProduksiBB' => $unitProduksiBB,
             'totalVendor' => $totalVendor,
             'komoditiLabels' => $komoditiLabels,
             'kapTonThn' => $kapTonThn,

@@ -20,7 +20,7 @@ class DashboardCadpotSprAdmController extends Controller
 
         // Page data
         $page = (object)[
-            'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'
+            'title' => ''
         ];
 
         // Active menu identifier
