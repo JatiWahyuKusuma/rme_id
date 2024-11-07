@@ -6,18 +6,30 @@
 
     <style>
         #map {
-            height: 685px;
+            height: 680px;
         }
 
         .card.card-outline.card-primary {
             margin: auto;
-            background-color: rgb(233, 233, 233);
-            border-top-color:rgb(46, 46, 46);
+            background-color: rgb(245, 245, 245);
+            border-top-color: rgb(46, 46, 46);
+        }
+
+        .row {
+            margin: auto;
+        }
+
+        .h1 {
+            text-shadow: 2px 2px 5px red;
         }
 
         .form-group.row {
             margin-top: 20px;
         }
+
+        /* .card-outline.card-primary {
+                            border-top: 4px solid #7b7e82;
+                        } */
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -30,20 +42,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.53.0/apexcharts.min.css"
         integrity="sha512-w3pXofOHrtYzBYpJwC6TzPH6SxD6HLAbT/rffdkA759nCQvYi5AHy5trNWFboZnj4xtdyK0AFMBtck9eTmwybg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script>
-        const commodityColorMap = {
-            'Cad Batugamping': '#00098E',
-            'Pot Batugamping': '#007DFF',
-            'Cad Lempung': '#009600',
-            'Pot Lempung': '#00FF00',
-            'Pot Pasirkuarsa': '#FF7D00',
-            'Pot Tras': '#7D007D',
-        };
-
-        // Get the labels and map the colors based on the selected commodity
-        const selectedCommodities = @json($komoditiLabels);
-        const chartColors = selectedCommodities.map(commodity => commodityColorMap[commodity] || '#CCCCCC');
-
         var options = {
             series: [{
                 data: @json($sdCadanganTons) // Ensure this data aligns with the colors
@@ -70,7 +70,7 @@
                     distributed: true, // Enable distributed colors
                 }
             },
-            colors: chartColors, // Define your colors here
+            colors: @json($chartColors),
             dataLabels: {
                 enabled: false,
                 style: {
@@ -88,8 +88,10 @@
                 }
             },
             xaxis: {
-                categories: selectedCommodities,
-
+                categories: @json($komoditiLabels),
+                min: 1000000,
+                max: 3500000000, // Set the minimum value to 1,000,000
+                // Ensure this matches the data length
                 labels: {
                     formatter: function(val) {
                         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -131,23 +133,22 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group row">
-                            <label class="col-1 control-label col-form-label">Filter : </label>
+                            <label class="col-1 control-label col-form-label">Filter: </label>
                             <div class="col-3">
-                                <select class="form-control" name="komoditi" id="komoditi">
+                                <select class="form-control" name="opco_id" id="opco_id">
                                     <option value="">-- Semua --</option>
-                                    @foreach ($komoditi as $komoditiItem)
-                                        <option value="{{ $komoditiItem->komoditi }}"
-                                            {{ isset($selectedKomoditi) && $selectedKomoditi == $komoditiItem->komoditi ? 'selected' : '' }}>
-                                            {{ $komoditiItem->komoditi }}
+                                    @foreach ($opco as $opcoItem)
+                                        <option value="{{ $opcoItem->opco_id }}"
+                                            {{ request('opco_id') == $opcoItem->opco_id ? 'selected' : '' }}>
+                                            {{ $opcoItem->nama_opco }}
                                         </option>
                                     @endforeach
                                 </select>
-
-                                <small class="form-text text-muted">Komoditi</small>
+                                <small class="form-text text-muted">Opco</small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-6" style="margin-top: 30px;">
+                    <div class="col-lg-3 col-4" style="margin-top: 30px;">
                         <div class="small-box bg-success" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
                                 <div class="icon" style="font-size: 50px; margin-right: 20px;">
@@ -158,26 +159,30 @@
                                         <g>
                                             <path
                                                 d="M300.844 476.125c-2.559 2.121-5.121 4.063-7.68 6.004-10.86 8.121-19.508 14.566-19.508 30.367h44.137a40.703 40.703 0 0 0-7.328-16.95 97.104 97.104 0 0 1-9.621-19.421zM282.57 468.004a44.01 44.01 0 0 0 18.008-20.125l.531-1.324a66.36 66.36 0 0 1 19.332-26.57 68.206 68.206 0 0 0 24.012-41.669c.102-.402.16-.816.176-1.234a64.642 64.642 0 0 0-23.305-60.559 8.875 8.875 0 0 1-2.117-2.382l-22.777-3.797a8.94 8.94 0 0 0-8.387 3.18l-98.781 123.585a9.016 9.016 0 0 1-9.707 2.825l-68.68-22.864a8.541 8.541 0 0 0-8.738 1.856L0 512.496h256c0-24.629 14.742-35.664 26.57-44.492zM335.45 512.496h167.636c-1.414-8.473-12.36-60.203-69.477-53.055a4.189 4.189 0 0 1-1.058.09 75.726 75.726 0 0 1-59.672-14.476 74.827 74.827 0 0 1-22.16-33.547 99.205 99.205 0 0 1-18.008 21.187 49.306 49.306 0 0 0-15.36 20.832c-4.058 12.184 1.942 22.246 8.297 33.016a53.31 53.31 0 0 1 9.801 25.953zm0 0"
-                                                fill="#228e3b" opacity="1" data-original="#228e3b" class=""></path>
+                                                fill="#228e3b" opacity="1" data-original="#228e3b" class="">
+                                            </path>
                                             <path
                                                 d="m368.64 293.926-21.187 21.187a7.13 7.13 0 0 1-1.851 1.324 78.56 78.56 0 0 1 16.593 62.938c.973 13.95 5.207 38.227 21.895 52.086a59.57 59.57 0 0 0 46.61 10.59h.085c12.625-3.266 19.774-12.18 27.985-22.598 11.476-14.3 24.453-30.543 53.23-30.543V150.566l-24.188 56.407a8.831 8.831 0 0 1-8.12 5.386h-30.544a8.822 8.822 0 0 0-8.738 7.766l-7.062 56.145a8.832 8.832 0 0 1-7.504 7.68l-52.172 7.417a8.914 8.914 0 0 0-5.031 2.559zM512 483.719v-77.153c-20.305 0-28.691 10.594-39.46 23.922a137.784 137.784 0 0 1-10.68 12.446 69.35 69.35 0 0 1 44.226 30.457A83.397 83.397 0 0 1 512 483.719zM217.875 137.324s97.703 93.988 125.52 164.086c0 0 14.847-68.676-79.016-178.644l6.75-6.125c6.559-6.676 6.77-17.309.48-24.239-6.289-6.93-16.894-7.746-24.171-1.863l-6.754 6.125C140.359-7.449 70.62.648 70.62.648c67.027 34.516 147.254 136.676 147.254 136.676zM229.516 300.633s35.312-26.48 52.968-26.48c0 0-26.484-17.657-44.14-17.657-17.653 0-8.828 44.137-8.828 44.137zM370.758 247.668s35.312 8.828 35.312-8.828c0-17.653-26.484-35.309-26.484-35.309 8.828 17.656-8.828 44.137-8.828 44.137zM344.277 159.395c4.875 0 8.825-3.954 8.825-8.829V132.91c0-4.875-3.95-8.828-8.825-8.828s-8.828 3.953-8.828 8.828v17.656a8.829 8.829 0 0 0 8.828 8.829zM366.813 176.164a8.81 8.81 0 0 0 6.742.48 8.83 8.83 0 0 0 5.105-4.433l8.828-17.656c2.18-4.364.407-9.668-3.957-11.848-4.363-2.176-9.668-.406-11.847 3.957l-8.825 17.656a8.81 8.81 0 0 0-.48 6.743 8.811 8.811 0 0 0 4.433 5.101zm0 0"
-                                                fill="#228e3b" opacity="1" data-original="#228e3b" class=""></path>
+                                                fill="#228e3b" opacity="1" data-original="#228e3b" class="">
+                                            </path>
                                             <path
                                                 d="M55.438 312.375 216.98 161.422c-6.882-7.059-11.21-11.211-11.386-11.387l-.883-.883-.707-.968c-.176-.18-4.059-5.121-10.68-12.977L31.691 286.247c-4.757 4.218-6.875 10.667-5.55 16.886s5.89 11.246 11.957 13.156a17.65 17.65 0 0 0 17.34-3.914zm0 0"
-                                                fill="#228e3b" opacity="1" data-original="#228e3b" class=""></path>
+                                                fill="#228e3b" opacity="1" data-original="#228e3b" class="">
+                                            </path>
                                         </g>
                                     </svg>
                                 </div>
                                 <div class="text-center">
                                     <h3 style="font-size: 40px;">{{ $sdCadanganTon }}</h3>
-                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total SD/Cadangan
+                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total
+                                        SD/Cadangan
                                         (ton)</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-6" style="margin-top: 30px;">
+                    <div class="col-lg-3 col-4" style="margin-top: 30px;">
                         <div class="small-box bg-warning" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
                                 <div class="icon" style="font-size: 50px; margin-right: 20px;">
@@ -201,13 +206,50 @@
                                 </div>
                                 <div class="text-center">
                                     <h3 style="font-size: 40px;">{{ $totalberlakuIUP }}</h3>
-                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP</p>
+                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP OP</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-6" style="margin-top: 30px;">
+                    <div class="col-lg-3 col-4" style="margin-top: 30px;">
+                        <div class="small-box bg-danger" style="height: 130px;">
+                            <div class="inner d-flex align-items-center" style="font-size: 30px;">
+                                <div class="icon" style="font-size: 50px; margin-right: 20px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" x="0"
+                                        y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512"
+                                        xml:space="preserve" class="">
+                                        <g>
+                                            <path
+                                                d="M389.513 87.422c0-12.012-4.688-23.32-13.184-31.816l-42.422-42.422C325.529 4.805 313.636 0 301.8 0h-2.578v90h90.292l-.001-2.578z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                            <path
+                                                d="M273.937 309.537c2.871-8.716 7.881-16.831 14.414-23.408l101.562-101.153V120h-105.4c-8.291 0-14.513-6.709-14.513-15V0H45C20.186 0 0 20.186 0 45v422c0 24.814 20.186 45 45 45h299.513c24.814 0 45.4-20.186 45.4-45V355.049l-16.484 16.084c-6.679 6.621-14.501 11.44-23.32 14.385l-47.695 15.923-7.266.396c-12.012 0-23.379-5.845-30.439-15.63-7.002-9.741-8.906-22.368-5.098-33.779l14.326-42.891zM75 270h149.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75c-8.291 0-15-6.709-15-15s6.709-15 15-15zm-15-45c0-8.291 6.709-15 15-15h149.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75c-8.291 0-15-6.709-15-15zm0 120c0-8.291 6.709-15 15-15h149.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75c-8.291 0-15-6.709-15-15zm224.513 75c8.291 0 15 6.709 15 15s-6.708 15-15 15h-90c-8.291 0-15-6.709-15-15s6.709-15 15-15h90zM75 180c-8.291 0-15-6.709-15-15s6.709-15 15-15h209.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                            <path
+                                                d="m301.111 322.808-13.05 39.151c-1.956 5.865 3.625 11.444 9.49 9.485l39.128-13.068-35.568-35.568zM417.609 199.307l-98.789 98.789 42.605 42.605c22.328-22.332 65.773-65.783 98.784-98.794l-42.6-42.6zM503.185 156.284c-5.273-5.303-13.037-8.335-21.27-8.335-8.233 0-15.996 3.032-21.299 8.35l-21.797 21.797 42.598 42.598 21.799-21.799c11.717-11.735 11.716-30.849-.031-42.611z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                            <path
+                                                d="m503.215 198.896.002-.002.086-.086a3.634 3.634 0 0 1-.088.088zM503.303 198.808l.133-.133-.133.133zM503.436 198.675c.097-.097.099-.099 0 0z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="text-center">
+                                    <h3 style="font-size: 40px;">{{ $totalberlakuIUP }}</h3>
+                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP
+                                        Ekspolrasi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-4" style="margin-top: 30px;">
                         <div class="small-box bg-info" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
                                 <div class="icon" style="font-size: 50px; margin-right: 20px;">
@@ -234,6 +276,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- ./col -->
@@ -247,9 +290,8 @@
                                     Peta Cadangan dan Potensi Bahan Baku
                                 </div>
                                 <div class="legend" style="margin-bottom: 5px; display: flex; align-items: center;">
-                                    <!-- Jarak di sini diperkecil -->
-                                    <h5 style="margin-right: 10px; font-weight: bold;">Komoditi : </h5>
-                                    <!-- Judul bold dan geser ke kanan -->
+                                    <h5 style="margin-left: 20px; font-weight: bold; margin-top:10px; margin-right:10px;">
+                                        Komoditi : </h5>
                                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                                         @foreach ($iconsLegend as $label => $iconPath)
                                             <div style="display: flex; align-items: center;">
@@ -273,7 +315,6 @@
                         <div class="container px-7 mx-auto">
                             <div class="p-6 m-20 bg-white rounded shadow">
                                 <div id="chart"></div>
-                                {{-- {!! $chart->container() !!} --}}
                             </div>
                         </div>
                         <div class="card bg-gradient-info">
@@ -319,20 +360,29 @@
                     <!-- right col -->
                 </div>
             </div>
-            <!-- /.row (main row) -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 @endsection
 @push('javascript')
+    <script>
+        document.getElementById('opco_id').addEventListener('change', function() {
+            let selectedOpco = this.value;
+            // Redirect to the same page with query parameter ?opco_id=
+            window.location.href = `?opco_id=${selectedOpco}`;
+        });
+    </script>
+
+    </script>
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const map = L.map('map').setView([-6.956579976082929, 111.69833373298265], 10);
 
-            const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
                 maxZoom: 50,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                id: 'mapbox/streets-v11',
+                accessToken: 'your.mapbox.access.token'
             }).addTo(map);
 
             // Data lokasi dari backend (laravel) locations dalam format JSON
@@ -342,10 +392,10 @@
             // Mapping komoditi ke warna
             const iconMapping = {
                 'Cad Batugamping': 'images/CadBatugamping.png',
-                'Cad Lempung': 'images/CadLempung.png',
+                'Cad Tanah Liat': 'images/CadTanahLiat.png',
                 'Pot Batugamping': 'images/PotBatugamping.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
-                'Pot Lempung': 'images/PotLempung.png',
+                'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
                 'Pabrik SG Rembang': 'images/sgrembang.png'
@@ -416,7 +466,39 @@
                         .addTo(map);
                 }
             });
-            @if ($OpcoId == 1)
+
+            @if ($OpcoId == null)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                const tubanIcon = L.icon({
+                    iconUrl: 'images/ghopotuban.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.8638896542228105, 111.91690249608592], {
+                    icon: tubanIcon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Indonesia (Persero) Tbk</h5>
+        </div>
+    `).addTo(map);
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                const rembangIcon = L.icon({
+                    iconUrl: 'images/sgrembang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.862084537748621, 111.45844893831284], {
+                    icon: rembangIcon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Gresik Rembang, Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
                     iconUrl: 'images/ghopotuban.png',
@@ -453,13 +535,6 @@
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
-        });
-    </script>
-    <script>
-        document.getElementById('komoditi').addEventListener('change', function() {
-            let selectedKomoditi = this.value;
-            // Redirect to the same page with query parameter ?komoditi=
-            window.location.href = `?komoditi=${selectedKomoditi}`;
         });
     </script>
 @endpush

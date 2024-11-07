@@ -5,225 +5,157 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CadangandanPotensiModel;
 use Carbon\Carbon;
+use App\Models\OpcoModel;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardCadpotAdmController extends Controller
 {
     public function index(Request $request)
     {
-        $user = Auth::user();
-        $OpcoId = auth()->user()->admin->opco_id;
         // Breadcrumb data
-        if (auth()->user()->admin->opco_id === 1) {
-            $breadcrumb = (object) [
-                'title' => 'Dashboard Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
-                'list' => ['Dashboard', 'GHOPO Tuban']
-            ];
-        } elseif (auth()->user()->admin->opco_id === 2) {
-            $breadcrumb = (object) [
-                'title' => 'Dashboard Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
-                'list' => ['Dashboard', 'SG Rembang']
-            ];
-        }
+        $breadcrumb = (object) [
+            'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG',
+            'list' => ['Home', 'Dashboard']
+        ];
 
         // Page data
         $page = (object)[
-            'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'
+            'title' => ''
         ];
 
         // Active menu identifier
-        $activeMenu = 'dashboardcadpot';
+        $activeMenu = 'dashboardcadangan';
 
-        $komoditi = CadangandanPotensiModel::where('opco_id', $OpcoId)
-            ->select('komoditi')
-            ->distinct()
+        $opcoId = $request->input('opco_id', null);
+        $opco = OpcoModel::all();
+        $commoditiesByOpco = [
+            1 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa'],
+            2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa', 'Pot Tras']
+        ];
+        if (empty($opcoId)) {
+            $opcoIdList = [1, 2];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+        } else {
+            $opcoIdList = [$opcoId];
+            $validCommodities = $commoditiesByOpco[$opcoId];
+        }
+
+
+        // Get list of valid opco IDs to filter
+        if (empty($opcoId)) {
+            $opcoIdList = [1, 2];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+        } else {
+            $opcoIdList = [$opcoId];
+            $validCommodities = $commoditiesByOpco[$opcoId];
+        }
+
+
+        // Card Total SD/Cadangan, IUP, DAN PPKH
+        $totalSdCadanganTon = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->sum('sd_cadangan_ton');
+        $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_iup')->count();
+        $totalValidPPKH = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_ppkh')->count();
+
+        // Chart SD/Cadangan by Komoditi
+        $data = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereIn('komoditi', $validCommodities)
+            ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
+            ->groupBy('komoditi')
+            ->orderBy('total_sd_cadangan_ton', 'desc')
+            ->limit(6)
             ->get();
 
-        $selectedKomoditi = $request->input('komoditi');
-        $query = CadangandanPotensiModel::where('opco_id', $OpcoId);
-        if ($selectedKomoditi) {
-            $query->where('komoditi', $selectedKomoditi);
+        // Prepare the data for the chart
+        $komoditiLabels = $data->pluck('komoditi');
+        $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
+
+        if ($opcoId == null) {
+            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D']; //All Opco
+        } elseif ($opcoId == 1) {
+            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#009600', '#FF7D00']; // GHOPO Tuban
+        } else if ($opcoId == 2){
+            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D']; //SG Rembang
         }
-        if ($OpcoId == 1) {
-            // Filter data by `opco_id`
-            $totalSdCadanganTon = $query->sum('sd_cadangan_ton');
-            $totalValidIUP = $query->whereNotNull('masa_berlaku_iup')->count();
-            $totalValidPPKH = $query->whereNotNull('masa_berlaku_ppkh')->count();
 
-            // Chart SD/Cadangan by Komoditi for `opco_id = 1`
-            $data = CadangandanPotensiModel::where('opco_id', $OpcoId)
-                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
-                    return $q->where('komoditi', $selectedKomoditi);
-                })
-                ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
-                ->groupBy('komoditi')
-                ->orderBy('total_sd_cadangan_ton', 'desc')
-                ->limit(6)
-                ->get();
+        $tableData = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereIn('komoditi', $validCommodities)
+            ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
+            ->get()
+            ->map(function ($item) {
+                $today = Carbon::now();
 
-            // Prepare the data for the chart
-            $komoditiLabels = $data->pluck('komoditi');
-            $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
+                // Check if masa_berlaku_iup has a valid date
+                if ($item->masa_berlaku_iup) {
+                    $masaBerlakuIUP = Carbon::parse($item->masa_berlaku_iup);
+                    // Calculate the difference in days
+                    $diffInDays = $masaBerlakuIUP->diffInDays($today, true);
 
-            // Table Data for `opco_id = 1`
-            $tableData = CadangandanPotensiModel::where('opco_id', $OpcoId)
-                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
-                    return $q->where('komoditi', $selectedKomoditi);
-                })
-                ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
-                ->get()
-                ->map(function ($item) {
-                    $today = Carbon::now();
+                    // Set warning if it is less than or equal to 0 (expired) or less than 365 days
+                    $item->warning = ($diffInDays <= 365 && $diffInDays >= 0);
+                } else {
+                    // If there is no date, do not set warning
+                    $item->warning = false;
+                }
 
-                    // Check if masa_berlaku_iup has a valid date
-                    if ($item->masa_berlaku_iup) {
-                        $masaBerlakuIUP = Carbon::parse($item->masa_berlaku_iup);
-                        // Calculate the difference in days
-                        $diffInDays = $masaBerlakuIUP->diffInDays($today, true);
-
-                        // Set warning if it is less than or equal to 365 days (1 year left)
-                        $item->warning = ($diffInDays <= 365 && $diffInDays >= 0);
-                    } else {
-                        // If there is no date, do not set warning
-                        $item->warning = false;
-                    }
-
-                    return $item;
-                });
-
-            // Define icons for the map legend
+                return $item;
+            });
+        // Define the icons legend dynamically based on the selected opco_id
+        $iconsLegend = [];
+        if ($opcoId == null) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/CadBatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Lempung' => 'images/CadLempung.png',
-                'Pot Lempung' => 'images/PotLempung.png',
-                'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
-            ];
-
-            if ($selectedKomoditi) {
-                $iconsLegend = [$selectedKomoditi => $iconsLegend[$selectedKomoditi]];
-            }
-
-
-            // Filter locations for the map based on `opco_id = 1`
-            $locations = CadangandanPotensiModel::where('opco_id', $OpcoId)
-                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
-                    return $q->where('komoditi', $selectedKomoditi);
-                })
-                ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
-                ->whereNotNull('latitude')
-                ->whereNotNull('longitude')
-                ->get();
-
-            return view('Admin.dashboardCadangan.index', [
-                'breadcrumb' => $breadcrumb,
-                'page' => $page,
-                'activeMenu' => $activeMenu,
-                'sdCadanganTon' => number_format($totalSdCadanganTon, 0, '.', '.'),
-                'totalberlakuIUP' => $totalValidIUP,
-                'totalberlakuPPKH' => $totalValidPPKH,
-                'komoditiLabels' => $komoditiLabels,
-                'sdCadanganTons' => $sdCadanganTons,
-                'tableData' => $tableData,
-                'locations' => $locations,
-                'iconsLegend' => $iconsLegend,
-                'OpcoId' => $OpcoId,
-                'komoditi' => $komoditi,
-                'selectedKomoditi' => $selectedKomoditi,
-            ]);
-        } else if ($OpcoId == 2) {
-            // Filter data by `opco_id`
-            $totalSdCadanganTon = $query->sum('sd_cadangan_ton');
-            $totalValidIUP = $query->whereNotNull('masa_berlaku_iup')->count();
-            $totalValidPPKH = $query->whereNotNull('masa_berlaku_ppkh')->count();
-
-            // Chart SD/Cadangan by Komoditi for `opco_id = 2`
-            $data = CadangandanPotensiModel::where('opco_id', $OpcoId)
-                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
-                    return $q->where('komoditi', $selectedKomoditi);
-                })
-                ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
-                ->groupBy('komoditi')
-                ->orderBy('total_sd_cadangan_ton', 'desc')
-                ->limit(6)
-                ->get();
-
-            // Prepare the data for the chart
-            $komoditiLabels = $data->pluck('komoditi');
-            $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
-
-            // Table Data for `opco_id = 2`
-            $tableData = CadangandanPotensiModel::where('opco_id', $OpcoId)
-                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
-                    return $q->where('komoditi', $selectedKomoditi);
-                })
-                ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
-                ->get()
-                ->map(function ($item) {
-                    $today = Carbon::now();
-
-                    // Check if masa_berlaku_iup has a valid date
-                    if ($item->masa_berlaku_iup) {
-                        $masaBerlakuIUP = Carbon::parse($item->masa_berlaku_iup);
-                        // Calculate the difference in days
-                        $diffInDays = $masaBerlakuIUP->diffInDays($today, true);
-
-                        // Set warning if it is less than or equal to 365 days (2 year left)
-                        $item->warning = ($diffInDays <= 365 && $diffInDays >= 0);
-                    } else {
-                        // If there is no date, do not set warning
-                        $item->warning = false;
-                    }
-
-                    return $item;
-                });
-
-            // Define icons for the map legend
-            $iconsLegend = [
-                'Cad Batugamping' => 'images/CadBatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Lempung' => 'images/CadLempung.png',
-                'Pot Lempung' => 'images/PotLempung.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
-
-            if ($selectedKomoditi) {
-                $iconsLegend = [$selectedKomoditi => $iconsLegend[$selectedKomoditi]];
-            }
-
-
-            // Filter locations for the map based on `opco_id = 2`
-            $locations = CadangandanPotensiModel::where('opco_id', $OpcoId)
-                ->when($selectedKomoditi, function ($q) use ($selectedKomoditi) {
-                    return $q->where('komoditi', $selectedKomoditi);
-                })
-                ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
-                ->whereNotNull('latitude')
-                ->whereNotNull('longitude')
-                ->get();
-
-            return view('Admin.dashboardCadangan.index', [
-                'breadcrumb' => $breadcrumb,
-                'page' => $page,
-                'activeMenu' => $activeMenu,
-                'sdCadanganTon' => number_format($totalSdCadanganTon, 0, '.', '.'),
-                'totalberlakuIUP' => $totalValidIUP,
-                'totalberlakuPPKH' => $totalValidPPKH,
-                'komoditiLabels' => $komoditiLabels,
-                'sdCadanganTons' => $sdCadanganTons,
-                'tableData' => $tableData,
-                'locations' => $locations,
-                'iconsLegend' => $iconsLegend,
-                'OpcoId' => $OpcoId,
-                'komoditi' => $komoditi,
-                'selectedKomoditi' => $selectedKomoditi,
-            ]);
+        } elseif ($opcoId == 1) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/CadBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tana hLiat' => 'images/PotTanahLiat.png',
+                'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
+            ];
+        }elseif($opcoId == 2){
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/CadBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
+                'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
+                'Pot Tras' => 'images/PotTras.png',
+            ];
         }
+
+        $locations = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereIn('komoditi', $validCommodities)
+            ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->get();
+
+        return view('Admin.DashboardCadangan.index', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'activeMenu' => $activeMenu,
+            'opco' => $opco,
+            'sdCadanganTon' => number_format($totalSdCadanganTon, 0, '.', '.'),
+            'totalberlakuIUP' => $totalValidIUP,
+            'totalberlakuPPKH' => $totalValidPPKH,
+            'komoditiLabels' => $komoditiLabels,
+            'sdCadanganTons' => $sdCadanganTons,
+            'tableData' => $tableData,
+            'locations' => $locations,
+            'iconsLegend' => $iconsLegend,
+            'OpcoId' => $opcoId,
+            'chartColors' => $chartColors,
+        ]);
     }
 
     public function maps()
     {
-        return view('Admin.dashboardCadangan.index');
+        return view('Admin.DashboardCadangan.index');
     }
 }

@@ -29,8 +29,8 @@ class DashboardCadpotSprAdmController extends Controller
         $opcoId = $request->input('opco_id', null);
         $opco = OpcoModel::all();
         $commoditiesByOpco = [
-            1 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Lempung', 'Pot Lempung', 'Pot Pasirkuarsa'],
-            2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Lempung', 'Pot Lempung', 'Pot Pasirkuarsa', 'Pot Tras']
+            1 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa'],
+            2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa', 'Pot Tras']
         ];
         if (empty($opcoId)) {
             $opcoIdList = [1, 2];
@@ -105,8 +105,8 @@ class DashboardCadpotSprAdmController extends Controller
             $iconsLegend = [
                 'Cad Batugamping' => 'images/CadBatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Lempung' => 'images/CadLempung.png',
-                'Pot Lempung' => 'images/PotLempung.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
@@ -114,16 +114,16 @@ class DashboardCadpotSprAdmController extends Controller
             $iconsLegend = [
                 'Cad Batugamping' => 'images/CadBatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Lempung' => 'images/CadLempung.png',
-                'Pot Lempung' => 'images/PotLempung.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
         }elseif($opcoId == 2){
             $iconsLegend = [
                 'Cad Batugamping' => 'images/CadBatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Lempung' => 'images/CadLempung.png',
-                'Pot Lempung' => 'images/PotLempung.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];

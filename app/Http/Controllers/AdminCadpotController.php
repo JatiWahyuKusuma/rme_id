@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CadangandanPotensiModel;
+use App\Models\OpcoModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -29,46 +30,66 @@ class AdminCadpotController extends Controller
         ];
 
         $activeMenu = 'admincadpot';
-        $admincadpot = CadangandanPotensiModel::all();
-        // Fetch all cadpot data, but in the DataTable method, filtering is applied based on opco_id
-        $admincadpot = CadangandanPotensiModel::where('opco_id', $userOpcoId)->get();
+        $admincadpot = CadangandanPotensiModel::orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId])
+            ->get();
 
-        return view('admin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu]);
+        $opco = OpcoModel::all();;
+
+        return view('admin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
-
     public function list(Request $request)
     {
-
-        $admincadpot = CadangandanPotensiModel::select('cadpot_id', 'opco_id', 'jarak', 'latitude', 'longitude', 'no_id', 'komoditi', 'lokasi_iup', 'tipe_sd_cadangan', 'sd_cadangan_ton', 'catatan', 'status_penyelidikan', 'acuan', 'kabupaten', 'kecamatan', 'luas_ha', 'masa_berlaku_iup', 'masa_berlaku_ppkh');
-
+        // Ambil opco_id dari pengguna yang sedang login
         $userOpcoId = auth()->user()->admin->opco_id;
 
-        // Filter the data based on the user's company (opco_id)
-        if ($userOpcoId) {
-            $admincadpot->where('opco_id', $userOpcoId);
-        }
+        // Ambil data cadangan dan potensi
+        $admincadpot = CadangandanPotensiModel::select(
+            'cadpot_id',
+            'opco_id',
+            'jarak',
+            'latitude',
+            'longitude',
+            'no_id',
+            'komoditi',
+            'lokasi_iup',
+            'tipe_sd_cadangan',
+            'sd_cadangan_ton',
+            'catatan',
+            'status_penyelidikan',
+            'acuan',
+            'kabupaten',
+            'kecamatan',
+            'luas_ha',
+            'masa_berlaku_iup',
+            'masa_berlaku_ppkh'
+        )->orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId]);
 
+        // Filter berdasarkan opco_id jika tersedia
         if ($request->opco_id) {
             $admincadpot->where('opco_id', $request->opco_id);
         }
 
-        if (($request->komoditi)) {
-            $admincadpot->where('komoditi', $request->komoditi);
-        }
 
+        // Konfigurasi untuk Datatables
         return Datatables::of($admincadpot)
             ->addIndexColumn()
-            ->addColumn('aksi', function ($admincadpot) {
-                $btn  = '<a href="' . url('/admincadpot/' . $admincadpot->cadpot_id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<a href="' . url('/admincadpot/' . $admincadpot->cadpot_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/admincadpot/' . $admincadpot->cadpot_id) . '">'
-                    . csrf_field() . method_field('DELETE') .
-                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
-                return $btn;
+            ->addColumn('aksi', function ($admincadpot) use ($userOpcoId) {
+                // Hanya tampilkan tombol jika opco_id data sama dengan opco_id pengguna yang login
+                if ($admincadpot->opco_id == $userOpcoId) {
+                    $btn  = '<a href="' . url('/admincadpot/' . $admincadpot->cadpot_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                    $btn .= '<a href="' . url('/admincadpot/' . $admincadpot->cadpot_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
+                    $btn .= '<form class="d-inline-block" method="POST" action="' . url('/admincadpot/' . $admincadpot->cadpot_id) . '">'
+                        . csrf_field() . method_field('DELETE') .
+                        '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
+                    return $btn;
+                }
+                // Jika opco_id tidak sama, jangan tampilkan tombol apapun
+                return '';
             })
             ->rawColumns(['aksi'])
             ->make(true);
     }
+
 
     public function create()
     {

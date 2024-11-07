@@ -61,7 +61,7 @@
                         <label class="col-1 control-label col-form-label">No ID</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="no_id" name="no_id"
-                                value="{{ old('no_id', $cadpot->no_id) }}" required>
+                                value="{{ old('no_id', $cadpot->no_id) }}" >
                             @error('no_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -111,7 +111,7 @@
                         <label class="col-1 control-label col-form-label">Catatan</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="catatan" name="catatan"
-                                value="{{ old('catatan', $cadpot->catatan) }}" required>
+                                value="{{ old('catatan', $cadpot->catatan) }}" >
                             @error('catatan')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -121,7 +121,7 @@
                         <label class="col-1 control-label col-form-label">Status Penyelidikan</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="status_penyelidikan" name="status_penyelidikan"
-                                value="{{ old('status_penyelidikan', $cadpot->status_penyelidikan) }}" required>
+                                value="{{ old('status_penyelidikan', $cadpot->status_penyelidikan) }}" >
                             @error('status_penyelidikan')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -131,7 +131,7 @@
                         <label class="col-1 control-label col-form-label">Acuan</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="acuan" name="acuan"
-                                value="{{ old('acuan', $cadpot->acuan) }}" required>
+                                value="{{ old('acuan', $cadpot->acuan) }}" >
                             @error('acuan')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror

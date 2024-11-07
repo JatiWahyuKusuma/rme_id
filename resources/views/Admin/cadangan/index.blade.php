@@ -20,24 +20,13 @@
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
-                            <select class="form-control" name="komoditi" id="komoditi">
-                                <option value="">-- Semua --</option>
-                                @if(auth()->user()->admin->opco_id == 1)
-                                    <option value="Cad Batugamping">Cad Batugamping</option>
-                                    <option value="Pot Batugamping">Pot Batugamping</option>
-                                    <option value="Cad Lempung">Cad Lempung</option>
-                                    <option value="Pot Lempung">Pot Lempung</option>
-                                    <option value="Pot Pasirkuarsa">Pot Pasirkuarsa</option>
-                                @elseif(auth()->user()->admin->opco_id == 2)
-                                    <option value="Cad Batugamping">Cad Batugamping</option>
-                                    <option value="Pot Batugamping">Pot Batugamping</option>
-                                    <option value="Cad Lempung">Cad Lempung</option>
-                                    <option value="Pot Lempung">Pot Lempung</option>
-                                    <option value="Pot Pasirkuarsa">Pot Pasirkuarsa</option>
-                                    <option value="Pot Tras">Pot Tras</option>
-                                @endif
+                            <select class="form-control" name="opco_id" id="opco_id">
+                                <option value="">-- Semua --</option> <!-- Pastikan ini hanya muncul sekali -->
+                                @foreach ($opco as $opco)
+                                    <option value="{{$opco->opco_id }}">{{$opco->nama_opco }}</option>
+                                @endforeach
                             </select>
-                            <small class="form-text text-muted">Komoditi</small>
+                            <small class="form-text text-muted">Opco</small>
                         </div>
                     </div>
                 </div>
@@ -47,7 +36,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Opco ID</th>
-                        <th>Jarak</th>
+                        <th>Jarak(km)</th>
                         <th>Komoditi</th>
                         <th>Lokasi/IUP</th>
                         <th>Tipe SD/Cadangan</th>
@@ -73,14 +62,12 @@
         th {
             text-align: center;
         }
-
         .aksi-buttons {
             display: flex;
             gap: 2px;
         }
 
-        .aksi-buttons a,
-        .aksi-buttons button {
+        .aksi-buttons a, .aksi-buttons button {
             flex-grow: 1;
             width: 75px;
             text-align: center;
@@ -89,112 +76,115 @@
 @endpush
 
 @push('js')
-    <script>
-        $(document).ready(function() {
-            var dataTable = $('#table_m_cadangan_potensi').DataTable({
-                serverSide: true,
-                ajax: {
-                    "url": "{{ url('admincadpot/list') }}",
-                    "type": "POST",
-                    "data": function(d) {
-                        d._token = '{{ csrf_token() }}';
-                        d.komoditi = $('#komoditi').val(); // Use the correct filter value
-                        d.opco_id = {{ auth()->user()->admin->opco_id }}
-                    }
+<script>
+    
+    $(document).ready(function() {
+        var dataTable = $('#table_m_cadangan_potensi').DataTable({
+            serverSide: true,
+            ajax: {
+                "url": "{{ url('admincadpot/list') }}",
+                "type": "POST",
+                "data": function(d) {
+                    d._token = '{{ csrf_token() }}';
+                    d.name = '{{ request()->get("name", "tuban") }}';
+                    d.opco_id = $('#opco_id').val(); // Use the correct filter value
+                }
+            },
+            columns: [
+                {
+                    data: "DT_RowIndex",
+                    className: "text-center",
+                    orderable: false,
+                    searchable: false
                 },
-                columns: [{
-                        data: "DT_RowIndex",
-                        className: "text-center",
-                        orderable: false,
-                        searchable: false
+                {
+                    data: "opco_id",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "jarak",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "komoditi",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "lokasi_iup",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "tipe_sd_cadangan",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "sd_cadangan_ton",
+                    orderable: true,
+                    searchable: true,
+                    render: function(data, type, row){
+                        return new Intl.NumberFormat('id-ID').format(data);
                     },
-                    {
-                        data: "opco_id",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "jarak",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "komoditi",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "lokasi_iup",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "tipe_sd_cadangan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "sd_cadangan_ton",
-                        orderable: true,
-                        searchable: true,
-                        render: function(data, type, row) {
-                            return new Intl.NumberFormat('id-ID').format(data);
-                        },
-                        width: "150px"
-                    },
-                    {
-                        data: "catatan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "status_penyelidikan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "acuan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "kabupaten",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "kecamatan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "luas_ha",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "masa_berlaku_iup",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "masa_berlaku_ppkh",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "aksi",
-                        orderable: false,
-                        searchable: false,
-                        width: "170px"
-                    }
-                ]
-            });
-
-            // Event listener for filter
-            $('#komoditi').on('change', function() {
-                dataTable.ajax.reload(); // Reload data when filter changes
-            });
+                    width: "150px"
+                },
+                {
+                    data: "catatan",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "status_penyelidikan",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "acuan",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "kabupaten",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "kecamatan",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "luas_ha",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "masa_berlaku_iup",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "masa_berlaku_ppkh",
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: "aksi",
+                    orderable: false,
+                    searchable: false,
+                    width: "170px"
+                }
+                
+            ]
         });
-    </script>
+
+        // Event listener for filter
+        $('#opco_id').on('change', function() {
+            dataTable.ajax.reload(); // Reload data when filter changes
+        });
+    });
+</script>
 @endpush

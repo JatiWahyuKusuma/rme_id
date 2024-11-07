@@ -9,17 +9,11 @@
             height: 680px;
         }
 
-        /* .content {
-                    background-color: rgb(222, 0, 0);
-                } */
-
-        /* .container-fluid {
-                    background-color: rgb(222, 0, 0);
-                } */
-
-        /* .content-header {
-                    background-color: rgb(222, 0, 0);
-                } */
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: rgb(46, 46, 46);
+        }
 
         .row {
             margin: auto;
@@ -34,8 +28,8 @@
         }
 
         /* .card-outline.card-primary {
-                border-top: 4px solid #7b7e82;
-            } */
+                                                    border-top: 4px solid #7b7e82;
+                                                } */
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -78,7 +72,7 @@
             },
             colors: @json($chartColors),
             dataLabels: {
-                enabled: true,
+                enabled: false,
                 style: {
                     colors: ['#000000']
                 },
@@ -154,7 +148,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-6" style="margin-top: 30px;">
+                    <div class="col-lg-3 col-4" style="margin-top: 10px;">
                         <div class="small-box bg-success" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
                                 <div class="icon" style="font-size: 50px; margin-right: 20px;">
@@ -188,7 +182,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-6" style="margin-top: 30px;">
+                    <div class="col-lg-3 col-4" style="margin-top: 10px;">
                         <div class="small-box bg-warning" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
                                 <div class="icon" style="font-size: 50px; margin-right: 20px;">
@@ -212,13 +206,51 @@
                                 </div>
                                 <div class="text-center">
                                     <h3 style="font-size: 40px;">{{ $totalberlakuIUP }}</h3>
-                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP</p>
+                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP OP</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-6" style="margin-top: 30px;">
+                    <div class="col-lg-3 col-4" style="margin-top: 10px;">
+                        <div class="small-box bg-danger" style="height: 130px;">
+                            <div class="inner d-flex align-items-center" style="font-size: 30px;">
+                                <div class="icon" style="font-size: 50px; margin-right: 20px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                        xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" x="0"
+                                        y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512"
+                                        xml:space="preserve" class="">
+                                        <g>
+                                            <path
+                                                d="M389.513 87.422c0-12.012-4.688-23.32-13.184-31.816l-42.422-42.422C325.529 4.805 313.636 0 301.8 0h-2.578v90h90.292l-.001-2.578z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                            <path
+                                                d="M273.937 309.537c2.871-8.716 7.881-16.831 14.414-23.408l101.562-101.153V120h-105.4c-8.291 0-14.513-6.709-14.513-15V0H45C20.186 0 0 20.186 0 45v422c0 24.814 20.186 45 45 45h299.513c24.814 0 45.4-20.186 45.4-45V355.049l-16.484 16.084c-6.679 6.621-14.501 11.44-23.32 14.385l-47.695 15.923-7.266.396c-12.012 0-23.379-5.845-30.439-15.63-7.002-9.741-8.906-22.368-5.098-33.779l14.326-42.891zM75 270h149.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75c-8.291 0-15-6.709-15-15s6.709-15 15-15zm-15-45c0-8.291 6.709-15 15-15h149.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75c-8.291 0-15-6.709-15-15zm0 120c0-8.291 6.709-15 15-15h149.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75c-8.291 0-15-6.709-15-15zm224.513 75c8.291 0 15 6.709 15 15s-6.708 15-15 15h-90c-8.291 0-15-6.709-15-15s6.709-15 15-15h90zM75 180c-8.291 0-15-6.709-15-15s6.709-15 15-15h209.513c8.291 0 15 6.709 15 15s-6.709 15-15 15H75z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                            <path
+                                                d="m301.111 322.808-13.05 39.151c-1.956 5.865 3.625 11.444 9.49 9.485l39.128-13.068-35.568-35.568zM417.609 199.307l-98.789 98.789 42.605 42.605c22.328-22.332 65.773-65.783 98.784-98.794l-42.6-42.6zM503.185 156.284c-5.273-5.303-13.037-8.335-21.27-8.335-8.233 0-15.996 3.032-21.299 8.35l-21.797 21.797 42.598 42.598 21.799-21.799c11.717-11.735 11.716-30.849-.031-42.611z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                            <path
+                                                d="m503.215 198.896.002-.002.086-.086a3.634 3.634 0 0 1-.088.088zM503.303 198.808l.133-.133-.133.133zM503.436 198.675c.097-.097.099-.099 0 0z"
+                                                fill="#a93540" opacity="1" data-original="#a93540" class="">
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="text-center">
+                                    <h3 style="font-size: 40px;">{{ $totalberlakuIUP }}</h3>
+                                    <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP
+                                        Eksplorasi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-3 col-4" style="margin-top: 10px;">
                         <div class="small-box bg-info" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
                                 <div class="icon" style="font-size: 50px; margin-right: 20px;">
@@ -348,10 +380,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             const map = L.map('map').setView([-6.956579976082929, 111.69833373298265], 10);
 
-            const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
                 maxZoom: 50,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                id: 'mapbox/streets-v11',
+                accessToken: 'your.mapbox.access.token'
             }).addTo(map);
+
 
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locations = @json($locations);
@@ -360,10 +394,10 @@
             // Mapping komoditi ke warna
             const iconMapping = {
                 'Cad Batugamping': 'images/CadBatugamping.png',
-                'Cad Lempung': 'images/CadLempung.png',
+                'Cad Tanah Liat': 'images/CadTanahLiat.png',
                 'Pot Batugamping': 'images/PotBatugamping.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
-                'Pot Lempung': 'images/PotLempung.png',
+                'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
                 'Pabrik SG Rembang': 'images/sgrembang.png'
