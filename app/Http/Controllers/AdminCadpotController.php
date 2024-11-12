@@ -29,6 +29,12 @@ class AdminCadpotController extends Controller
                 'list' => ['Home', 'SBI Tuban']
             ];
         }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa']
+            ];
+        }
 
         $page = (object)[
             'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'

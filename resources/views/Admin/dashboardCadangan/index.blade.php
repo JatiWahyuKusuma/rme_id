@@ -86,7 +86,7 @@
             xaxis: {
                 categories: @json($komoditiLabels),
                 min: 1000000,
-                max: 3500000000, // Set the minimum value to 1,000,000
+                // Set the minimum value to 1,000,000
                 // Ensure this matches the data length
                 labels: {
                     formatter: function(val) {
@@ -365,6 +365,7 @@
         document.getElementById('opco_id').addEventListener('change', function() {
             let selectedOpco = this.value;
             // Redirect to the same page with query parameter ?opco_id=
+
             window.location.href = `?opco_id=${selectedOpco}`;
         });
     </script>
@@ -374,7 +375,7 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const map = L.map('map').setView([-6.956579976082929, 111.69833373298265], 10);
+            const map = L.map('map').setView([-3.160237881740241, 111.97376353377497], 5);
 
             const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
                 maxZoom: 50,
@@ -382,7 +383,28 @@
                 accessToken: 'your.mapbox.access.token'
             }).addTo(map);
 
-
+            const zoomLevels = {
+                1: {
+                    lat: -6.8638896542228105,
+                    lon: 111.91690249608592,
+                    zoom: 10
+                }, // GHOPO Tuban
+                2: {
+                    lat: -6.862084537748621,
+                    lon: 111.45844893831284,
+                    zoom: 10
+                }, // SG Rembang
+                3: {
+                    lat: -6.81381003288771,
+                    lon: 111.88562746834054,
+                    zoom: 10
+                }, // SBI Tuban
+                4: {
+                    lat: -4.799956009286747,
+                    lon: 119.60816663988693,
+                    zoom: 10
+                } // Semen Tonasa
+            };
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locations = @json($locations);
             const iconsLegend = @json($iconsLegend);
@@ -397,7 +419,8 @@
                 'Pot Tras': 'images/PotTras.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
                 'Pabrik SG Rembang': 'images/sgrembang.png',
-                'Pabrik SBI Tuban ': 'images/solusibangunindonesia.jpg'
+                'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png',
+                'Pabrik Semen Tonasa ': 'images/semenTonasa.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -465,6 +488,12 @@
                         .addTo(map);
                 }
             });
+            @if ($OpcoId)
+                const selectedOpco = zoomLevels[{{ $OpcoId }}];
+                if (selectedOpco) {
+                    map.setView([selectedOpco.lat, selectedOpco.lon], selectedOpco.zoom);
+                }
+            @endif
 
             @if ($OpcoId == null)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
@@ -490,17 +519,17 @@
                     popupAnchor: [0, -30]
                 });
 
-                L.marker([-6.862084537748621, 111.45844893831284], {
+                L.marker([-6.86213779763091, 111.458459666856], {
                     icon: rembangIcon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
-            <h5>PT. Semen Gresik Rembang, Tbk</h5>
+            <h5>PT. Semen Gresik Rembang. Tbk</h5>
         </div>
     `).addTo(map);
                 // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
                 const sbitubicon = L.icon({
-                    iconUrl: 'images/solusibangunindonesia.jpg',
-                    iconSize: [70, 70],
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
                     iconAnchor: [15, 30],
                     popupAnchor: [0, -30]
                 });
@@ -509,7 +538,22 @@
                     icon: sbitubicon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
-            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban, Tbk</h5>
+            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban. Tbk</h5>
+        </div>
+    `).addTo(map);
+                // Admin for Semen Tonasa (opco_id = 4), show only the SBI Tuban icon
+                const sticon = L.icon({
+                    iconUrl: 'images/semenTonasa.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-4.799956009286747, 119.60816663988693], {
+                    icon: sticon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Tonasa(Persero). Tbk</h5>
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 1)
@@ -537,18 +581,18 @@
                     popupAnchor: [0, -30]
                 });
 
-                L.marker([-6.813809367071614, 111.88562612723601], {
+                L.marker([-6.86213779763091, 111.458459666856], {
                     icon: rembangIcon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
-            <h5>PT. Semen Gresik Rembang, Tbk</h5>
+            <h5>PT. Semen Gresik Rembang. Tbk</h5>
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 3)
                 // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
                 const sbitubicon = L.icon({
-                    iconUrl: 'images/solusibangunindonesia.jpg',
-                    iconSize: [70, 70],
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
                     iconAnchor: [15, 30],
                     popupAnchor: [0, -30]
                 });
@@ -557,7 +601,23 @@
                     icon: sbitubicon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
-            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban, Tbk</h5>
+            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban. Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 4)
+                // Admin for Semen Tonasa (opco_id = 4), show only the SBI Tuban icon
+                const sticon = L.icon({
+                    iconUrl: 'images/semenTonasa.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-4.799956009286747, 119.60816663988693], {
+                    icon: sticon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Tonasa(Persero). Tbk</h5>
         </div>
     `).addTo(map);
             @endif

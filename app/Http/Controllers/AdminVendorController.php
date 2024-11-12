@@ -28,6 +28,11 @@ class AdminVendorController extends Controller
                 'title' => 'Vendor Bahan Baku di SIG - SBI Tuban',
                 'list' => ['Home', 'SBI Tuban']
             ];
+        } elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Vendor Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa']
+            ];
         }
 
         $page = (object)[
@@ -36,13 +41,12 @@ class AdminVendorController extends Controller
 
         $activeMenu = 'adminvendorbb';
 
-        // $adminvendorbb = VendorModel::all();
         // Fetch all cadpot data, but in the DataTable method, filtering is applied based on opco_id
         $adminvendorbb = VendorModel::orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId])
             ->get();
         $opco = OpcoModel::all();
 
-        return view('admin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opco' => $opco]);
+        return view('admin.vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
 
     public function list(Request $request)
@@ -63,36 +67,30 @@ class AdminVendorController extends Controller
             'kap_ton_thn',
             'konsumsi_ton_thn'
         )->orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId]);
-        // Filter data berdasarkan perusahaan pengguna (opco_id)
-        // if ($userOpcoId) {
-        //     $adminvendorbb->where('opco_id', $userOpcoId);
-        // }
 
         if ($request->opco_id) {
             $adminvendorbb->where('opco_id', $request->opco_id);
         }
-        // if ($request->komoditi) {
-        //     $adminvendorbb->where('komoditi', $request->komoditi);
-        // }
 
         return Datatables::of($adminvendorbb)
-        ->addIndexColumn()
-        ->addColumn('aksi', function ($adminvendorbb) use ($userOpcoId) {
-            // Hanya tampilkan tombol jika opco_id data sama dengan opco_id pengguna yang login
-            if ($adminvendorbb->opco_id == $userOpcoId) {
-                $btn  = '<a href="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<a href="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id) . '">'
-                    . csrf_field() . method_field('DELETE') .
-                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
-                return $btn;
-            }
-            // Jika opco_id tidak sama, jangan tampilkan tombol apapun
-            return '';
-        })
-        ->rawColumns(['aksi'])
-        ->make(true);
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($adminvendorbb) use ($userOpcoId) {
+                // Check if the current data's opco_id matches the user's opco_id
+                if ($adminvendorbb->opco_id == $userOpcoId) {
+                    $btn  = '<a href="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                    $btn .= '<a href="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
+                    $btn .= '<form class="d-inline-block" method="POST" action="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id) . '">'
+                        . csrf_field() . method_field('DELETE') .
+                        '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
+                    return $btn;
+                }
+                // If opco_id does not match, display no action buttons
+                return '';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
+
 
 
     public function create()
@@ -110,7 +108,7 @@ class AdminVendorController extends Controller
         $activeMenu = 'adminvendorbb';
         $opcoId = auth()->user()->admin->opco_id;
 
-        return view('admin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
+        return view('admin.vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
     }
 
     public function store(Request $request)
@@ -167,7 +165,7 @@ class AdminVendorController extends Controller
 
         $activeMenu = 'adminvendorbb';
 
-        return view('admin.Vendor.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu]);
+        return view('admin.vendor.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu]);
     }
 
     public function edit($id)
@@ -188,7 +186,7 @@ class AdminVendorController extends Controller
         $opcoId = auth()->user()->admin->opco_id;
         $activeMenu = 'adminvendorbb';
 
-        return view('admin.Vendor.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
+        return view('admin.vendor.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
     }
 
     public function update(Request $request, $id)
@@ -210,7 +208,7 @@ class AdminVendorController extends Controller
         $adminvendorbb = VendorModel::find($id);
 
         if (!$adminvendorbb || $adminvendorbb->opco_id != $loggedOpcoId) {
-            return redirect('/adminvend$adminvendorbb')->withErrors('Anda tidak diizinkan untuk mengedit data ini.');
+            return redirect('/adminvendorbb')->withErrors('Anda tidak diizinkan untuk mengedit data ini.');
         }
 
 

@@ -29,17 +29,23 @@ class DashboardVendorAdmController extends Controller
         $opco = OpcoModel::all();
 
         $opcoId = $request->input('opco_id', null);
-        $commoditiesByOpco = [
-            1 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash'],
-            2 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash'],
-            3 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash']
-        ];
-        if (empty($opcoId)) {
-            $opcoIdList = [1, 2, 3];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2],  $commoditiesByOpco[3]);
+        $commoditiesByOpco = VendorModel::query()
+            ->select('opco_id', 'komoditi')
+            ->distinct()
+            ->get()
+            ->groupBy('opco_id')
+            ->map(function ($items) {
+                return $items->pluck('komoditi')->toArray();
+            })
+            ->toArray();
+
+        // Filter valid opcoIdList dan komoditi yang sesuai
+        if (is_null($opcoId)) {
+            $opcoIdList = array_keys($commoditiesByOpco);
+            $validCommodities = array_merge(...array_values($commoditiesByOpco));
         } else {
             $opcoIdList = [$opcoId];
-            $validCommodities = $commoditiesByOpco[$opcoId];
+            $validCommodities = $commoditiesByOpco[$opcoId] ?? [];
         }
 
 
@@ -69,6 +75,15 @@ class DashboardVendorAdmController extends Controller
         // Prepare the data for the chart
         $komoditiLabels = $data->pluck('komoditi');
         $kapTonThn = $data->pluck('total_kap_ton_thn');
+        $commodityColors = [
+            'Purified Gypsum' => '#9b9b9b',
+            'Copper Slag' => '#000000',
+            'Fly Ash' => '#ff0000',
+        ];
+
+        $chartColors = $komoditiLabels->map(function ($komoditi) use ($commodityColors) {
+            return $commodityColors[$komoditi] ?? '#CCCCCC'; // Warna default jika komoditi tidak ditemukan
+        })->toArray();
 
         // Table Data
         $tableData = VendorModel::whereIn('opco_id', $opcoIdList)
@@ -94,13 +109,20 @@ class DashboardVendorAdmController extends Controller
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/Flyash.png',
             ];
-        }elseif ($opcoId == 3) {
+        } elseif ($opcoId == 3) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/Flyash.png',
+            ];
+        }elseif ($opcoId == 4) {
             $iconsLegend = [
                 'Purified Gypsum' => 'images/PurifiedGypsum.png',
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/Flyash.png',
             ];
         }
+
         $locationsVen = VendorModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
             ->select('komoditi', 'latitude', 'longitude', 'kap_ton_thn', 'vendor', 'kabupaten', 'jarak')
@@ -124,6 +146,7 @@ class DashboardVendorAdmController extends Controller
             'locationsVen' => $locationsVen,
             'iconsLegend' => $iconsLegend,
             'OpcoId' => $opcoId,
+            'chartColors' => $chartColors,
         ]);
     }
 

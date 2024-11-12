@@ -12,6 +12,7 @@ class DashboardCadpotAdmController extends Controller
 {
     public function index(Request $request)
     {
+
         // Breadcrumb data
         $breadcrumb = (object) [
             'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG',
@@ -28,27 +29,23 @@ class DashboardCadpotAdmController extends Controller
 
         $opcoId = $request->input('opco_id', null);
         $opco = OpcoModel::all();
-        $commoditiesByOpco = [
-            1 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa'],
-            2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa', 'Pot Tras'],
-            3 => ['Cad Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa']
-        ];
-        if (empty($opcoId)) {
-            $opcoIdList = [1, 2, 3];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2], $commoditiesByOpco[3]);
+        $commoditiesByOpco = CadangandanPotensiModel::query()
+            ->select('opco_id', 'komoditi')
+            ->distinct()
+            ->get()
+            ->groupBy('opco_id')
+            ->map(function ($items) {
+                return $items->pluck('komoditi')->toArray();
+            })
+            ->toArray();
+
+        // Filter valid opcoIdList dan komoditi yang sesuai
+        if (is_null($opcoId)) {
+            $opcoIdList = array_keys($commoditiesByOpco);
+            $validCommodities = array_merge(...array_values($commoditiesByOpco));
         } else {
             $opcoIdList = [$opcoId];
-            $validCommodities = $commoditiesByOpco[$opcoId];
-        }
-
-
-        // Get list of valid opco IDs to filter
-        if (empty($opcoId)) {
-            $opcoIdList = [1, 2, 3];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2], $commoditiesByOpco[3]);
-        } else {
-            $opcoIdList = [$opcoId];
-            $validCommodities = $commoditiesByOpco[$opcoId];
+            $validCommodities = $commoditiesByOpco[$opcoId] ?? [];
         }
 
 
@@ -71,15 +68,19 @@ class DashboardCadpotAdmController extends Controller
         $komoditiLabels = $data->pluck('komoditi');
         $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
 
-        if ($opcoId == null) {
-            $chartColors = ['#007DFF', '#000440', '#00FF00', '#FF7D00', '#002b00', '#7D007D']; //All Opco
-        } elseif ($opcoId == 1) {
-            $chartColors = ['#007DFF', '#000440', '#00FF00', '#002b00', '#FF7D00']; // GHOPO Tuban
-        } else if ($opcoId == 2) {
-            $chartColors = ['#007DFF', '#000440', '#00FF00', '#FF7D00', '#002b00', '#7D007D']; //SG Rembang
-        } else if ($opcoId == 3) {
-            $chartColors = ['#000440', '#00FF00', '#FF7D00', '#002b00'];
-        }
+        $commodityColors = [
+            'Cad Batugamping' => '#000440',
+            'Cad Tanah Liat' => '#002b00',
+            'Pot Batugamping' => '#007DFF',
+            'Pot Tanah Liat' => '#00FF00',
+            'Pot Pasirkuarsa' => '#FF7D00',
+            'Pot Tras' => '#7D007D'
+        ];
+
+        $chartColors = $komoditiLabels->map(function ($komoditi) use ($commodityColors) {
+            return $commodityColors[$komoditi] ?? '#CCCCCC'; // Warna default jika komoditi tidak ditemukan
+        })->toArray();
+
         $tableData = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
             ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
@@ -103,6 +104,7 @@ class DashboardCadpotAdmController extends Controller
                 return $item;
             });
         // Define the icons legend dynamically based on the selected opco_id
+        // Definisikan pemetaan ikon komoditi
         $iconsLegend = [];
         if ($opcoId == null) {
             $iconsLegend = [
@@ -130,14 +132,23 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
-        }elseif ($opcoId == 3) {
+        } elseif ($opcoId == 3) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Cad Tanah Liat' => 'images/CadTanahLiat.png',
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
+        } elseif ($opcoId == 4) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tana hLiat' => 'images/PotTanahLiat.png',
+                'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
+            ];
         }
+
 
         $locations = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)

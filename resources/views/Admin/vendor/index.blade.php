@@ -12,11 +12,8 @@
 
 @section('content')
     <div class="card card-outline card-primary">
-
         <div class="card-header">
-
             <h3 class="card-title">{{ $page->title }}</h3>
-
             <div class="card-tools">
                 <a class="btn btn-sm btn-primary mt-1" href="{{ url('vendorbb/create') }}">Tambah</a>
             </div>
@@ -103,14 +100,12 @@
 @push('js')
     <script>
         $(document).ready(function() {
-
-            // Initialize DataTable
-            var dataLevel = $('#table_m_vendor').DataTable({
+            var dataTable = $('#table_m_vendor').DataTable({
                 serverSide: true,
                 ajax: {
-                    url: "{{ url('vendorbb/list') }}",
-                    type: "POST",
-                    data: function(d) {
+                    "url": "{{ url('adminvendorbb/list') }}",
+                    "type": "POST",
+                    "data": function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token
                         d.opco_id = $('#opco_id').val(); // Get the selected filter value
                     }
@@ -190,7 +185,7 @@
 
             // Event listener for filter
             $('#opco_id').on('change', function() {
-                dataLevel.ajax.reload(); // Reload DataTable with the selected filter
+                dataTable.ajax.reload(); // Reload DataTable with the selected filter
             });
 
         });
