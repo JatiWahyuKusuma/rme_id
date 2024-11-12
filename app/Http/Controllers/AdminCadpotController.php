@@ -9,7 +9,7 @@ use Yajra\DataTables\DataTables;
 
 class AdminCadpotController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $userOpcoId = auth()->user()->admin->opco_id;
 
@@ -23,6 +23,11 @@ class AdminCadpotController extends Controller
                 'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
                 'list' => ['Home', 'SG Rembang']
             ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban']
+            ];
         }
 
         $page = (object)[
@@ -33,13 +38,13 @@ class AdminCadpotController extends Controller
         $admincadpot = CadangandanPotensiModel::orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId])
             ->get();
 
-        $opco = OpcoModel::all();;
+        $opco = OpcoModel::all();
 
         return view('admin.cadangan.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadpot' => $admincadpot, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
+
     public function list(Request $request)
     {
-        // Ambil opco_id dari pengguna yang sedang login
         $userOpcoId = auth()->user()->admin->opco_id;
 
         // Ambil data cadangan dan potensi

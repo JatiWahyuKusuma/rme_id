@@ -1,5 +1,13 @@
 @extends('layout.template')
-
+@section('css')
+    <style>
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: rgb(46, 46, 46);
+        }
+    </style>
+@endsection
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">

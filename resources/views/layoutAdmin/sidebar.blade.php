@@ -8,7 +8,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
             <!-- Sidebar user panel (optional) -->
-            @if (Auth::user()->admin->opco_id === 1 || Auth::user()->admin->opco_id === 2)
+            @if (Auth::user()->admin->opco_id === 1 || Auth::user()->admin->opco_id === 2 || Auth::user()->admin->opco_id === 3)
                 <!-- Brand Logo -->
                 <a href="{{ url('/dashboardcadpot') }}" class="brand-link d-flex justify-content-center">
                     <img src="{{ asset('images/SIGputihMerah.png') }}" alt="AdminLTE Logo" class="brand-image"
@@ -24,6 +24,8 @@
                                 Admin GHOPO Tuban
                             @elseif (Auth::user()->admin->opco_id === 2)
                                 Admin SG Rembang
+                            @elseif(Auth::user()->admin->opco_id === 3)
+                                Admin SBI Tuban
                             @endif
                         </a>
                     </div>
@@ -70,6 +72,8 @@
                         Data GHOPO Tuban
                     @elseif (Auth::user()->admin->opco_id === 2)
                         Data SG Rembang
+                    @elseif (Auth::user()->admin->opco_id === 3)
+                        Data SBI Tuban
                     @endif
                 </li>
                 <li class="nav-item">

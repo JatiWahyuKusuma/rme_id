@@ -28,11 +28,12 @@ class DashboardVendorSprAdmController extends Controller
         $opcoId = $request->input('opco_id', null);
         $commoditiesByOpco = [
             1 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash'],
-            2 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash']
+            2 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash'],
+            3 => ['Purified Gypsum', 'Copper Slag', 'Fly Ash']
         ];
         if (empty($opcoId)) {
-            $opcoIdList = [1, 2];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+            $opcoIdList = [1, 2, 3];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2],  $commoditiesByOpco[3]);
         } else {
             $opcoIdList = [$opcoId];
             $validCommodities = $commoditiesByOpco[$opcoId];
@@ -41,12 +42,13 @@ class DashboardVendorSprAdmController extends Controller
 
         // Get list of valid opco IDs to filter
         if (empty($opcoId)) {
-            $opcoIdList = [1, 2];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+            $opcoIdList = [1, 2, 3];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2],  $commoditiesByOpco[3]);
         } else {
             $opcoIdList = [$opcoId];
             $validCommodities = $commoditiesByOpco[$opcoId];
         }
+
 
 
         //Card TotalKapTon, Unit Potensi, Total Vendor
@@ -85,6 +87,12 @@ class DashboardVendorSprAdmController extends Controller
                 'Fly Ash' => 'images/FlyAsh.png',
             ];
         } elseif ($opcoId == 2) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/Flyash.png',
+            ];
+        } elseif ($opcoId == 3) {
             $iconsLegend = [
                 'Purified Gypsum' => 'images/PurifiedGypsum.png',
                 'Copper Slag' => 'images/CopperSlag.png',

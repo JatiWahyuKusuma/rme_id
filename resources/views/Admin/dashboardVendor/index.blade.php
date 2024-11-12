@@ -9,6 +9,7 @@
             height: 680px;
         }
 
+
         .row {
             margin: auto;
         }
@@ -23,6 +24,7 @@
             border-top-color: rgb(46, 46, 46);
         }
     </style>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 @endsection
@@ -36,14 +38,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <script>
-        const warnakomoditi = {
-            'Purified Gypsum': '#9B9B9B',
-            'Copper Slag': '#000000',
-            'Fly Ash': '#FF0000',
-        }
-
-        const selectKomoditi = @json($komoditiLabels);
-        const chartColors = selectKomoditi.map(komoditi => warnakomoditi[komoditi] || '#CCCCCC');
         var options = {
             series: [{
                 data: @json($kapTonThn) // Ensure this data aligns with the colors
@@ -70,11 +64,11 @@
                     distributed: true, // Enable distributed colors
                 }
             },
-            colors: chartColors, // Define your colors here
+            colors: ['#9B9B9B', '#000000', '#FF0000'], // Define your colors here
             dataLabels: {
                 enabled: false,
                 style: {
-                    colors: ['#FFFFFF']
+                    colors: ['#697565'],
                 },
                 formatter: function(val) {
                     // Format the value with a period as a thousand separator
@@ -88,7 +82,7 @@
                 }
             },
             xaxis: {
-                categories: selectKomoditi,
+                categories: @json($komoditiLabels),
                 labels: {
                     formatter: function(val) {
                         return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -130,18 +124,18 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group row">
-                            <label class="col-1 control-label col-form label">Filter : </label>
+                            <label class="col-1 control-label col-form-label">Filter: </label>
                             <div class="col-3">
-                                <select class="form-control" name="komoditi" id="komoditi">
-                                    <option value="">--Semua--</option>
-                                    @foreach ($komoditi as $komoditiItem)
-                                        <option value="{{ $komoditiItem->komoditi }}"
-                                            {{ isset($filterKomoditi) && $filterKomoditi == $komoditiItem->komoditi ? 'selected' : '' }}>
-                                            {{ $komoditiItem->komoditi }}
+                                <select class="form-control" name="opco_id" id="opco_id">
+                                    <option value="">-- Semua --</option>
+                                    @foreach ($opco as $opcoItem)
+                                        <option value="{{ $opcoItem->opco_id }}"
+                                            {{ request('opco_id') == $opcoItem->opco_id ? 'selected' : '' }}>
+                                            {{ $opcoItem->nama_opco }}
                                         </option>
                                     @endforeach
                                 </select>
-                                <small class="form-text text muted">Komoditi</small>
+                                <small class="form-text text-muted">Opco</small>
                             </div>
                         </div>
                     </div>
@@ -159,7 +153,6 @@
                                                 fill="#298a3f" opacity="1" data-original="#298a3f" class=""></path>
                                         </g>
                                     </svg>
-
                                 </div>
                                 <div class="text-center">
                                     <h3 style="font-size: 40px;">{{ $totalKapTonThn }}</h3>
@@ -271,8 +264,6 @@
                     </div>
                 </div>
 
-                <!-- ./col -->
-
                 <!-- /.row -->
                 <!-- Main row -->
                 <div class="row">
@@ -283,9 +274,8 @@
                                     Peta Vendor Bahan Baku
                                 </div>
                                 <div class="legend" style="margin-bottom: 5px; display: flex; align-items: center;">
-                                    <!-- Jarak di sini diperkecil -->
-                                    <h5 style="margin-right: 10px; font-weight: bold;">Komoditi : </h5>
-                                    <!-- Judul bold dan geser ke kanan -->
+                                    <h5 style="margin-left: 20px; font-weight: bold; margin-top:10px; margin-right:10px;">
+                                        Komoditi : </h5>
                                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                                         @foreach ($iconsLegend as $label => $iconPath)
                                             <div style="display: flex; align-items: center;">
@@ -308,7 +298,6 @@
                         <div class="container px-7 mx-auto">
                             <div class="p-6 m-20 bg-white rounded shadow">
                                 <div id="chart"></div>
-                                {{-- {!! $chart->container() !!} --}}
                             </div>
                         </div>
                         <div class="card bg-gradient-info">
@@ -347,6 +336,14 @@
     </section>
 @endsection
 @push('javascript')
+    <script>
+        document.getElementById('opco_id').addEventListener('change', function() {
+            let selectedOpco = this.value;
+            // Redirect to the same page with query parameter ?opco_id=
+            window.location.href = `?opco_id=${selectedOpco}`;
+        });
+    </script>
+
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script>
@@ -360,14 +357,16 @@
 
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locationsVen = @json($locationsVen);
+            const iconsLegend = @json($iconsLegend);
 
             // Mapping komoditi ke warna
             const iconMapping = {
                 'Purified Gypsum': 'images/PurifiedGypsum.png',
                 'Copper Slag': 'images/CopperSlag.png',
                 'Fly Ash': 'images/FlyAsh.png',
-                'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
-                'Pabrik SG Rembang': 'images/sgrembang.png'
+                'PT. Semen Indonesia (Persero) Tbk': 'images/ghopotuban.png', // Icon for Tuban factory
+                'PT. Semen Gresik Rembang': 'images/sgrembang.png',
+                'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -413,27 +412,28 @@
                         .addTo(map);
                 }
             });
-            @if ($OpcoId == 1)
+
+            @if ($OpcoId == null)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
                     iconUrl: 'images/ghopotuban.png',
-                    iconSize: [50, 50], // Adjust the size as needed
+                    iconSize: [50, 50],
                     iconAnchor: [30, 30],
                     popupAnchor: [0, -30]
                 });
 
-                L.marker([-6.863603138698599, 111.91686228064258], {
+                L.marker([-6.8638896542228105, 111.91690249608592], {
                     icon: tubanIcon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Indonesia (Persero) Tbk</h5>
         </div>
     `).addTo(map);
-            @elseif ($OpcoId == 2)
-                // Tambah marker untuk Pabrik SG Rembang
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
                 const rembangIcon = L.icon({
                     iconUrl: 'images/sgrembang.png',
-                    iconSize: [50, 50], // Adjust the size as needed
-                    iconAnchor: [30, 30],
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
                     popupAnchor: [0, -30]
                 });
 
@@ -444,17 +444,73 @@
             <h5>PT. Semen Gresik Rembang, Tbk</h5>
         </div>
     `).addTo(map);
-            @endif
+                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
+                const sbitubicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [130, 130],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
 
+                L.marker([-6.81381003288771, 111.88562746834054], {
+                    icon: sbitubicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban, Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 1)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                const tubanIcon = L.icon({
+                    iconUrl: 'images/ghopotuban.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [30, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.8638896542228105, 111.91690249608592], {
+                    icon: tubanIcon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Indonesia (Persero) Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 2)
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                const rembangIcon = L.icon({
+                    iconUrl: 'images/sgrembang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.862084537748621, 111.45844893831284], {
+                    icon: rembangIcon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Gresik Rembang, Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 3)
+                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
+                const sbitubicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.81381003288771, 111.88562746834054], {
+                    icon: sbitubicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban, Tbk</h5>
+        </div>
+    `).addTo(map);
+            @endif
             function numberWithCommas(x) {
                 return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
         });
-    </script>
-    <script>
-        document.getElementById('komoditi').addEventListener('change', function() {
-            let filterKomoditi = this.value;
-            window.location.href = `?komoditi=${filterKomoditi}`;
-        })
     </script>
 @endpush

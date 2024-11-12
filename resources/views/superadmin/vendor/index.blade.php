@@ -1,7 +1,16 @@
 @extends('layout.template')
 
-@section('content')
+@section('css')
+    <style>
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: rgb(46, 46, 46);
+        }
+    </style>
+@endsection
 
+@section('content')
     <div class="card card-outline card-primary">
 
         <div class="card-header">
@@ -32,7 +41,7 @@
                             <select class="form-control" name="opco_id" id="opco_id">
                                 <option value="">-- Semua --</option> <!-- Pastikan ini hanya muncul sekali -->
                                 @foreach ($opco as $opco)
-                                    <option value="{{$opco->opco_id }}">{{$opco->nama_opco }}</option>
+                                    <option value="{{ $opco->opco_id }}">{{ $opco->nama_opco }}</option>
                                 @endforeach
                             </select>
                             <small class="form-text text-muted">Opco</small>
@@ -64,7 +73,6 @@
         </div>
 
     </div>
-
 @endsection
 
 @push('css')
@@ -72,16 +80,19 @@
         th {
             text-align: center;
         }
+
         .aksi-buttons {
             display: flex;
             justify-content: center;
             gap: 5px;
         }
+
         .aksi-buttons a,
         .aksi-buttons button {
             flex-grow: 1;
             text-align: center;
         }
+
         table th {
             text-align: center;
             vertical-align: middle;
@@ -104,8 +115,7 @@
                         d.opco_id = $('#opco_id').val(); // Get the selected filter value
                     }
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "DT_RowIndex",
                         className: "text-center",
                         orderable: false,

@@ -1,4 +1,14 @@
-@extends('LayoutAdmin.template')
+@extends('layoutAdmin.template')
+
+@section('css')
+    <style>
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: rgb(46, 46, 46);
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="card card-outline card-primary">
@@ -8,7 +18,7 @@
             <h3 class="card-title">{{ $page->title }}</h3>
 
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('adminvendorbb/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('vendorbb/create') }}">Tambah</a>
             </div>
 
         </div>
@@ -28,19 +38,13 @@
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
-                            <select class="form-control" name="komoditi" id="komoditi">
-                                <option value="">-- Semua --</option>
-                                @if(auth()->user()->admin->opco_id == 1)
-                                    <option value="Purified Gypsum">Purified Gypsum</option>
-                                    <option value="Copper Slag">Copper Slag</option>
-                                    <option value="Fly Ash">Fly Ash</option>
-                                @elseif(auth()->user()->admin->opco_id == 2)
-                                    <option value="Purified Gypsum">Purified Gypsum</option>
-                                    <option value="Copper Slag">Copper Slag</option>
-                                    <option value="Fly Ash">Fly Ash</option>
-                                @endif
+                            <select class="form-control" name="opco_id" id="opco_id">
+                                <option value="">-- Semua --</option> <!-- Pastikan ini hanya muncul sekali -->
+                                @foreach ($opco as $opco)
+                                    <option value="{{ $opco->opco_id }}">{{ $opco->nama_opco }}</option>
+                                @endforeach
                             </select>
-                            <small class="form-text text-muted">Komoditi</small>
+                            <small class="form-text text-muted">Opco</small>
                         </div>
                     </div>
                 </div>
@@ -104,12 +108,11 @@
             var dataLevel = $('#table_m_vendor').DataTable({
                 serverSide: true,
                 ajax: {
-                    url: "{{ url('adminvendorbb/list') }}",
+                    url: "{{ url('vendorbb/list') }}",
                     type: "POST",
                     data: function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token
-                        d.komoditi = $('#komoditi').val(); // Get the selected filter value
-                        d.opco_id = {{ auth()->user()->admin->opco_id }}
+                        d.opco_id = $('#opco_id').val(); // Get the selected filter value
                     }
                 },
                 columns: [{
@@ -186,7 +189,7 @@
             });
 
             // Event listener for filter
-            $('#komoditi').on('change', function() {
+            $('#opco_id').on('change', function() {
                 dataLevel.ajax.reload(); // Reload DataTable with the selected filter
             });
 

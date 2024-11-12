@@ -26,10 +26,6 @@
         .form-group.row {
             margin-top: 20px;
         }
-
-        /* .card-outline.card-primary {
-                                                    border-top: 4px solid #7b7e82;
-                                                } */
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -241,7 +237,7 @@
                                     </svg>
                                 </div>
                                 <div class="text-center">
-                                    <h3 style="font-size: 40px;">{{ $totalberlakuIUP }}</h3>
+                                    <h3 style="font-size: 40px;">{{ $totalEksplorasi }}</h3>
                                     <p style="font-size: 23px; margin-top: -10px; margin-bottom: 10px;">Total IUP
                                         Eksplorasi</p>
                                 </div>
@@ -393,14 +389,15 @@
 
             // Mapping komoditi ke warna
             const iconMapping = {
-                'Cad Batugamping': 'images/CadBatugamping.png',
-                'Cad Tanah Liat': 'images/CadTanahLiat.png',
+                'Cad Batugamping': 'images/Cadbatugamping.png',
+                'Cad Tanah Liat': 'images/Cadtanahliat.png',
                 'Pot Batugamping': 'images/PotBatugamping.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
-                'Pabrik SG Rembang': 'images/sgrembang.png'
+                'Pabrik SG Rembang': 'images/sgrembang.png',
+                'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -500,6 +497,21 @@
             <h5>PT. Semen Gresik Rembang, Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
+                const sbitubicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [130, 130],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.81381003288771, 111.88562746834054], {
+                    icon: sbitubicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban, Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -530,6 +542,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Gresik Rembang, Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 3)
+                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
+                const sbitubicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [100, 100],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.81381003288771, 111.88562746834054], {
+                    icon: sbitubicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Tuban, Tbk</h5>
         </div>
     `).addTo(map);
             @endif

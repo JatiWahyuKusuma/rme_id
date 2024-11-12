@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OpcoModel;
 use App\Models\VendorModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -22,6 +23,11 @@ class AdminVendorController extends Controller
                 'title' => 'Vendor Bahan Baku di SIG - SG Rembang',
                 'list' => ['Home', 'SG Rembang']
             ];
+        } elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Vendor Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban']
+            ];
         }
 
         $page = (object)[
@@ -30,45 +36,64 @@ class AdminVendorController extends Controller
 
         $activeMenu = 'adminvendorbb';
 
-        $adminvendorbb = VendorModel::all();
-         // Fetch all cadpot data, but in the DataTable method, filtering is applied based on opco_id
-         $adminvendorbb = VendorModel::where('opco_id', $userOpcoId)->get();
+        // $adminvendorbb = VendorModel::all();
+        // Fetch all cadpot data, but in the DataTable method, filtering is applied based on opco_id
+        $adminvendorbb = VendorModel::orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId])
+            ->get();
+        $opco = OpcoModel::all();
 
-        return view('admin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu]);
+        return view('admin.Vendor.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
 
     public function list(Request $request)
     {
-        $adminvendorbb = VendorModel::select('vendor_id','opco_id', 'jarak', 'latitude', 'longitude', 'vendor', 'komoditi', 'desa', 'kecamatan', 'kabupaten', 'kap_ton_thn', 'konsumsi_ton_thn');
-
         $userOpcoId = auth()->user()->admin->opco_id;
 
-        // Filter the data based on the user's company (opco_id)
-        if ($userOpcoId) {
-            $adminvendorbb->where('opco_id', $userOpcoId);
-        }
+        $adminvendorbb = VendorModel::select(
+            'vendor_id',
+            'opco_id',
+            'jarak',
+            'latitude',
+            'longitude',
+            'vendor',
+            'komoditi',
+            'desa',
+            'kecamatan',
+            'kabupaten',
+            'kap_ton_thn',
+            'konsumsi_ton_thn'
+        )->orderByRaw("opco_id = ? DESC, opco_id ASC", [$userOpcoId]);
+        // Filter data berdasarkan perusahaan pengguna (opco_id)
+        // if ($userOpcoId) {
+        //     $adminvendorbb->where('opco_id', $userOpcoId);
+        // }
+
         if ($request->opco_id) {
             $adminvendorbb->where('opco_id', $request->opco_id);
         }
-
-        if (($request->komoditi)) {
-            $adminvendorbb->where('komoditi', $request->komoditi);
-        }
-
+        // if ($request->komoditi) {
+        //     $adminvendorbb->where('komoditi', $request->komoditi);
+        // }
 
         return Datatables::of($adminvendorbb)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($adminvendorbb) {
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($adminvendorbb) use ($userOpcoId) {
+            // Hanya tampilkan tombol jika opco_id data sama dengan opco_id pengguna yang login
+            if ($adminvendorbb->opco_id == $userOpcoId) {
                 $btn  = '<a href="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id) . '" class="btn btn-info btn-sm">Detail</a> ';
                 $btn .= '<a href="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
                 $btn .= '<form class="d-inline-block" method="POST" action="' . url('/adminvendorbb/' . $adminvendorbb->vendor_id) . '">'
                     . csrf_field() . method_field('DELETE') .
                     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';
                 return $btn;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+            }
+            // Jika opco_id tidak sama, jangan tampilkan tombol apapun
+            return '';
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
     }
+
 
     public function create()
     {
@@ -85,7 +110,7 @@ class AdminVendorController extends Controller
         $activeMenu = 'adminvendorbb';
         $opcoId = auth()->user()->admin->opco_id;
 
-        return view('admin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu,'opcoId'=> $opcoId]);
+        return view('admin.Vendor.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'adminvendorbb' => $adminvendorbb, 'activeMenu' => $activeMenu, 'opcoId' => $opcoId]);
     }
 
     public function store(Request $request)
@@ -93,7 +118,7 @@ class AdminVendorController extends Controller
         $request->validate([
             'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric', 
+            'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'vendor' => 'required|string',
             'komoditi' => 'required|string',
@@ -101,7 +126,7 @@ class AdminVendorController extends Controller
             'kecamatan' => 'required|string',
             'kabupaten' => 'required|string',
             'kap_ton_thn' => 'required',
-            'konsumsi_ton_thn' => 'required|string',      
+            'konsumsi_ton_thn' => 'required|string',
         ]);
         $loggedOpcoId = auth()->user()->admin->opco_id;
 
@@ -171,7 +196,7 @@ class AdminVendorController extends Controller
         $request->validate([
             'opco_id' => 'required|integer',
             'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric', 
+            'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'vendor' => 'required|string',
             'komoditi' => 'required|string',
@@ -179,7 +204,7 @@ class AdminVendorController extends Controller
             'kecamatan' => 'required|string',
             'kabupaten' => 'required|string',
             'kap_ton_thn' => 'required',
-            'konsumsi_ton_thn' => 'required|string',  
+            'konsumsi_ton_thn' => 'required|string',
         ]);
         $loggedOpcoId = auth()->user()->admin->opco_id;
         $adminvendorbb = VendorModel::find($id);

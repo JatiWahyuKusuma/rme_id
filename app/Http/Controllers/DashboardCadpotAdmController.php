@@ -30,11 +30,12 @@ class DashboardCadpotAdmController extends Controller
         $opco = OpcoModel::all();
         $commoditiesByOpco = [
             1 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa'],
-            2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa', 'Pot Tras']
+            2 => ['Cad Batugamping', 'Pot Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa', 'Pot Tras'],
+            3 => ['Cad Batugamping', 'Cad Tanah Liat', 'Pot Tanah Liat', 'Pot Pasirkuarsa']
         ];
         if (empty($opcoId)) {
-            $opcoIdList = [1, 2];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+            $opcoIdList = [1, 2, 3];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2], $commoditiesByOpco[3]);
         } else {
             $opcoIdList = [$opcoId];
             $validCommodities = $commoditiesByOpco[$opcoId];
@@ -43,8 +44,8 @@ class DashboardCadpotAdmController extends Controller
 
         // Get list of valid opco IDs to filter
         if (empty($opcoId)) {
-            $opcoIdList = [1, 2];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2]);
+            $opcoIdList = [1, 2, 3];
+            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2], $commoditiesByOpco[3]);
         } else {
             $opcoIdList = [$opcoId];
             $validCommodities = $commoditiesByOpco[$opcoId];
@@ -55,6 +56,7 @@ class DashboardCadpotAdmController extends Controller
         $totalSdCadanganTon = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->sum('sd_cadangan_ton');
         $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_iup')->count();
         $totalValidPPKH = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_ppkh')->count();
+        $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->where('status_penyelidikan', 'Eksplorasi Rinci')->count();
 
         // Chart SD/Cadangan by Komoditi
         $data = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
@@ -70,13 +72,14 @@ class DashboardCadpotAdmController extends Controller
         $sdCadanganTons = $data->pluck('total_sd_cadangan_ton');
 
         if ($opcoId == null) {
-            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D']; //All Opco
+            $chartColors = ['#007DFF', '#000440', '#00FF00', '#FF7D00', '#002b00', '#7D007D']; //All Opco
         } elseif ($opcoId == 1) {
-            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#009600', '#FF7D00']; // GHOPO Tuban
-        } else if ($opcoId == 2){
-            $chartColors = ['#007DFF', '#00098E', '#00FF00', '#FF7D00', '#009600', '#7D007D']; //SG Rembang
+            $chartColors = ['#007DFF', '#000440', '#00FF00', '#002b00', '#FF7D00']; // GHOPO Tuban
+        } else if ($opcoId == 2) {
+            $chartColors = ['#007DFF', '#000440', '#00FF00', '#FF7D00', '#002b00', '#7D007D']; //SG Rembang
+        } else if ($opcoId == 3) {
+            $chartColors = ['#000440', '#00FF00', '#FF7D00', '#002b00'];
         }
-
         $tableData = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
             ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
@@ -103,29 +106,36 @@ class DashboardCadpotAdmController extends Controller
         $iconsLegend = [];
         if ($opcoId == null) {
             $iconsLegend = [
-                'Cad Batugamping' => 'images/CadBatugamping.png',
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
         } elseif ($opcoId == 1) {
             $iconsLegend = [
-                'Cad Batugamping' => 'images/CadBatugamping.png',
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tana hLiat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
-        }elseif($opcoId == 2){
+        } elseif ($opcoId == 2) {
             $iconsLegend = [
-                'Cad Batugamping' => 'images/CadBatugamping.png',
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Cad Tanah Liat' => 'images/CadTanahLiat.png',
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
+            ];
+        }elseif ($opcoId == 3) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
+                'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
         }
 
@@ -144,6 +154,7 @@ class DashboardCadpotAdmController extends Controller
             'sdCadanganTon' => number_format($totalSdCadanganTon, 0, '.', '.'),
             'totalberlakuIUP' => $totalValidIUP,
             'totalberlakuPPKH' => $totalValidPPKH,
+            'totalEksplorasi' => $totalIUPEksplorasi,
             'komoditiLabels' => $komoditiLabels,
             'sdCadanganTons' => $sdCadanganTons,
             'tableData' => $tableData,
