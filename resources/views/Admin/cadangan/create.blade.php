@@ -10,10 +10,13 @@
             <form method="POST" action="{{ url('admincadpot') }}" class="form-horizontal">
                 @csrf
                 <div class="form-group row">
-                    <label class="col-1 control-label col-form-label">Opco ID</label>
+                    <label class="col-1 control-label col-form-label">Nama Opco</label>
                     <div class="col-11">
-                        <input type="hidden" class="form-control" id="opco_id" name="opco_id" value="{{ $opcoId }}" readonly>
-                        <input type="text" class="form-control" value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : '') }}" readonly>
+                        <input type="hidden" class="form-control" id="opco_id" name="opco_id" value="{{ $opcoId }}"
+                            readonly>
+                        <input type="text" class="form-control"
+                              value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ''))) ) }}"
+                            readonly>
                         @error('opco_id')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -22,8 +25,8 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Jarak</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="jarak" name="jarak"
-                            value="{{ old('jarak') }}" required>
+                        <input type="text" class="form-control" id="jarak" name="jarak" value="{{ old('jarak') }}"
+                            required>
                         @error('jarak')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -53,7 +56,7 @@
                     <label class="col-1 control-label col-form-label">NO ID</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="no_id" name="no_id"
-                            value="{{ old('no_id') }}" >
+                            value="{{ old('no_id') }}">
                         @error('no_id')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -103,7 +106,7 @@
                     <label class="col-1 control-label col-form-label">Catatan</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="catatan" name="catatan"
-                            value="{{ old('catatan') }}" >
+                            value="{{ old('catatan') }}">
                         @error('catatan')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -113,7 +116,7 @@
                     <label class="col-1 control-label col-form-label">Status Penyelidikan</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="status_penyelidikan" name="status_penyelidikan"
-                            value="{{ old('status_penyelidikan') }}" >
+                            value="{{ old('status_penyelidikan') }}">
                         @error('status_penyelidikan')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -123,7 +126,7 @@
                     <label class="col-1 control-label col-form-label">Acuan</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="acuan" name="acuan"
-                            value="{{ old('acuan') }}" >
+                            value="{{ old('acuan') }}">
                         @error('acuan')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -153,7 +156,7 @@
                     <label class="col-1 control-label col-form-label">Luas(ha)</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="luas_ha" name="luas_ha"
-                            value="{{ old('luas_ha') }}" >
+                            value="{{ old('luas_ha') }}">
                         @error('luas_ha')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -163,7 +166,7 @@
                     <label class="col-1 control-label col-form-label">Masa Berlaku IUP</label>
                     <div class="col-11">
                         <input type="date" class="form-control" id="masa_berlaku_iup" name="masa_berlaku_iup"
-                            value="{{ old('masa_berlaku_iup') }}" >
+                            value="{{ old('masa_berlaku_iup') }}">
                         @error('masa_berlaku_iup')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror

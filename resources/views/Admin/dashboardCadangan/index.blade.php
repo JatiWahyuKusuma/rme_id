@@ -287,8 +287,8 @@
                                     Peta Cadangan dan Potensi Bahan Baku
                                 </div>
                                 <div class="legend" style="margin-bottom: 5px; display: flex; align-items: center;">
-                                    <h5 style="margin-left: 20px; font-weight: bold; margin-top:10px; margin-right:10px;">
-                                        Komoditi : </h5>
+                                    <h6 style="margin-left: 10px; font-weight: bold; margin-top:10px; margin-right:10px;">
+                                        Komoditi : </h6>
                                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                                         @foreach ($iconsLegend as $label => $iconPath)
                                             <div style="display: flex; align-items: center;">
@@ -403,7 +403,13 @@
                     lat: -4.799956009286747,
                     lon: 119.60816663988693,
                     zoom: 10
-                } // Semen Tonasa
+                }, // Semen Tonasa
+                5: {
+                    lat: -6.458664695262742,
+                    lon: 106.93274391171009,
+                    zoom: 10
+                }
+                
             };
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locations = @json($locations);
@@ -415,12 +421,14 @@
                 'Cad Tanah Liat': 'images/Cadtanahliat.png',
                 'Pot Batugamping': 'images/PotBatugamping.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
+                'Cad Shale' : 'images/CadShale.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
                 'Pabrik SG Rembang': 'images/sgrembang.png',
                 'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png',
-                'Pabrik Semen Tonasa ': 'images/semenTonasa.png'
+                'Pabrik Semen Tonasa ': 'images/semenTonasa.png',
+                'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -556,6 +564,21 @@
             <h5>PT. Semen Tonasa(Persero). Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
+                const sbinaricon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([ -6.458664695262742, 106.93274391171009], {
+                    icon: sbinaricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -618,6 +641,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Tonasa(Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 5)
+                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
+                const sbinaricon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([ -6.458664695262742, 106.93274391171009], {
+                    icon: sbinaricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
         </div>
     `).addTo(map);
             @endif

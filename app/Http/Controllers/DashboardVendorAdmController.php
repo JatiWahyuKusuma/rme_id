@@ -48,17 +48,6 @@ class DashboardVendorAdmController extends Controller
             $validCommodities = $commoditiesByOpco[$opcoId] ?? [];
         }
 
-
-        // Get list of valid opco IDs to filter
-        if (empty($opcoId)) {
-            $opcoIdList = [1, 2, 3];
-            $validCommodities = array_merge($commoditiesByOpco[1], $commoditiesByOpco[2],  $commoditiesByOpco[3]);
-        } else {
-            $opcoIdList = [$opcoId];
-            $validCommodities = $commoditiesByOpco[$opcoId];
-        }
-
-
         //Card TotalKapTon, Unit Potensi, Total Vendor
         $totalKapTonThn = VendorModel::whereIn('opco_id', $opcoIdList)->sum('kap_ton_thn');
         $unitProduksiBB = VendorModel::whereIn('opco_id', $opcoIdList)->whereNotNull('komoditi')->distinct('komoditi')->count('komoditi');
@@ -116,6 +105,12 @@ class DashboardVendorAdmController extends Controller
                 'Fly Ash' => 'images/Flyash.png',
             ];
         }elseif ($opcoId == 4) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/Flyash.png',
+            ];
+        }elseif ($opcoId == 5) {
             $iconsLegend = [
                 'Purified Gypsum' => 'images/PurifiedGypsum.png',
                 'Copper Slag' => 'images/CopperSlag.png',

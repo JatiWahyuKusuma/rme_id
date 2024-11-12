@@ -11,7 +11,8 @@
             @if (Auth::user()->admin->opco_id === 1 ||
                     Auth::user()->admin->opco_id === 2 ||
                     Auth::user()->admin->opco_id === 3 ||
-                    Auth::user()->admin->opco_id === 4)
+                    Auth::user()->admin->opco_id === 4 ||
+                    Auth::user()->admin->opco_id === 5)
                 <!-- Brand Logo -->
                 <a href="{{ url('/dashboardcadpot') }}" class="brand-link d-flex justify-content-center">
                     <img src="{{ asset('images/SIGputihMerah.png') }}" alt="AdminLTE Logo" class="brand-image"
@@ -31,6 +32,8 @@
                                 Admin SBI Tuban
                             @elseif(Auth::user()->admin->opco_id === 4)
                                 Admin Semen Tonasa
+                            @elseif(Auth::user()->admin->opco_id === 5)
+                                Admin SBI Narogong
                             @endif
                         </a>
                     </div>
@@ -81,6 +84,8 @@
                         Data SBI Tuban
                     @elseif(Auth::user()->admin->opco_id === 4)
                         Admin Semen Tonasa
+                    @elseif(Auth::user()->admin->opco_id === 5)
+                        Admin SBI Narogong
                     @endif
                 </li>
                 <li class="nav-item">

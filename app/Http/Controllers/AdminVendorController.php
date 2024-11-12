@@ -33,6 +33,11 @@ class AdminVendorController extends Controller
                 'title' => 'Vendor Bahan Baku di SIG - Semen Tonasa',
                 'list' => ['Home', 'Semen Tonasa']
             ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Vendor Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong']
+            ];
         }
 
         $page = (object)[

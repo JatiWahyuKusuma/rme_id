@@ -380,7 +380,12 @@
                     lat: -4.799956009286747,
                     lon: 119.60816663988693,
                     zoom: 10
-                } // Semen Tonasa
+                }, // Semen Tonasa
+                5: {
+                    lat: -6.458664695262742,
+                    lon: 106.93274391171009,
+                    zoom: 10
+                } // SBI Narogong
             };
 
             // Mapping komoditi ke warna
@@ -391,7 +396,8 @@
                 'PT. Semen Indonesia (Persero) Tbk': 'images/ghopotuban.png', // Icon for Tuban factory
                 'PT. Semen Gresik Rembang': 'images/sgrembang.png',
                 'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png',
-                'Pabrik Semen Tonasa ': 'images/semenTonasa.png'
+                'Pabrik Semen Tonasa ': 'images/semenTonasa.png',
+                'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -504,6 +510,21 @@
             <h5>PT. Semen Tonasa(Persero). Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
+                const sbinaricon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.458664695262742, 106.93274391171009], {
+                    icon: sbinaricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -566,6 +587,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Tonasa(Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 5)
+                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
+                const sbinaricon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-6.458664695262742, 106.93274391171009], {
+                    icon: sbinaricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
         </div>
     `).addTo(map);
             @endif

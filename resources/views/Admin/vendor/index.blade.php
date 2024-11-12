@@ -15,7 +15,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('vendorbb/create') }}">Tambah</a>
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('adminvendorbb/create') }}">Tambah</a>
             </div>
 
         </div>

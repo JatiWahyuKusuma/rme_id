@@ -53,7 +53,7 @@ class DashboardCadpotAdmController extends Controller
         $totalSdCadanganTon = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->sum('sd_cadangan_ton');
         $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_iup')->count();
         $totalValidPPKH = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_ppkh')->count();
-        $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->where('status_penyelidikan', 'Eksplorasi Rinci')->count();
+        $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->where('status_penyelidikan', 'Eksplorasi')->count();
 
         // Chart SD/Cadangan by Komoditi
         $data = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
@@ -74,7 +74,8 @@ class DashboardCadpotAdmController extends Controller
             'Pot Batugamping' => '#007DFF',
             'Pot Tanah Liat' => '#00FF00',
             'Pot Pasirkuarsa' => '#FF7D00',
-            'Pot Tras' => '#7D007D'
+            'Pot Tras' => '#7D007D',
+            'Cad Shale' => '#927e5a',
         ];
 
         $chartColors = $komoditiLabels->map(function ($komoditi) use ($commodityColors) {
@@ -114,6 +115,7 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
+                'Cad Shale' => 'images/CadShale.png'
             ];
         } elseif ($opcoId == 1) {
             $iconsLegend = [
@@ -144,8 +146,16 @@ class DashboardCadpotAdmController extends Controller
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
-                'Pot Tana hLiat' => 'images/PotTanahLiat.png',
+                'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
+            ];
+        }elseif ($opcoId == 5) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Tanah Liat' => 'images/Pottanahliat.png',
+                'Cad Shale' => 'images/CadShale.png',
+                'Pot Tras' => 'images/PotTras.png',
             ];
         }
 
