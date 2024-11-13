@@ -104,13 +104,19 @@ class DashboardVendorAdmController extends Controller
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/Flyash.png',
             ];
-        }elseif ($opcoId == 4) {
+        } elseif ($opcoId == 4) {
             $iconsLegend = [
                 'Purified Gypsum' => 'images/PurifiedGypsum.png',
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/Flyash.png',
             ];
-        }elseif ($opcoId == 5) {
+        } elseif ($opcoId == 5) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/Flyash.png',
+            ];
+        } elseif ($opcoId == 6) {
             $iconsLegend = [
                 'Purified Gypsum' => 'images/PurifiedGypsum.png',
                 'Copper Slag' => 'images/CopperSlag.png',

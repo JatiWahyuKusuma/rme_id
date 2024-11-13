@@ -408,8 +408,13 @@
                     lat: -6.458664695262742,
                     lon: 106.93274391171009,
                     zoom: 10
-                }
-                
+                }, // SBI Narogong
+                6: {
+                    lat: -7.687812398575669,
+                    lon: 109.0223195076442,
+                    zoom: 10
+                } // SBI Cilacap
+
             };
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locations = @json($locations);
@@ -421,14 +426,15 @@
                 'Cad Tanah Liat': 'images/Cadtanahliat.png',
                 'Pot Batugamping': 'images/PotBatugamping.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
-                'Cad Shale' : 'images/CadShale.png',
+                'Cad Shale': 'images/CadShale.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
                 'Pabrik SG Rembang': 'images/sgrembang.png',
                 'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png',
                 'Pabrik Semen Tonasa ': 'images/semenTonasa.png',
-                'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png'
+                'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png',
+                'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -467,8 +473,8 @@
                             <td>${numberWithCommas(location.sd_cadangan_ton)}</td>
                         </tr>
                         <tr>
-                            <td><strong> Tipe SD/Cadangan </strong></td>
-                            <td>${location.tipe_sd_cadangan}</td>
+                            <td><strong> Status Penyelidikan </strong></td>
+                            <td>${location.status_penyelidikan}</td>
                         </tr>
                         <tr>
                             <td><strong> Lokasi/IUP </strong></td>
@@ -572,11 +578,26 @@
                     popupAnchor: [0, -30]
                 });
 
-                L.marker([ -6.458664695262742, 106.93274391171009], {
+                L.marker([-6.458664695262742, 106.93274391171009], {
                     icon: sbinaricon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
+        </div>
+    `).addTo(map);
+                // Admin for SBI Cilacap (opco_id = 6), show only the SBI Tuban icon
+                const sbicilicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-7.687811734050903, 109.02232084874895], {
+                    icon: sbicilicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Cilacap. Tbk</h5>
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 1)
@@ -652,11 +673,27 @@
                     popupAnchor: [0, -30]
                 });
 
-                L.marker([ -6.458664695262742, 106.93274391171009], {
+                L.marker([-6.458664695262742, 106.93274391171009], {
                     icon: sbinaricon
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 6)
+                // Admin for SBI Cilacap (opco_id = 6), show only the SBI Tuban icon
+                const sbicilicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-7.687811734050903, 109.02232084874895], {
+                    icon: sbicilicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Cilacap. Tbk</h5>
         </div>
     `).addTo(map);
             @endif

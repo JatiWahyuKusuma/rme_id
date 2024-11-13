@@ -53,7 +53,7 @@ class DashboardCadpotSprAdmController extends Controller
         $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_iup')->count();
         $totalValidPPKH = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_ppkh')->count();
         $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
-            ->where('status_penyelidikan', 'Eksplorasi Rinci')
+            ->where('status_penyelidikan', 'Eksplorasi')
             ->count();
 
         // Chart SD/Cadangan by Komoditi
@@ -62,7 +62,6 @@ class DashboardCadpotSprAdmController extends Controller
             ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
             ->groupBy('komoditi')
             ->orderBy('total_sd_cadangan_ton', 'desc')
-            ->limit(6)
             ->get();
 
         // Prepare the data for the chart
@@ -74,7 +73,8 @@ class DashboardCadpotSprAdmController extends Controller
             'Pot Batugamping' => '#007DFF',
             'Pot Tanah Liat' => '#00FF00',
             'Pot Pasirkuarsa' => '#FF7D00',
-            'Pot Tras' => '#7D007D'
+            'Pot Tras' => '#7D007D',
+            'Cad Shale' => '#927e5a',
         ];
 
         $chartColors = $komoditiLabels->map(function ($komoditi) use ($commodityColors) {
@@ -113,6 +113,7 @@ class DashboardCadpotSprAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
+                'Cad Shale' => 'images/CadShale.png',
             ];
         } elseif ($opcoId == 1) {
             $iconsLegend = [
@@ -138,7 +139,7 @@ class DashboardCadpotSprAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
-        }elseif ($opcoId == 4) {
+        } elseif ($opcoId == 4) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
@@ -146,13 +147,28 @@ class DashboardCadpotSprAdmController extends Controller
                 'Pot Tana hLiat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
+        } elseif ($opcoId == 5) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
+                'Cad Shale' => 'images/CadShale.png',
+                'Pot Tras' => 'images/PotTras.png',
+            ];
+        } elseif ($opcoId == 6) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
+            ];
         }
 
-        
+
 
         $locations = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
-            ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
+            ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'status_penyelidikan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->get();

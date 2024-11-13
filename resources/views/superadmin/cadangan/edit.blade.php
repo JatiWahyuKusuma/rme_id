@@ -18,15 +18,15 @@
                     @csrf
                     {!! method_field('PUT') !!}
                     <div class="form-group row">
-                        <label class="col-1 control-label col-form-label">OPCO ID</label>
+                        <label class="col-1 control-label col-form-label">Opco ID</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="opco_id" name="opco_id"
-                                value="{{ old('opco_id', $cadpot->opco_id) }}" required>
+                                value="{{ old('opco_id', $cadpot->opco_id) }}" readonly>
                             @error('opco_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                    </div>
+                    </div>                    
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Jarak</label>
                         <div class="col-11">

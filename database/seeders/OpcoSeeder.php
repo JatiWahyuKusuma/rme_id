@@ -40,6 +40,11 @@ class OpcoSeeder extends Seeder
                 'kode_opco' => 'SBI Nar',
                 'nama_opco'=> 'SBI Narogong',
             ],
+            [
+                'opco_id' => 6,
+                'kode_opco' => 'SBI Cil',
+                'nama_opco'=> 'SBI Cilacap',
+            ],
 
         ];
 

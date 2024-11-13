@@ -37,9 +37,14 @@ class AdminSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Admin Semen SBI Narogong',
-            'email' => 'adminsbinara@gmail.com',
+            'email' => 'adminsbinar@gmail.com',
             'password' => Hash::make('adminsbinar123'),
         ]);
-        
+        User::create([
+            'name' => 'Admin SBI Cilacap',
+            'email' => 'adminsbicil@gmail.com',
+            'password' => Hash::make('adminsbicil123'),
+        ]);
+ 
     }
 }

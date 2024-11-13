@@ -39,7 +39,13 @@ class AdminCadpotController extends Controller
                 'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SBI Narogong',
                 'list' => ['Home', 'SBI Narogong']
             ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap']
+            ];
         }
+
 
         $page = (object)[
             'title' => 'Daftar Cadangan dan Potensi Bahan Baku yang terdaftar dalam sistem'

@@ -7,6 +7,31 @@
             background-color: rgb(245, 245, 245);
             border-top-color: rgb(46, 46, 46);
         }
+
+        .aksi-buttons {
+            display: flex;
+            gap: 5px;
+            /* Adjust spacing between buttons */
+            justify-content: center;
+        }
+
+        .aksi-buttons a,
+        .aksi-buttons button {
+            flex: 1;
+            /* Make buttons take equal space */
+            padding: 5px 0;
+            /* Adjust padding for better sizing */
+            text-align: center;
+            font-size: 0.85em;
+            /* Adjust font size for better fit */
+            border-radius: 4px;
+            /* Optional: Rounded corners for better appearance */
+        }
+
+        .aksi-buttons .btn {
+            width: auto;
+            /* Remove fixed width, allowing buttons to adjust proportionally */
+        }
     </style>
 @endsection
 
@@ -49,9 +74,7 @@
                         <th>Jarak(km)</th>
                         <th>Komoditi</th>
                         <th>Lokasi/IUP</th>
-                        <th>Tipe SD/Cadangan</th>
                         <th>SD/Cadangan(ton)</th>
-                        <th>Catatan</th>
                         <th>Status Penyelidikan</th>
                         <th>Acuan</th>
                         <th>Kabupaten</th>
@@ -104,32 +127,32 @@
                         data: "DT_RowIndex",
                         className: "text-center",
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        width: "10px"
                     },
                     {
                         data: "opco_id",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "jarak",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "komoditi",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "120px"
                     },
                     {
                         data: "lokasi_iup",
                         orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "tipe_sd_cadangan",
-                        orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "sd_cadangan_ton",
@@ -141,44 +164,46 @@
                         width: "150px"
                     },
                     {
-                        data: "catatan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
                         data: "status_penyelidikan",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "70px"
                     },
                     {
                         data: "acuan",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "150px"
                     },
                     {
                         data: "kabupaten",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "kecamatan",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "luas_ha",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "masa_berlaku_iup",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "masa_berlaku_ppkh",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "aksi",

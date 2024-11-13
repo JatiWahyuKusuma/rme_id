@@ -61,7 +61,6 @@ class DashboardCadpotAdmController extends Controller
             ->select('komoditi', CadangandanPotensiModel::raw('SUM(sd_cadangan_ton) as total_sd_cadangan_ton'))
             ->groupBy('komoditi')
             ->orderBy('total_sd_cadangan_ton', 'desc')
-            ->limit(6)
             ->get();
 
         // Prepare the data for the chart
@@ -153,16 +152,23 @@ class DashboardCadpotAdmController extends Controller
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
-                'Pot Tanah Liat' => 'images/Pottanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Cad Shale' => 'images/CadShale.png',
                 'Pot Tras' => 'images/PotTras.png',
+            ];
+        }elseif ($opcoId == 6) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
         }
 
 
         $locations = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
-            ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'tipe_sd_cadangan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
+            ->select('komoditi', 'latitude', 'longitude', 'sd_cadangan_ton', 'status_penyelidikan', 'lokasi_iup', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha', 'jarak')
             ->whereNotNull('latitude')
             ->whereNotNull('longitude')
             ->get();

@@ -44,14 +44,12 @@
             <table class="table-bordered table-striped table-hover table-sm table" id="table_m_cadangan_potensi">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Opco ID</th>
                         <th>Jarak(km)</th>
                         <th>Komoditi</th>
                         <th>Lokasi/IUP</th>
-                        <th>Tipe SD/Cadangan</th>
                         <th>SD/Cadangan(ton)</th>
-                        <th>Catatan</th>
                         <th>Status Penyelidikan</th>
                         <th>Acuan</th>
                         <th>Kabupaten</th>
@@ -105,32 +103,32 @@
                         data: "DT_RowIndex",
                         className: "text-center",
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        width: "10px"
                     },
                     {
                         data: "opco_id",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "jarak",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "komoditi",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "lokasi_iup",
                         orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: "tipe_sd_cadangan",
-                        orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "sd_cadangan_ton",
@@ -142,44 +140,46 @@
                         width: "150px"
                     },
                     {
-                        data: "catatan",
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
                         data: "status_penyelidikan",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "70px"
                     },
                     {
                         data: "acuan",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "150px"
                     },
                     {
                         data: "kabupaten",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "kecamatan",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "luas_ha",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "10px"
                     },
                     {
                         data: "masa_berlaku_iup",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "masa_berlaku_ppkh",
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        width: "100px"
                     },
                     {
                         data: "aksi",

@@ -21,7 +21,7 @@
                         <label class="col-1 control-label col-form-label">Opco ID</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="opco_id" name="opco_id"
-                                value="{{ old('opco_id', $vendorbb->opco_id) }}" required>
+                                value="{{ old('opco_id', $vendorbb->opco_id) }}" readonly>
                             @error('opco_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
