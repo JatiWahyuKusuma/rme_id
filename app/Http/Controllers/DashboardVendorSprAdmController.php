@@ -119,6 +119,12 @@ class DashboardVendorSprAdmController extends Controller
                 'Copper Slag' => 'images/CopperSlag.png',
                 'Fly Ash' => 'images/Flyash.png',
             ];
+        }elseif ($opcoId == 7) {
+            $iconsLegend = [
+                'Purified Gypsum' => 'images/PurifiedGypsum.png',
+                'Copper Slag' => 'images/CopperSlag.png',
+                'Fly Ash' => 'images/Flyash.png',
+            ];
         }
 
         $locationsVen = VendorModel::whereIn('opco_id', $opcoIdList)

@@ -162,6 +162,14 @@ class DashboardCadpotSprAdmController extends Controller
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
+        } elseif ($opcoId == 7) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
+                'Pot Tras' => 'images/PotTras.png',
+            ];
         }
 
 

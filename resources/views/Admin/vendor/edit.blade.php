@@ -18,12 +18,12 @@
                     @csrf
                     {!! method_field('PUT') !!}
                     <div class="form-group row">
-                        <label class="col-1 control-label col-form-label">Nama Opco </label>
+                        <label class="col-1 control-label col-form-label">Nama Opco</label>
                         <div class="col-11">
                             <input type="hidden" class="form-control" id="opco_id" name="opco_id" value="{{ $opcoId }}"
                                 readonly>
                             <input type="text" class="form-control"
-                                value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ($opcoId == 6 ? 'SBI Cilacap' : ''))))) }}"
+                                value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ($opcoId == 6 ? 'SBI Cilacap' :  ($opcoId == 7 ? 'SBI Lhoknga' :'')))))) }}"
                                 readonly>
                             @error('opco_id')
                                 <small class="form-text text-danger">{{ $message }}</small>

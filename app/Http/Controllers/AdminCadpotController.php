@@ -45,6 +45,12 @@ class AdminCadpotController extends Controller
                 'list' => ['Home', 'SBI Cilacap']
             ];
         }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga']
+            ];
+        }
 
 
         $page = (object)[

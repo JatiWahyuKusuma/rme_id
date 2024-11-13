@@ -389,7 +389,12 @@
                     lat: -7.687812398575669,
                     lon: 109.0223195076442,
                     zoom: 10
-                } // SBI Cilacap
+                }, // SBI Cilacap
+                7: {
+                    lat: 5.451535421962084,
+                    lon: 95.24642980917199,
+                    zoom: 10
+                } // SBI Lhoknga
             };
 
             // Mapping komoditi ke warna
@@ -402,7 +407,8 @@
                 'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png',
                 'Pabrik Semen Tonasa ': 'images/semenTonasa.png',
                 'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png',
-                'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png'
+                'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png',
+                'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -545,6 +551,21 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Cilacap. Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for SBI Lhoknga (opco_id = 7), show only the SBI Tuban icon
+                const sbilhokicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([5.451535421962084, 95.24642980917199], {
+                    icon: sbilhokicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -639,6 +660,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Solusi Bangun Indonesia Pabrik Cilacap. Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 7)
+                // Admin for SBI Lhoknga (opco_id = 7), show only the SBI Tuban icon
+                const sbilhokicon = L.icon({
+                    iconUrl: 'images/solusibangunindonesia.png',
+                    iconSize: [90, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([5.451535421962084, 95.24642980917199], {
+                    icon: sbilhokicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
         </div>
     `).addTo(map);
             @endif
