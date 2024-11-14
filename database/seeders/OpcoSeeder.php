@@ -55,6 +55,11 @@ class OpcoSeeder extends Seeder
                 'kode_opco' => 'SP',
                 'nama_opco'=> 'Semen Padang',
             ],
+            [
+                'opco_id' => 9,
+                'kode_opco' => 'SMBR',
+                'nama_opco'=> 'Semen Baturaja',
+            ],
 
 
         ];

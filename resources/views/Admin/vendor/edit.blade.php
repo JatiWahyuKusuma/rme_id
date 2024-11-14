@@ -23,7 +23,7 @@
                             <input type="hidden" class="form-control" id="opco_id" name="opco_id" value="{{ $opcoId }}"
                                 readonly>
                             <input type="text" class="form-control"
-                                value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ($opcoId == 6 ? 'SBI Cilacap' :  ($opcoId == 7 ? 'SBI Lhoknga' :'')))))) }}"
+                                value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ($opcoId == 6 ? 'SBI Cilacap' : ($opcoId == 7 ? 'SBI Lhoknga' : ($opcoId == 9 ? 'Semen Baturaja' : ''))))))) }}"
                                 readonly>
                             @error('opco_id')
                                 <small class="form-text text-danger">{{ $message }}</small>
@@ -121,7 +121,8 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-1 control-label col-form-label">Konsumsi (ton/thn)</label> <!-- Tambahkan spasi di antara Konsumsi dan tanda kurung -->
+                        <label class="col-1 control-label col-form-label">Konsumsi (ton/thn)</label>
+                        <!-- Tambahkan spasi di antara Konsumsi dan tanda kurung -->
                         <div class="col-11">
                             <input type="text" class="form-control" id="konsumsi_ton_thn" name="konsumsi_ton_thn"
                                 value="{{ old('konsumsi_ton_thn', $adminvendorbb->konsumsi_ton_thn) }}" required>
@@ -130,7 +131,7 @@
                             @enderror
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label"></label>
                         <div class="col-11">

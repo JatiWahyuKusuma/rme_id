@@ -420,7 +420,12 @@
                     lat: -0.9538889782848652,
                     lon: 100.46975045278182,
                     zoom: 10
-                } // Semen Padang
+                }, // Semen Padang
+                9: {
+                    lat: -4.115230975617444,
+                    lon: 104.16263540642808,
+                    zoom: 10
+                } // Semen Baturaja
             };
 
             // Data lokasi dari backend (laravel) locations dalam format JSON
@@ -447,7 +452,8 @@
                 'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png',
                 'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png',
                 'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png',
-                'Pabrik Semen Padang ': 'images/SemenPadang.png'
+                'Pabrik Semen Padang ': 'images/SemenPadang.png',
+                'Pabrik Semen Baturaja ': 'images/SemenBaturaja.png',
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -644,6 +650,21 @@
             <h5>PT. Semen Padang (Persero). Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for Semen Baturaja (opco_id = 9 )
+                const smbricon = L.icon({
+                    iconUrl: 'images/SemenBaturaja.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-4.115230975617444, 104.16263540642808, ], {
+                    icon: smbricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Baturaja (Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -770,6 +791,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Padang (Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 9)
+                // Admin for Semen Baturaja (opco_id = 9 )
+                const smbricon = L.icon({
+                    iconUrl: 'images/SemenBaturaja.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-4.115230975617444, 104.16263540642808, ], {
+                    icon: smbricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Baturaja (Persero). Tbk</h5>
         </div>
     `).addTo(map);
             @endif

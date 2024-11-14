@@ -424,7 +424,12 @@
                     lat: -0.9538889782848652,
                     lon: 100.46975045278182,
                     zoom: 10
-                } // Semen Padang
+                }, // Semen Padang
+                9: {
+                    lat: -4.115230975617444,
+                    lon: 104.16263540642808,
+                    zoom: 10
+                } // Semen Baturaja
 
             };
             // Data lokasi dari backend (laravel) locations dalam format JSON
@@ -451,7 +456,9 @@
                 'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png',
                 'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png',
                 'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png',
-                'Pabrik Semen Padang ': 'images/SemenPadang.png'
+                'Pabrik Semen Padang ': 'images/SemenPadang.png',
+                'Pabrik Semen Baturaja ': 'images/SemenBaturaja.png',
+
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -527,7 +534,7 @@
             @endif
 
             @if ($OpcoId == null)
-                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                // Admin for GHOPO Tuban (opco_id = 1)
                 const tubanIcon = L.icon({
                     iconUrl: 'images/ghopotuban.png',
                     iconSize: [50, 50],
@@ -542,7 +549,7 @@
             <h5>PT. Semen Indonesia (Persero) Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                // Admin for SG Rembang (opco_id = 2)
                 const rembangIcon = L.icon({
                     iconUrl: 'images/sgrembang.png',
                     iconSize: [50, 50],
@@ -557,7 +564,7 @@
             <h5>PT. Semen Gresik Rembang. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
+                // Admin for SBI Tuban (opco_id = 3)
                 const sbitubicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -572,7 +579,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Tuban. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for Semen Tonasa (opco_id = 4), show only the SBI Tuban icon
+                // Admin for Semen Tonasa (opco_id = 4)
                 const sticon = L.icon({
                     iconUrl: 'images/semenTonasa.png',
                     iconSize: [50, 50],
@@ -587,7 +594,7 @@
             <h5>PT. Semen Tonasa(Persero). Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
+                // Admin for SBI Narogong (opco_id = 5)
                 const sbinaricon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -602,7 +609,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Cilacap (opco_id = 6), show only the SBI Tuban icon
+                // Admin for SBI Cilacap (opco_id = 6)
                 const sbicilicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -617,7 +624,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Cilacap. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Lhoknga (opco_id = 7), show only the SBI Tuban icon
+                // Admin for SBI Lhoknga (opco_id = 7)
                 const sbilhokicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -632,7 +639,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
+                // Admin for Semen Padang (opco_id = 8)
                 const spicon = L.icon({
                     iconUrl: 'images/SemenPadang.png',
                     iconSize: [50, 50],
@@ -647,8 +654,23 @@
             <h5>PT. Semen Padang (Persero). Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for Semen Baturaja (opco_id = 9 )
+                const smbricon = L.icon({
+                    iconUrl: 'images/SemenBaturaja.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-4.115230975617444, 104.16263540642808, ], {
+                    icon: smbricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Baturaja (Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
-                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
+                // Admin for GHOPO Tuban (opco_id = 1)
                 const tubanIcon = L.icon({
                     iconUrl: 'images/ghopotuban.png',
                     iconSize: [50, 50],
@@ -664,7 +686,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 2)
-                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
+                // Admin for SG Rembang (opco_id = 2)
                 const rembangIcon = L.icon({
                     iconUrl: 'images/sgrembang.png',
                     iconSize: [50, 50],
@@ -680,7 +702,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 3)
-                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
+                // Admin for SBI Tuban (opco_id = 3)
                 const sbitubicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -696,7 +718,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 4)
-                // Admin for Semen Tonasa (opco_id = 4), show only the SBI Tuban icon
+                // Admin for Semen Tonasa (opco_id = 4)
                 const sticon = L.icon({
                     iconUrl: 'images/semenTonasa.png',
                     iconSize: [50, 50],
@@ -712,7 +734,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 5)
-                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
+                // Admin for SBI Narogong (opco_id = 5)
                 const sbinaricon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -728,7 +750,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 6)
-                // Admin for SBI Cilacap (opco_id = 6), show only the SBI Tuban icon
+                // Admin for SBI Cilacap (opco_id = 6)
                 const sbicilicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -744,7 +766,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 7)
-                // Admin for SBI Lhoknga (opco_id = 7), show only the SBI Tuban icon
+                // Admin for SBI Lhoknga (opco_id = 7)
                 const sbilhokicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -760,7 +782,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 8)
-                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
+                // Admin for Semen Padang (opco_id = 8)
                 const spicon = L.icon({
                     iconUrl: 'images/SemenPadang.png',
                     iconSize: [50, 50],
@@ -773,6 +795,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Semen Padang (Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 9)
+                // Admin for Semen Baturaja (opco_id = 9 )
+                const smbricon = L.icon({
+                    iconUrl: 'images/SemenBaturaja.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-4.115230975617444, 104.16263540642808, ], {
+                    icon: smbricon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Baturaja (Persero). Tbk</h5>
         </div>
     `).addTo(map);
             @endif

@@ -56,6 +56,12 @@ class AdminCadpotController extends Controller
                 'list' => ['Home', 'Semen Padang']
             ];
         }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja']
+            ];
+        }
 
 
         $page = (object)[

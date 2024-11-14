@@ -25,7 +25,7 @@ class MAdminSeeder extends Seeder
             'user_id' => 2,
             'level_id' => 2,
             'opco_id' => 2
-        ]);  
+        ]);
         AdminModel::create([
             'user_id' => 4,
             'level_id' => 2,
@@ -56,6 +56,10 @@ class MAdminSeeder extends Seeder
             'level_id' => 2,
             'opco_id' => 8
         ]);
-
+        AdminModel::create([
+            'user_id' => 10,
+            'level_id' => 2,
+            'opco_id' => 9
+        ]);
     }
 }

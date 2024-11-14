@@ -55,6 +55,11 @@ class AdminSeeder extends Seeder
             'email' => 'adminsemenpadang@gmail.com',
             'password' => Hash::make('adminsemenpadang123'),
         ]);
+        User::create([
+            'name' => 'Admin Semen Baturaja',
+            'email' => 'adminsmbr@gmail.com',
+            'password' => Hash::make('adminsmbr123'),
+        ]);
  
     }
 }

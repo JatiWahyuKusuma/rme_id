@@ -23,7 +23,7 @@
                             <input type="hidden" class="form-control" id="opco_id" name="opco_id" value="{{ $opcoId }}"
                                 readonly>
                             <input type="text" class="form-control"
-                                value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ($opcoId == 6 ? 'SBI Cilacap' :  ($opcoId == 7 ? 'SBI Lhoknga' :($opcoId == 8 ? 'Semen Padang' : ''))))))) }}"
+                                value="{{ $opcoId == 1 ? 'GHOPO Tuban' : ($opcoId == 2 ? 'SG Rembang' : ($opcoId == 3 ? 'SBI Tuban' : ($opcoId == 4 ? 'Semen Tonasa' : ($opcoId == 5 ? 'SBI Narogong' : ($opcoId == 6 ? 'SBI Cilacap' :  ($opcoId == 7 ? 'SBI Lhoknga' :($opcoId == 8 ? 'Semen Padang' : ($opcoId == 9 ? 'Semen Baturaja' : '')))))))) }}"
                                 readonly>
                             @error('opco_id')
                                 <small class="form-text text-danger">{{ $message }}</small>

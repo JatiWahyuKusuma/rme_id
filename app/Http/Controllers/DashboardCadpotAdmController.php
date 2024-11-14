@@ -178,7 +178,7 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
-        }elseif ($opcoId == 8) {
+        } elseif ($opcoId == 8) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
@@ -188,6 +188,13 @@ class DashboardCadpotAdmController extends Controller
                 'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
                 'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
                 'Cad Granit' => 'images/CadGranit.png',
+            ];
+        } elseif ($opcoId == 9) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
         }
 
