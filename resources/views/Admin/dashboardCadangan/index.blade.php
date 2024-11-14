@@ -287,8 +287,8 @@
                                     Peta Cadangan dan Potensi Bahan Baku
                                 </div>
                                 <div class="legend" style="margin-bottom: 5px; display: flex; align-items: center;">
-                                    <h6 style="margin-left: 10px; font-weight: bold; margin-top:10px; margin-right:10px;">
-                                        Komoditi : </h6>
+                                    <h6 style="margin-left: 10px; font-weight: bold; margin-top:5px; margin-right:10px;">
+                                        Komoditi: </h6>
                                     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                                         @foreach ($iconsLegend as $label => $iconPath)
                                             <div style="display: flex; align-items: center;">
@@ -319,7 +319,7 @@
 
                         {{-- DETAIL TABLE --}}
                         <div class="container mt-4">
-                            <div class="p-6 m-20 bg-white rounded shadow" style="max-height: 400px; overflow-y: auto;">
+                            <div class="p-6 m-20 bg-white rounded shadow" style=" max-height: 420px; overflow-y: auto;">
                                 <table class="table table-bordered">
                                     <thead style="position: sticky; top: 0; background-color: white; z-index: 10;">
                                         <tr>
@@ -353,6 +353,7 @@
                                     /* or any other color you prefer */
                                 }
                             </style>
+                        </div>
                     </section>
                     <!-- right col -->
                 </div>
@@ -418,7 +419,12 @@
                     lat: 5.451535421962084,
                     lon: 95.24642980917199,
                     zoom: 10
-                } // SBI Lhoknga
+                }, // SBI Lhoknga 
+                8: {
+                    lat: -0.9538889782848652,
+                    lon: 100.46975045278182,
+                    zoom: 10
+                } // Semen Padang
 
             };
             // Data lokasi dari backend (laravel) locations dalam format JSON
@@ -434,13 +440,18 @@
                 'Cad Shale': 'images/CadShale.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
+                'Cad Tras': 'images/CadTras.png',
+                'Cad Pasirkuarsa': 'images/CadPasirkuarsa.png',
+                'Cad Agregat Basalt': 'images/CadAgregatBasalt.png',
+                'Cad Granit': 'images/CadGranit.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory
                 'Pabrik SG Rembang': 'images/sgrembang.png',
                 'Pabrik SBI Tuban ': 'images/solusibangunindonesia.png',
                 'Pabrik Semen Tonasa ': 'images/semenTonasa.png',
                 'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png',
                 'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png',
-                'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png'
+                'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png',
+                'Pabrik Semen Padang ': 'images/SemenPadang.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -621,6 +632,21 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
+                const spicon = L.icon({
+                    iconUrl: 'images/SemenPadang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-0.9538889782848652, 100.46975045278182], {
+                    icon: spicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Padang (Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -731,6 +757,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 8)
+                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
+                const spicon = L.icon({
+                    iconUrl: 'images/SemenPadang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-0.9538889782848652, 100.46975045278182], {
+                    icon: spicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Padang (Persero). Tbk</h5>
         </div>
     `).addTo(map);
             @endif

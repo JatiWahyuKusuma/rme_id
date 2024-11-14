@@ -50,6 +50,11 @@ class AdminCadpotController extends Controller
                 'title' => 'Cadangan dan Potensi Bahan Baku di SIG - SBI Lhoknga',
                 'list' => ['Home', 'SBI Lhoknga']
             ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Cadangan dan Potensi Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang']
+            ];
         }
 
 

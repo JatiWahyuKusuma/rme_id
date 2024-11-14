@@ -48,6 +48,11 @@ class AdminVendorController extends Controller
                 'title' => 'Vendor Bahan Baku di SIG - SBI Lhoknga',
                 'list' => ['Home', 'SBI Lhoknga']
             ];
+        }elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Vendor Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang']
+            ];
         }
 
         $page = (object)[

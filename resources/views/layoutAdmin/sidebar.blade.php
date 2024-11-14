@@ -14,7 +14,8 @@
                     Auth::user()->admin->opco_id === 4 ||
                     Auth::user()->admin->opco_id === 5 ||
                     Auth::user()->admin->opco_id === 6 ||
-                    Auth::user()->admin->opco_id === 7)
+                    Auth::user()->admin->opco_id === 7 ||
+                    Auth::user()->admin->opco_id === 8)
                 <!-- Brand Logo -->
                 <a href="{{ url('/dashboardcadpot') }}" class="brand-link d-flex justify-content-center">
                     <img src="{{ asset('images/SIGputihMerah.png') }}" alt="AdminLTE Logo" class="brand-image"
@@ -40,6 +41,8 @@
                                 Admin SBI Cilacap
                             @elseif(Auth::user()->admin->opco_id === 7)
                                 Admin SBI Lhoknga
+                            @elseif(Auth::user()->admin->opco_id === 8)
+                                Admin Semen Padang
                             @endif
                         </a>
                     </div>
@@ -96,6 +99,8 @@
                         Admin SBI Cilacap
                     @elseif(Auth::user()->admin->opco_id === 7)
                         Admin SBI Lhoknga
+                    @elseif(Auth::user()->admin->opco_id === 8)
+                        Admin Semen Padang
                     @endif
                 </li>
                 <li class="nav-item">

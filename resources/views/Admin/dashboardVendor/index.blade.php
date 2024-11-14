@@ -395,7 +395,13 @@
                     lat: 5.451535421962084,
                     lon: 95.24642980917199,
                     zoom: 10
-                } // SBI Lhoknga
+                }, // SBI Lhoknga
+                8: {
+                    lat: -0.9538889782848652,
+                    lon: 100.46975045278182,
+                    zoom: 10
+                } // Semen Padang
+
             };
 
             // Mapping komoditi ke warna
@@ -409,7 +415,8 @@
                 'Pabrik Semen Tonasa ': 'images/semenTonasa.png',
                 'Pabrik SBI Narogong ': 'images/solusibangunindonesia.png',
                 'Pabrik SBI Cilacap ': 'images/solusibangunindonesia.png',
-                'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png'
+                'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png',
+                'Pabrik Semen Padang ': 'images/SemenPadang.png'
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -567,6 +574,21 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
         </div>
     `).addTo(map);
+                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
+                const spicon = L.icon({
+                    iconUrl: 'images/SemenPadang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-0.9538889782848652, 100.46975045278182], {
+                    icon: spicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Padang (Persero). Tbk</h5>
+        </div>
+    `).addTo(map);
             @elseif ($OpcoId == 1)
                 // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
@@ -677,6 +699,22 @@
                 }).bindPopup(`
         <div style="font-family: Arial, sans-serif;">
             <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
+        </div>
+    `).addTo(map);
+            @elseif ($OpcoId == 8)
+                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
+                const spicon = L.icon({
+                    iconUrl: 'images/SemenPadang.png',
+                    iconSize: [50, 50],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+
+                L.marker([-0.9538889782848652, 100.46975045278182], {
+                    icon: spicon
+                }).bindPopup(`
+        <div style="font-family: Arial, sans-serif;">
+            <h5>PT. Semen Padang (Persero). Tbk</h5>
         </div>
     `).addTo(map);
             @endif

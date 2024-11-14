@@ -75,6 +75,10 @@ class DashboardCadpotAdmController extends Controller
             'Pot Pasirkuarsa' => '#FF7D00',
             'Pot Tras' => '#7D007D',
             'Cad Shale' => '#927e5a',
+            'Cad Tras' => '#320432',
+            'Cad Pasirkuarsa' => '#8e4500',
+            'Cad Agregat Basalt' => '#393839',
+            'Cad Granit' => '#eb35a3',
         ];
 
         $chartColors = $komoditiLabels->map(function ($komoditi) use ($commodityColors) {
@@ -113,7 +117,11 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
-                'Cad Shale' => 'images/CadShale.png'
+                'Cad Shale' => 'images/CadShale.png',
+                'Cad Tras' => 'images/CadTras.png',
+                'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
+                'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
+                'Cad Granit' => 'images/CadGranit.png',
             ];
         } elseif ($opcoId == 1) {
             $iconsLegend = [
@@ -147,7 +155,7 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
             ];
-        }elseif ($opcoId == 5) {
+        } elseif ($opcoId == 5) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
@@ -155,20 +163,31 @@ class DashboardCadpotAdmController extends Controller
                 'Cad Shale' => 'images/CadShale.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
-        }elseif ($opcoId == 6) {
+        } elseif ($opcoId == 6) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
-        }elseif ($opcoId == 7) {
+        } elseif ($opcoId == 7) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Pot Tras' => 'images/PotTras.png',
+            ];
+        }elseif ($opcoId == 8) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
+                'Cad Tras' => 'images/CadTras.png',
+                'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
+                'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
+                'Cad Granit' => 'images/CadGranit.png',
             ];
         }
 
