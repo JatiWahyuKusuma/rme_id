@@ -6,7 +6,7 @@
 
     <style>
         #map {
-            height: 680px;
+            height: 655px;
         }
 
         .card.card-outline.card-primary {
@@ -274,7 +274,6 @@
                     </div>
 
                 </div>
-
                 <!-- ./col -->
                 <!-- /.row -->
                 <!-- Main row -->
@@ -318,7 +317,7 @@
 
                         {{-- DETAIL TABLE --}}
                         <div class="container mt-4">
-                            <div class="p-6 m-20 bg-white rounded shadow" style="max-height: 420px; overflow-y: auto;">
+                            <div class="p-6 m-20 bg-white rounded shadow" style="max-height: 392px; overflow-y: auto;">
                                 <table class="table table-bordered">
                                     <thead style="position: sticky; top: 0; background-color: white; z-index: 10;">
                                         <tr>
@@ -336,22 +335,28 @@
                                                 <td>{{ $data->komoditi }}</td>
                                                 <td>{{ $data->lokasi_iup }}</td>
                                                 <td>{{ number_format($data->sd_cadangan_ton, 0, '.', '.') }}</td>
-                                                <td class="{{ $data->warning ? 'bg-warning' : '' }}">
+                                                <!-- Tanda warna kuning untuk Masa Berlaku IUP -->
+                                                <td class="{{ $data->warning_iup ? 'bg-warning' : '' }}">
                                                     {{ $data->masa_berlaku_iup }}
                                                 </td>
-                                                <td>{{ $data->masa_berlaku_ppkh }}</td>
+                                                <!-- Tanda warna kuning untuk Masa Berlaku PPKH -->
+                                                <td class="{{ $data->warning_ppkh ? 'bg-warning' : '' }}">
+                                                    {{ $data->masa_berlaku_ppkh }}
+                                                </td>
                                                 <td>{{ $data->jarak }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
-                            <style>
-                                .bg-warning {
-                                    background-color: yellow;
-                                    /* or any other color you prefer */
-                                }
-                            </style>
+                        </div>
+                        <style>
+                            .bg-warning {
+                                background-color: yellow;
+                                /* Sesuaikan warna jika diperlukan */
+                            }
+                        </style>
+
                     </section>
                     <!-- right col -->
                 </div>
@@ -440,9 +445,8 @@
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
-                'Cad Shale': 'images/CadShale.png',
                 'Cad Tras': 'images/CadTras.png',
-                'Cad Pasirkuarsa': 'images/CadPasirkuarsa.png',
+                'Cad Pasirkuarsa': 'images/Cadpasirkuarsa.png',
                 'Cad Agregat Basalt': 'images/CadAgregatBasalt.png',
                 'Cad Granit': 'images/CadGranit.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory

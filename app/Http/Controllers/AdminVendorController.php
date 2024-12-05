@@ -120,10 +120,55 @@ class AdminVendorController extends Controller
 
     public function create()
     {
-        $breadcrumb = (object) [
-            'title' => 'Tambah Data Vendor Bahan Baku di SIG ',
-            'list' => ['Home', 'Vendor', 'Tambah']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban', 'Tambah']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang', 'Tambah']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban', 'Tambah']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa','Tambah']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong','Tambah']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap','Tambah']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga','Tambah']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang','Tambah']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Vendor Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja','Tambah']
+            ];
+        }
 
         $page = (object)[
             'title' => 'Tambah Vendor Bahan Baku baru'
@@ -179,10 +224,55 @@ class AdminVendorController extends Controller
     {
         $adminvendorbb = VendorModel::find($id);
 
-        $breadcrumb = (object) [
-            'title' => 'Detail Vendor Bahan Baku',
-            'list' => ['Home', 'Vendor', 'Detail']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban', 'Detail']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang', 'Detail']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban', 'Detail']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa','Detail']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong','Detail']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap','Detail']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga','Detail']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang','Detail']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Vendor Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja','Detail']
+            ];
+        }
 
         $page = (object)[
             'title' => ''
@@ -197,11 +287,55 @@ class AdminVendorController extends Controller
     {
         $adminvendorbb = VendorModel::find($id);
 
-        $breadcrumb = (object) [
-            'title' => 'Edit Data Vendor Bahan Baku',
-            'list' => ['Home', 'Vendor', 'Edit']
-        ];
-
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban', 'Edit']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang', 'Edit']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban', 'Edit']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa','Edit']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong','Edit']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap','Edit']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga','Edit']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang','Edit']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Vendor Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja','Edit']
+            ];
+        }
         $page = (object)[
             'title' => ''
         ];
@@ -255,7 +389,7 @@ class AdminVendorController extends Controller
             'kap_ton_thn' => $request->kap_ton_thn,
             'konsumsi_ton_thn' => $request->konsumsi_ton_thn,
         ]);
-        return redirect('/adminvendorbb')->with('success', 'Data level berhasil diubah');
+        return redirect('/adminvendorbb')->with('success', 'Data Vendor berhasil diubah');
     }
 
     public function destroy($id)

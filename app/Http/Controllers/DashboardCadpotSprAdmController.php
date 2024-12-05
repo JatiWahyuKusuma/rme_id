@@ -50,9 +50,13 @@ class DashboardCadpotSprAdmController extends Controller
 
         // Card Total SD/Cadangan, IUP, DAN PPKH
         $totalSdCadanganTon = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->sum('sd_cadangan_ton');
-        $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_iup')->count();
+        $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereNotNull('masa_berlaku_iup')
+            ->where('status_penyelidikan', 'Operasi Produksi')
+            ->count();
         $totalValidPPKH = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_ppkh')->count();
         $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereNotNull('masa_berlaku_iup')
             ->where('status_penyelidikan', 'Eksplorasi')
             ->count();
 
@@ -74,7 +78,6 @@ class DashboardCadpotSprAdmController extends Controller
             'Pot Tanah Liat' => '#00FF00',
             'Pot Pasirkuarsa' => '#FF7D00',
             'Pot Tras' => '#7D007D',
-            'Cad Shale' => '#927e5a',
             'Cad Tras' => '#320432',
             'Cad Pasirkuarsa' => '#8e4500',
             'Cad Agregat Basalt' => '#393839',
@@ -84,7 +87,6 @@ class DashboardCadpotSprAdmController extends Controller
         $chartColors = $komoditiLabels->map(function ($komoditi) use ($commodityColors) {
             return $commodityColors[$komoditi] ?? '#CCCCCC'; // Warna default jika komoditi tidak ditemukan
         })->toArray();
-
         $tableData = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
             ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
@@ -92,21 +94,28 @@ class DashboardCadpotSprAdmController extends Controller
             ->map(function ($item) {
                 $today = Carbon::now();
 
-                // Check if masa_berlaku_iup has a valid date
+                // Masa Berlaku IUP
                 if ($item->masa_berlaku_iup) {
                     $masaBerlakuIUP = Carbon::parse($item->masa_berlaku_iup);
-                    // Calculate the difference in days
-                    $diffInDays = $masaBerlakuIUP->diffInDays($today, true);
-
-                    // Set warning if it is less than or equal to 0 (expired) or less than 365 days
-                    $item->warning = ($diffInDays <= 365 && $diffInDays >= 0);
+                    // Tandai jika tanggal kurang dari 1 tahun dari sekarang atau sudah lewat
+                    $item->warning_iup = $masaBerlakuIUP->isPast() || $masaBerlakuIUP->diffInDays($today) <= 365;
                 } else {
-                    // If there is no date, do not set warning
-                    $item->warning = false;
+                    $item->warning_iup = false;
+                }
+
+                // Masa Berlaku PPKH
+                if ($item->masa_berlaku_ppkh) {
+                    $masaBerlakuPPKH = Carbon::parse($item->masa_berlaku_ppkh);
+                    // Tandai jika tanggal kurang dari 1 tahun dari sekarang atau sudah lewat
+                    $item->warning_ppkh = $masaBerlakuPPKH->isPast() || $masaBerlakuPPKH->diffInDays($today) <= 365;
+                } else {
+                    $item->warning_ppkh = false;
                 }
 
                 return $item;
             });
+
+
         // Define the icons legend dynamically based on the selected opco_id
         $iconsLegend = [];
         if ($opcoId == null) {
@@ -117,9 +126,8 @@ class DashboardCadpotSprAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
-                'Cad Shale' => 'images/CadShale.png',
                 'Cad Tras' => 'images/CadTras.png',
-                'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
+                'Cad Pasirkuarsa' => 'images/Cadpasirkuarsa.png',
                 'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
                 'Cad Granit' => 'images/CadGranit.png',
             ];
@@ -160,7 +168,7 @@ class DashboardCadpotSprAdmController extends Controller
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
-                'Cad Shale' => 'images/CadShale.png',
+                'Cad Tana Liat' => 'images/CadTanahLiat.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
         } elseif ($opcoId == 6) {
@@ -178,16 +186,23 @@ class DashboardCadpotSprAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
-        }elseif ($opcoId == 8) {
+        } elseif ($opcoId == 8) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Cad Tras' => 'images/CadTras.png',
-                'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
+                'Cad Pasirkuarsa' => 'images/Cadpasirkuarsa.png',
                 'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
                 'Cad Granit' => 'images/CadGranit.png',
+            ];
+        } elseif ($opcoId == 9) {
+            $iconsLegend = [
+                'Cad Batugamping' => 'images/Cadbatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Cad Tanah Liat' => 'images/Cadtanahliat.png',
+                'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
         }
 

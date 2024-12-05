@@ -24,7 +24,6 @@
 
             <!-- Removed the horizontal line after the user panel -->
 
-
             <li class="nav-header">Dashboard</li>
             <li class="nav-item">
                 <a href="{{ url('/dashboardcadangan') }}"
@@ -56,23 +55,6 @@
                     <p style="margin-left: 5px;">Vendor</p>
                 </a>
             </li>
-            {{-- <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;"> --}}
-            {{-- <li class="nav-header">Riwayat</li>
-            <li class="nav-item">
-                <a href="{{ url('/cadangan/history') }}"
-                    class="nav-link {{ $activeMenu == 'riwayatcadpot' ? 'active' : '' }}">
-                    <i class="nav-icon far fa-address-card"></i>
-                    {{-- <p>Cadangan dan Potensi</p>
-                    {{-- riwayatcadpot --}}
-                {{-- </a>
-            </li> --}} 
-            {{-- <li class="nav-item">
-                <a href="{{ url('/riwayatvendor') }}"
-                    class="nav-link {{ $activeMenu == 'riwayatvendor' ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-user-friends"></i>
-                    <p>Vendor</p>
-                </a>
-            {{-- </li> --}} 
             <hr style="border: none; border-top: 1px solid rgb(100, 100, 100); margin: 10px 0;">
             <li class="nav-header">Data All Opco</li>
             <li class="nav-item">

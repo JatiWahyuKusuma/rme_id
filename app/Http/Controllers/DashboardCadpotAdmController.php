@@ -14,10 +14,55 @@ class DashboardCadpotAdmController extends Controller
     {
 
         // Breadcrumb data
-        $breadcrumb = (object) [
-            'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG',
-            'list' => ['Home', 'Dashboard']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - GHOPO TUBAN',
+                'list' => ['Home', 'GHOPO Tuban', 'Dashboard']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SG REMBANG',
+                'list' => ['Home', 'SG Rembang', 'Dashboard']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SBI TUBAN',
+                'list' => ['Home', 'SBI Tuban', 'Dashboard']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SEMEN TONASA',
+                'list' => ['Home', 'Semen Tonasa','Dashboard']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SBI NAROGONG',
+                'list' => ['Home', 'SBI Narogong','Dashboard']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SBI CILACAP',
+                'list' => ['Home', 'SBI Cilacap','Dashboard']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SBI LHOKNGA',
+                'list' => ['Home', 'SBI Lhoknga','Dashboard']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SEMEN PADANG',
+                'list' => ['Home', 'Semen Padang','Dashboard']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD CADANGAN DAN POTENSI BAHAN BAKU DI SIG - SEMEN BATURAJA',
+                'list' => ['Home', 'Semen Baturaja','Dashboard']
+            ];
+        }
 
         // Page data
         $page = (object)[
@@ -51,9 +96,15 @@ class DashboardCadpotAdmController extends Controller
 
         // Card Total SD/Cadangan, IUP, DAN PPKH
         $totalSdCadanganTon = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->sum('sd_cadangan_ton');
-        $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_iup')->count();
+        $totalValidIUP = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereNotNull('masa_berlaku_iup')
+            ->where('status_penyelidikan', 'Operasi Produksi')
+            ->count();
         $totalValidPPKH = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->whereNotNull('masa_berlaku_ppkh')->count();
-        $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)->where('status_penyelidikan', 'Eksplorasi')->count();
+        $totalIUPEksplorasi = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
+            ->whereNotNull('masa_berlaku_iup')
+            ->where('status_penyelidikan', 'Eksplorasi')
+            ->count();
 
         // Chart SD/Cadangan by Komoditi
         $data = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
@@ -74,7 +125,6 @@ class DashboardCadpotAdmController extends Controller
             'Pot Tanah Liat' => '#00FF00',
             'Pot Pasirkuarsa' => '#FF7D00',
             'Pot Tras' => '#7D007D',
-            'Cad Shale' => '#927e5a',
             'Cad Tras' => '#320432',
             'Cad Pasirkuarsa' => '#8e4500',
             'Cad Agregat Basalt' => '#393839',
@@ -117,9 +167,8 @@ class DashboardCadpotAdmController extends Controller
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
                 'Pot Tras' => 'images/PotTras.png',
-                'Cad Shale' => 'images/CadShale.png',
                 'Cad Tras' => 'images/CadTras.png',
-                'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
+                'Cad Pasirkuarsa' => 'images/Cadpasirkuarsa.png',
                 'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
                 'Cad Granit' => 'images/CadGranit.png',
             ];
@@ -160,7 +209,7 @@ class DashboardCadpotAdmController extends Controller
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
                 'Pot Batugamping' => 'images/PotBatugamping.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
-                'Cad Shale' => 'images/CadShale.png',
+                'Cad Tanah Liat' => 'images/CadTanahLiat.png',
                 'Pot Tras' => 'images/PotTras.png',
             ];
         } elseif ($opcoId == 6) {
@@ -185,7 +234,7 @@ class DashboardCadpotAdmController extends Controller
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Cad Tras' => 'images/CadTras.png',
-                'Cad Pasirkuarsa' => 'images/CadPasirkuarsa.png',
+                'Cad Pasirkuarsa' => 'images/Cadpasirkuarsa.png',
                 'Cad Agregat Basalt' => 'images/CadAgregatBasalt.png',
                 'Cad Granit' => 'images/CadGranit.png',
             ];

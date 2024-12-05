@@ -14,10 +14,55 @@ class DashboardVendorAdmController extends Controller
     public function index(Request $request)
     {
         // Breadcrumb data
-        $breadcrumb = (object) [
-            'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG',
-            'list' => ['Home', 'Dashboard']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - GHOPO TUBAN',
+                'list' => ['Home', 'GHOPO Tuban', 'Dashboard']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SG REMBANG',
+                'list' => ['Home', 'SG Rembang', 'Dashboard']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SBI TUBAN',
+                'list' => ['Home', 'SBI Tuban', 'Dashboard']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SEMEN TONASA',
+                'list' => ['Home', 'Semen Tonasa','Dashboard']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SBI NAROGONG',
+                'list' => ['Home', 'SBI Narogong','Dashboard']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SBI CILACAP',
+                'list' => ['Home', 'SBI Cilacap','Dashboard']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SBI LHOKNGA',
+                'list' => ['Home', 'SBI Lhoknga','Dashboard']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SEMEN PADANG',
+                'list' => ['Home', 'Semen Padang','Dashboard']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'DASHBOARD VENDOR BAHAN BAKU DI SIG - SEMEN BATURAJA',
+                'list' => ['Home', 'Semen Baturaja','Dashboard']
+            ];
+        }
 
         // Page data
         $page = (object)[

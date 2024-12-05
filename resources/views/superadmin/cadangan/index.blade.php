@@ -46,12 +46,11 @@
                     <tr>
                         <th>No</th>
                         <th>Opco ID</th>
-                        <th>Jarak(km)</th>
                         <th>Komoditi</th>
                         <th>Lokasi/IUP</th>
                         <th>SD/Cadangan(ton)</th>
                         <th>Status Penyelidikan</th>
-                        <th>Acuan</th>
+                        <th>Catatan</th>
                         <th>Kabupaten</th>
                         <th>Kecamatan</th>
                         <th>Luas(Ha)</th>
@@ -79,7 +78,7 @@
         .aksi-buttons a,
         .aksi-buttons button {
             flex-grow: 1;
-            width: 75px;
+            width: 50px;
             text-align: center;
         }
     </style>
@@ -95,7 +94,6 @@
                     "type": "POST",
                     "data": function(d) {
                         d._token = '{{ csrf_token() }}';
-                        d.name = '{{ request()->get('name', 'tuban') }}';
                         d.opco_id = $('#opco_id').val(); // Use the correct filter value
                     }
                 },
@@ -113,22 +111,16 @@
                         width: "10px"
                     },
                     {
-                        data: "jarak",
-                        orderable: true,
-                        searchable: true,
-                        width: "10px"
-                    },
-                    {
                         data: "komoditi",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "50px"
                     },
                     {
                         data: "lokasi_iup",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "50px"
                     },
                     {
                         data: "sd_cadangan_ton",
@@ -143,13 +135,13 @@
                         data: "status_penyelidikan",
                         orderable: true,
                         searchable: true,
-                        width: "70px"
+                        width: "40px"
                     },
                     {
-                        data: "acuan",
+                        data: "catatan",
                         orderable: true,
                         searchable: true,
-                        width: "150px"
+                        width: "70px"
                     },
                     {
                         data: "kabupaten",
@@ -173,13 +165,13 @@
                         data: "masa_berlaku_iup",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "70px"
                     },
                     {
                         data: "masa_berlaku_ppkh",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "70px"
                     },
                     {
                         data: "aksi",

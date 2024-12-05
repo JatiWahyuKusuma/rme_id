@@ -34,7 +34,7 @@
                         <label class="col-1 control-label col-form-label">Jarak</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="jarak" name="jarak"
-                                value="{{ old('jarak', $admincadpot->jarak) }}" required>
+                                value="{{ old('jarak', $admincadpot->jarak) }}" >
                             @error('jarak')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -44,7 +44,7 @@
                         <label class="col-1 control-label col-form-label">latitude</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="latitude" name="latitude"
-                                value="{{ old('latitude', $admincadpot->latitude) }}" required>
+                                value="{{ old('latitude', $admincadpot->latitude) }}" >
                             @error('latitude')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror
@@ -54,7 +54,7 @@
                         <label class="col-1 control-label col-form-label">Longitude</label>
                         <div class="col-11">
                             <input type="text" class="form-control" id="longitude" name="longitude"
-                                value="{{ old('longitude', $admincadpot->longitude) }}" required>
+                                value="{{ old('longitude', $admincadpot->longitude) }}" >
                             @error('longitude')
                                 <small class="form-text text-danger">{{ $message }}</small>
                             @enderror

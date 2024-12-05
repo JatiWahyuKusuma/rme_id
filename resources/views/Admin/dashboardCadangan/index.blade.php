@@ -6,7 +6,7 @@
 
     <style>
         #map {
-            height: 680px;
+            height: 655px;
         }
 
         .card.card-outline.card-primary {
@@ -319,7 +319,7 @@
 
                         {{-- DETAIL TABLE --}}
                         <div class="container mt-4">
-                            <div class="p-6 m-20 bg-white rounded shadow" style=" max-height: 420px; overflow-y: auto;">
+                            <div class="p-6 m-20 bg-white rounded shadow" style=" max-height: 392px; overflow-y: auto;">
                                 <table class="table table-bordered">
                                     <thead style="position: sticky; top: 0; background-color: white; z-index: 10;">
                                         <tr>
@@ -446,7 +446,7 @@
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',
                 'Cad Tras': 'images/CadTras.png',
-                'Cad Pasirkuarsa': 'images/CadPasirkuarsa.png',
+                'Cad Pasirkuarsa': 'images/Cadpasirkuarsa.png',
                 'Cad Agregat Basalt': 'images/CadAgregatBasalt.png',
                 'Cad Granit': 'images/CadGranit.png',
                 'Pabrik Semen Indonesia Tuban': 'images/ghopotuban.png', // Icon for Tuban factory

@@ -24,7 +24,7 @@
                     <label class="col-1 control-label col-form-label">Jarak</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="jarak" name="jarak" value="{{ old('jarak') }}"
-                            required>
+                            >
                         @error('jarak')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -34,7 +34,7 @@
                     <label class="col-1 control-label col-form-label">Latitude</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="latitude" name="latitude"
-                            value="{{ old('latitude') }}" required>
+                            value="{{ old('latitude') }}" >
                         @error('latitude')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -44,7 +44,7 @@
                     <label class="col-1 control-label col-form-label">Longitude</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="longitude" name="longitude"
-                            value="{{ old('longitude') }}" required>
+                            value="{{ old('longitude') }}" >
                         @error('longitude')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -84,7 +84,7 @@
                     <label class="col-1 control-label col-form-label">Tipe SD/Cadangan</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="tipe_sd_cadangan" name="tipe_sd_cadangan"
-                            value="{{ old('tipe_sd_cadangan') }}" required>
+                            value="{{ old('tipe_sd_cadangan') }}" >
                         @error('tipe_sd_cadangan')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror

@@ -107,8 +107,6 @@ class AdminCadpotController extends Controller
         if ($request->opco_id) {
             $admincadpot->where('opco_id', $request->opco_id);
         }
-
-
         // Konfigurasi untuk Datatables
         return Datatables::of($admincadpot)
             ->addIndexColumn()
@@ -132,10 +130,56 @@ class AdminCadpotController extends Controller
 
     public function create()
     {
-        $breadcrumb = (object) [
-            'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG ',
-            'list' => ['Home', 'Cadangan', 'Tambah']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban', 'Tambah']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang', 'Tambah']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban', 'Tambah']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa','Tambah']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong','Tambah']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap','Tambah']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga','Tambah']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang','Tambah']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Tambah Data Cadangan dan Potensi Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja','Tambah']
+            ];
+        }
+
 
         $page = (object)[
             'title' => 'Tambah data Cadangan / Potensi Bahan Baku baru'
@@ -152,13 +196,13 @@ class AdminCadpotController extends Controller
     {
         $request->validate([
             'opco_id' => 'required|integer',
-            'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'jarak' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
             'lokasi_iup' => 'required|string',
-            'tipe_sd_cadangan' => 'required|string',
+            'tipe_sd_cadangan' => 'nullable|string',
             'sd_cadangan_ton' => 'required|integer',
             'catatan' => 'nullable|string',
             'status_penyelidikan' => 'nullable|string',
@@ -206,10 +250,55 @@ class AdminCadpotController extends Controller
     {
         $admincadpot = CadangandanPotensiModel::find($id);
 
-        $breadcrumb = (object) [
-            'title' => 'Detail Data GHOPO Cadangan dan Potensi Bahan Baku di SIG',
-            'list' => ['Home', 'Cadangan & Potensi', 'Detail']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban', 'Detail']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang', 'Detail']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban', 'Detail']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa','Detail']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong','Detail']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap','Detail']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga','Detail']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang','Detail']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja','Detail']
+            ];
+        }
 
         $page = (object)[
             'title' => ''
@@ -224,10 +313,55 @@ class AdminCadpotController extends Controller
     {
         $admincadpot = CadangandanPotensiModel::find($id);
 
-        $breadcrumb = (object) [
-            'title' => 'Edit Data Cadangan atau Potensi Bahan Baku',
-            'list' => ['Home', 'GHOPO Tuban', 'Edit']
-        ];
+        if (auth()->user()->admin->opco_id === 1) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - GHOPO Tuban',
+                'list' => ['Home', 'GHOPO Tuban', 'Edit']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 2) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - SG Rembang',
+                'list' => ['Home', 'SG Rembang', 'Edit']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 3) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - SBI Tuban',
+                'list' => ['Home', 'SBI Tuban', 'Edit']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 4) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - Semen Tonasa',
+                'list' => ['Home', 'Semen Tonasa','Edit']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 5) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - SBI Narogong',
+                'list' => ['Home', 'SBI Narogong','Edit']
+            ];
+        }elseif (auth()->user()->admin->opco_id === 6) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - SBI Cilacap',
+                'list' => ['Home', 'SBI Cilacap','Edit']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 7) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - SBI Lhoknga',
+                'list' => ['Home', 'SBI Lhoknga','Edit']
+            ];
+        } elseif (auth()->user()->admin->opco_id === 8) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - Semen Padang',
+                'list' => ['Home', 'Semen Padang','Edit']
+            ];
+        }
+        elseif (auth()->user()->admin->opco_id === 9) {
+            $breadcrumb = (object) [
+                'title' => 'Edit Data Cadangan dan Potensi Bahan Baku di SIG - Semen Baturaja',
+                'list' => ['Home', 'Semen Baturaja','Edit']
+            ];
+        }
 
         $page = (object)[
             'title' => ''
@@ -249,13 +383,13 @@ class AdminCadpotController extends Controller
     {
         $request->validate([
             'opco_id' => 'required|integer',
-            'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'jarak' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
             'lokasi_iup' => 'required|string',
-            'tipe_sd_cadangan' => 'required|string',
+            'tipe_sd_cadangan' => 'nullable|string',
             'sd_cadangan_ton' => 'required|integer',
             'catatan' => 'nullable|string',
             'status_penyelidikan' => 'nullable|string',

@@ -28,12 +28,13 @@
                     <div class="form-group row">
                         <label class="col-1 control-label col-form-label">Filter: </label>
                         <div class="col-3">
-                            <select class="form-control" name="nama_opco" id="nama_opco">
-                                <option value="">-- Semua --</option>
-                                <option value="GHOPO Tuban" > GHOPO Tuban </option>
-                                <option value="SG Rembang">SG Rembang</option>
+                            <select class="form-control" name="opco_id" id="opco_id">
+                                <option value="">-- Semua --</option> <!-- Pastikan ini hanya muncul sekali -->
+                                @foreach ($opco as $opco)
+                                    <option value="{{ $opco->opco_id }}">{{ $opco->nama_opco }}</option>
+                                @endforeach
                             </select>
-                            <small class="form-text text-muted">Nama opco</small>
+                            <small class="form-text text-muted">Nama Opco</small>
                         </div>
                     </div>
                 </div>
@@ -72,7 +73,7 @@
                     "type": "POST",
                     "data": function(d) {
                         d._token = '{{ csrf_token() }}'; // Add CSRF token
-                        d.nama_opco = $('#nama_opco').val();
+                        d.opco_id = $('#opco_id').val();
                     }
                 },
                 columns: [
@@ -102,7 +103,7 @@
                     }
                 ]
             });
-            $('#nama_opco').on('change', function() {
+            $('#opco_id').on('change', function() {
                 dataTable.ajax.reload();
             });
         });

@@ -22,30 +22,55 @@
                     <img src="{{ asset('images/SIGputihMerah.png') }}" alt="AdminLTE Logo" class="brand-image"
                         style="width: 170px; height: auto; max-height: 100px; box-shadow: none;">
                 </a>
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="{{ asset('images/admin.png') }}" class="elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex flex-column align-items-center">
+                    <div class="image text-center"
+                        style="margin-top: 5px; display: flex; align-items: center; justify-content: flex-start;">
                         <a href="#" class="d-block">
                             @if (Auth::user()->admin->opco_id === 1)
-                                Admin GHOPO Tuban
+                                <img src="{{ asset('images/SIGputihMerah.png') }}" style="width: 100px;">
                             @elseif (Auth::user()->admin->opco_id === 2)
-                                Admin SG Rembang
+                                <img src="{{ asset('images/sgrembang.png') }}" style="width: 100px;">
                             @elseif(Auth::user()->admin->opco_id === 3)
-                                Admin SBI Tuban
+                                <img src="{{ asset('images/sbisolusibangunindonesia.png') }}"
+                                    style="width: 150px; height: 70px; ">
                             @elseif(Auth::user()->admin->opco_id === 4)
-                                Admin Semen Tonasa
+                                <img src="{{ asset('images/semenTonasa.png') }}" style="width: 100px;">
                             @elseif(Auth::user()->admin->opco_id === 5)
-                                Admin SBI Narogong
+                                <img src="{{ asset('images/sbisolusibangunindonesia.png') }}"
+                                    style="width: 150px; height: 70px;">
                             @elseif(Auth::user()->admin->opco_id === 6)
-                                Admin SBI Cilacap
+                                <img src="{{ asset('images/sbisolusibangunindonesia.png') }}"
+                                    style="width: 150px; height: 70px;">
                             @elseif(Auth::user()->admin->opco_id === 7)
-                                Admin SBI Lhoknga
+                                <img src="{{ asset('images/sbisolusibangunindonesia.png') }}"
+                                    style="width: 150px; height: 70px;">
                             @elseif(Auth::user()->admin->opco_id === 8)
-                                Admin Semen Padang
+                                <img src="{{ asset('images/SemenPadang.png') }}" style="width: 90px;">
                             @elseif(Auth::user()->admin->opco_id === 9)
-                                Admin Semen Baturaja
+                                <img src="{{ asset('images/SemenBaturaja.png') }}" style="width: 100px;">
+                            @endif
+                        </a>
+                    </div>
+                    <div class="info text-center mt-2">
+                        <a href="#" class="d-block">
+                            @if (Auth::user()->admin->opco_id === 1)
+                                <p class="text-center" style="font-weight: bold;">Admin GHOPO Tuban</p>
+                            @elseif (Auth::user()->admin->opco_id === 2)
+                                <p class="text-center" style="font-weight: bold;">Admin SG Rembang</p>
+                            @elseif(Auth::user()->admin->opco_id === 3)
+                                <p class="text-center" style="font-weight: bold;">Admin SBI Tuban</p>
+                            @elseif(Auth::user()->admin->opco_id === 4)
+                                <p class="text-center" style="font-weight: bold;">Admin Semen Tonasa</p>
+                            @elseif(Auth::user()->admin->opco_id === 5)
+                                <p class="text-center" style="font-weight: bold;">Admin SBI Narogong</p>
+                            @elseif(Auth::user()->admin->opco_id === 6)
+                                <p class="text-center" style="font-weight: bold;">Admin SBI Cilacap</p>
+                            @elseif(Auth::user()->admin->opco_id === 7)
+                                <p class="text-center" style="font-weight: bold;">Admin SBI Lhoknga</p>
+                            @elseif(Auth::user()->admin->opco_id === 8)
+                                <p class="text-center" style="font-weight: bold;">Admin Semen Padang</p>
+                            @elseif(Auth::user()->admin->opco_id === 9)
+                                <p class="text-center" style="font-weight: bold;">Admin Semen Baturaja</p>
                             @endif
                         </a>
                     </div>
@@ -95,17 +120,17 @@
                     @elseif (Auth::user()->admin->opco_id === 3)
                         Data SBI Tuban
                     @elseif(Auth::user()->admin->opco_id === 4)
-                        Admin Semen Tonasa
+                        Data Semen Tonasa
                     @elseif(Auth::user()->admin->opco_id === 5)
-                        Admin SBI Narogong
+                        Data SBI Narogong
                     @elseif(Auth::user()->admin->opco_id === 6)
-                        Admin SBI Cilacap
+                        Data SBI Cilacap
                     @elseif(Auth::user()->admin->opco_id === 7)
-                        Admin SBI Lhoknga
+                        Data SBI Lhoknga
                     @elseif(Auth::user()->admin->opco_id === 8)
-                        Admin Semen Padang
+                        Data Semen Padang
                     @elseif(Auth::user()->admin->opco_id === 9)
-                        Admin Semen Baturaja
+                        Data Semen Baturaja
                     @endif
                 </li>
                 <li class="nav-item">
@@ -118,7 +143,8 @@
                             <g>
                                 <path fill-rule="evenodd"
                                     d="M136.121 105.976h66.7c3.664 0 6.662 2.998 6.662 6.662v47.329H129.46v-47.329c0-3.664 2.997-6.662 6.661-6.662zm347.668 42.169c8.684 0 14.492 8.795 11.345 16.71l-10.606 34.385C491.919 231.362 496 266.553 496 303.453s-4.083 72.086-11.474 104.206l10.608 34.393c3.147 7.915-2.661 16.71-11.345 16.71H268.136c-8.684 0-14.492-8.794-11.345-16.71l10.608-34.393c-7.391-32.12-11.474-67.306-11.474-104.206 0-36.901 4.08-72.091 11.471-104.213l-10.606-34.385c-3.147-7.915 2.661-16.71 11.345-16.71zM315.992 415.659h119.94a8 8 0 0 0 0-16h-119.94a8 8 0 0 0 0 16zm99.939-55.507h-79.938a8 8 0 0 0 0 16h79.938a8 8 0 0 0 0-16zM315.992 207.24h119.94a8 8 0 0 0 0-16h-119.94a8 8 0 0 0 0 16zm99.939 23.507h-79.938a8 8 0 0 0 0 16h79.938a8 8 0 0 0 0-16zM140.374 370.789c24.293 0 43.986 19.693 43.986 43.986s-19.693 43.986-43.986 43.986-43.986-19.693-43.986-43.986 19.693-43.986 43.986-43.986zm0 26.077c-9.891 0-17.909 8.018-17.909 17.909s8.018 17.909 17.909 17.909 17.909-8.018 17.909-17.909-8.018-17.909-17.909-17.909zm108.086 17.909 2.394-7.762c-7.453-33.92-10.929-68.86-10.929-103.56 0-25.67 1.902-51.471 5.908-76.894H33.655L77.34 368.19c2.191 7.103 5.452 13.603 9.576 19.35 9.925-19.438 30.139-32.751 53.458-32.751 33.124 0 59.986 26.862 59.986 59.986zM22 175.967h221.475l7.377 23.919a448.588 448.588 0 0 0-2.207 10.673H22c-3.3 0-6-2.7-6-6v-22.593c0-3.299 2.7-5.999 6-5.999zm203.482-48.864v32.864h14.435c.216-14.741 12.201-27.822 28.219-27.822h13.226c-.728-2.888-3.355-5.042-6.461-5.042zm-186.141-1.478 57.764-33.35c3.173-1.832 7.268-.735 9.1 2.439l7.718 13.368a22.524 22.524 0 0 0-.463 4.556v47.329H51.477l-14.574-25.242c-1.832-3.173-.735-7.268 2.438-9.1zm124.275-35.649h39.205c11.948 0 21.812 9.371 22.608 21.127h18.21V59.901c0-3.664-2.998-6.662-6.662-6.662h-66.7c-3.664 0-6.662 2.998-6.662 6.662v30.075z"
-                                    clip-rule="evenodd" fill="#c2c7d0" opacity="1" data-original="#c2c7d0"></path>
+                                    clip-rule="evenodd" fill="#c2c7d0" opacity="1" data-original="#c2c7d0">
+                                </path>
                             </g>
                         </svg>
                         <p style="margin-left: 5px;">Cadangan dan Potensi</p>

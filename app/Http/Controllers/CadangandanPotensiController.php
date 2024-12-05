@@ -71,13 +71,13 @@ class CadangandanPotensiController extends Controller
     {
         $request->validate([
             'opco_id' => 'required|integer',
-            'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'jarak' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
             'lokasi_iup' => 'required|string',
-            'tipe_sd_cadangan' => 'required|string',
+            'tipe_sd_cadangan' => 'nullable|string',
             'sd_cadangan_ton' => 'required|integer',
             'catatan' => 'nullable|string',
             'status_penyelidikan' => 'nullable|string',
@@ -118,8 +118,8 @@ class CadangandanPotensiController extends Controller
         $cadpot = CadangandanPotensiModel::find($id);
 
         $breadcrumb = (object) [
-            'title' => 'Detail Data GHOPO Cadangan dan Potensi Bahan Baku di SIG',
-            'list' => ['Home', 'GHOPO Tuban', 'Detail']
+            'title' => 'Detail Data Cadangan dan Potensi Bahan Baku di SIG',
+            'list' => ['Home', 'Cadangan dan Potensi', 'Detail']
         ];
 
         $page = (object)[
@@ -137,7 +137,7 @@ class CadangandanPotensiController extends Controller
 
         $breadcrumb = (object) [
             'title' => 'Edit Data Cadangan atau Potensi Bahan Baku',
-            'list' => ['Home', 'GHOPO Tuban', 'Edit']
+            'list' => ['Home', 'Cadangan dan Potensi', 'Edit']
         ];
 
         $page = (object)[
@@ -153,13 +153,13 @@ class CadangandanPotensiController extends Controller
     {
         $request->validate([
             'opco_id' => 'required|integer',
-            'jarak' => 'required|numeric',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
+            'jarak' => 'nullable|numeric',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'no_id' => 'nullable|integer',
             'komoditi' => 'required|string',
             'lokasi_iup' => 'required|string',
-            'tipe_sd_cadangan' => 'required|string',
+            'tipe_sd_cadangan' => 'nullable|string',
             'sd_cadangan_ton' => 'required|integer',
             'catatan' => 'nullable|string',
             'status_penyelidikan' => 'nullable|string',

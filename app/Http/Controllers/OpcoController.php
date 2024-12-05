@@ -33,8 +33,8 @@ class OpcoController extends Controller
             $opcos->where('kode_opco', $request->kode_opco);
         }
 
-        if ($request->nama_opco) {
-            $opcos->where('nama_opco', $request->nama_opco);
+        if ($request->opco_id) {
+            $opcos->where('opco_id', $request->opco_id);
         }
 
         return Datatables::of($opcos)

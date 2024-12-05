@@ -69,14 +69,13 @@
             <table class="table-bordered table-striped table-hover table-sm table" id="table_m_cadangan_potensi">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Opco ID</th>
-                        <th>Jarak(km)</th>
                         <th>Komoditi</th>
                         <th>Lokasi/IUP</th>
                         <th>SD/Cadangan(ton)</th>
                         <th>Status Penyelidikan</th>
-                        <th>Acuan</th>
+                        <th>Catatan</th>
                         <th>Kabupaten</th>
                         <th>Kecamatan</th>
                         <th>Luas(Ha)</th>
@@ -137,22 +136,16 @@
                         width: "10px"
                     },
                     {
-                        data: "jarak",
-                        orderable: true,
-                        searchable: true,
-                        width: "10px"
-                    },
-                    {
                         data: "komoditi",
                         orderable: true,
                         searchable: true,
-                        width: "120px"
+                        width: "50px"
                     },
                     {
                         data: "lokasi_iup",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "50px"
                     },
                     {
                         data: "sd_cadangan_ton",
@@ -167,13 +160,13 @@
                         data: "status_penyelidikan",
                         orderable: true,
                         searchable: true,
-                        width: "70px"
+                        width: "40px"
                     },
                     {
-                        data: "acuan",
+                        data: "catatan",
                         orderable: true,
                         searchable: true,
-                        width: "150px"
+                        width: "70px"
                     },
                     {
                         data: "kabupaten",
@@ -197,13 +190,13 @@
                         data: "masa_berlaku_iup",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "70px"
                     },
                     {
                         data: "masa_berlaku_ppkh",
                         orderable: true,
                         searchable: true,
-                        width: "100px"
+                        width: "70px"
                     },
                     {
                         data: "aksi",
