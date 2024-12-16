@@ -137,7 +137,7 @@ class DashboardCadpotAdmController extends Controller
 
         $tableData = CadangandanPotensiModel::whereIn('opco_id', $opcoIdList)
             ->whereIn('komoditi', $validCommodities)
-            ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'jarak')
+            ->select('komoditi', 'lokasi_iup', 'sd_cadangan_ton', 'masa_berlaku_iup', 'masa_berlaku_ppkh', 'luas_ha')
             ->get()
             ->map(function ($item) {
                 $today = Carbon::now();

@@ -328,7 +328,7 @@
                                             <th class="text-center">SD/Cadangan (ton)</th>
                                             <th class="text-center">Masa Berlaku IUP</th>
                                             <th class="text-center">Masa Berlaku PPKH</th>
-                                            <th class="text-center">Jarak</th>
+                                            <th class="text-center">Luas</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -341,7 +341,7 @@
                                                     {{ $data->masa_berlaku_iup }}
                                                 </td>
                                                 <td>{{ $data->masa_berlaku_ppkh }}</td>
-                                                <td>{{ $data->jarak }}</td>
+                                                <td>{{ $data->luas_ha }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
