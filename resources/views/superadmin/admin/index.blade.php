@@ -5,8 +5,29 @@
         .card.card-outline.card-primary {
             margin: auto;
             background-color: rgb(245, 245, 245);
-            border-top-color: rgb(46, 46, 46);
+            border-top-color: #800000;
+            border-top: 4px solid #800000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #800000, #800000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+        th {
+            text-align: center;
+            background-color: #800000;
+            /* Set header background color to red */
+            color: white;
+            /* Set font color to white */
+        }
+
     </style>
 @endsection
 
@@ -15,7 +36,7 @@
         <div class="card-header">
             <h3 class="card-title">{{ $page->title }}</h3>
             <div class="card-tools">
-                <a class="btn btn-sm btn-primary mt-1" href="{{ url('admin/create') }}">Tambah</a>
+                <a class="btn-gradient" href="{{ url('admin/create') }}">Tambah Admin</a>
             </div>
         </div>
         <div class="card-body">
@@ -56,12 +77,12 @@
 @endsection
 
 @push('css')
-<style>
-    /* Center-align table headers */
-    th {
-        text-align: center;
-    }
-</style>
+    <style>
+        /* Center-align table headers */
+        th {
+            text-align: center;
+        }
+    </style>
 @endpush
 @push('js')
     <script>
@@ -76,8 +97,7 @@
                         d.name = $('#name').val();
                     }
                 },
-                columns: [
-                    {
+                columns: [{
                         data: "DT_RowIndex",
                         className: "text-center",
                         orderable: false,

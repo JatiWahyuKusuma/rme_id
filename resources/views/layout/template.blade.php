@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .main-footer {
+        position: flex;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        /* Tinggi tetap */
+        margin-left: 250px;
+        /* Sesuaikan dengan lebar sidebar */
+        z-index: 1000;
+        background-color: #f4f6f9;
+        border-top: 1px solid #dee2e6;
+        padding: 15px;
+    }
+</style>
 
 <head>
     <meta charset="utf-8">
@@ -7,6 +23,10 @@
     <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 Bootstrap Theme (opsional) -->
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet" />
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -21,7 +41,29 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
 
+    {{-- font --}}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     @stack('css')
+    <style>
+        :root {
+            --font-family-sans-serif: 'Poppins', sans-serif;
+        }
+
+        body,
+        .main-header .navbar,
+        .main-sidebar,
+        .brand-link,
+        .nav-sidebar>.nav-item>.nav-link,
+        .card,
+        .table,
+        .btn,
+        .form-control,
+        .dropdown-menu {
+            font-family: 'Poppins', sans-serif !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -73,7 +115,7 @@
             $(document).on('click', '#delete'function(e) {
                 e.preventDefault();
                 var link = $(this).attr("href");
-                
+
                 Swal.fire({
                     title: "Are you sure?",
                     text: "You won't be able to revert this!",
@@ -125,6 +167,29 @@
     @stack('javascript')
     @yield('js')
     @yield('css')
+    @stack('scripts')
+    <!-- Select2 JS - Pastikan setelah jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Inisialisasi Select2 untuk semua elemen dengan class 'select2'
+            $('.select2').select2({
+                theme: 'bootstrap-5',
+                width: '100%', // Pastikan lebar penuh
+                placeholder: "Pilih Lokasi IUP", // Tambahkan placeholder
+                allowClear: true // Opsi untuk menghapus pilihan
+            });
+
+            // Jika menggunakan select2 multiple
+            $('.select2-multiple').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: "Pilih beberapa opsi...",
+                allowClear: true,
+                closeOnSelect: false // Untuk multiple select
+            });
+        });
+    </script>
 </body>
 
 </html>

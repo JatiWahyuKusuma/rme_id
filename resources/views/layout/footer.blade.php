@@ -1,6 +1,6 @@
 <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
-      <b> All rights reserved.</b>
+      <b> All rights reserved.</b><br>
     </div>
     <strong>Copyright &copy; 2024 RME.ID</a>.</strong>
   </footer>

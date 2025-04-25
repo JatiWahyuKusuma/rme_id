@@ -1,4 +1,45 @@
 @extends('layout.template')
+@section('css')
+    <style>
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: #800000;
+            border-top: 4px solid #800000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #800000, #800000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-gradientu {
+            background: linear-gradient(to right, #800000, #800000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+            display: inline-block;
+            /* Ensure it behaves as a block element */
+            margin-top: 20px;
+            /* Space above the button */
+            width: 150px;
+            /* Adjust width automatically */
+            text-align: center;
+            /* Center text */
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="card card-outline card-primary">
@@ -28,8 +69,9 @@
                     </tr>
                 </table>
             @endempty
-            <a href="{{ url('level') }}" class="btn btn-sm btn-default mt 2">Kembali</a>
+
         </div>
+        <a href="{{ url('level') }}" class="btn-gradientu">Kembali</a>
     </div>
 @endsection
 

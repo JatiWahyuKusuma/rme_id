@@ -12,7 +12,9 @@
         .card.card-outline.card-primary {
             margin: auto;
             background-color: rgb(245, 245, 245);
-            border-top-color: rgb(46, 46, 46);
+            border-top-color: #800000;
+            border-top: 4px solid #800000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .row {
@@ -441,7 +443,7 @@
             const iconMapping = {
                 'Cad Batugamping': 'images/Cadbatugamping.png',
                 'Cad Tanah Liat': 'images/Cadtanahliat.png',
-                'Pot Batugamping': 'images/PotBatugamping.png',
+                'Pot Batugamping': 'images/PotBatugampings.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',
                 'Pot Tras': 'images/PotTras.png',

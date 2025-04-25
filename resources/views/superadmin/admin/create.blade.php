@@ -1,4 +1,37 @@
 @extends('layout.template')
+@section('css')
+    <style>
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: #800000;
+            border-top: 4px solid #800000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(to right, #800000, #800000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-gradientu {
+            background: linear-gradient(to right, #a0a0a0, #535353);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="card card-outline card-primary">
@@ -55,8 +88,8 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label"></label>
                     <div class="col-11">
-                        <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
-                        <a class="btn btn-sm btn-default ml-1" href="{{ url('admin') }}">Kembali</a>
+                        <button type="submit" class="btn-gradient">Simpan</button>
+                        <a class="btn-gradientu" href="{{ url('admin') }}">Kembali</a>
                     </div>
                 </div>
             </form>

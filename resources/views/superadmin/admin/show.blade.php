@@ -1,5 +1,34 @@
 @extends('layout.template')
+@section('css')
+    <style>
+        .card.card-outline.card-primary {
+            margin: auto;
+            background-color: rgb(245, 245, 245);
+            border-top-color: #800000;
+            border-top: 4px solid #800000;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
+        .btn-gradient {
+            background: linear-gradient(to right, #800000, #800000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+            display: inline-block;
+            /* Ensure it behaves as a block element */
+            margin-top: 20px;
+            /* Space above the button */
+            width: 200px;
+            /* Adjust width automatically */
+            text-align: center;
+            /* Center text */
+        }
+    </style>
+@endsection
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
@@ -20,19 +49,19 @@
                     </tr>
                     <tr>
                         <th>Nama </th>
-                        <td>{{ $admin->name}}</td>
+                        <td>{{ $admin->name }}</td>
                     </tr>
                     <tr>
                         <th>Email </th>
-                        <td>{{ $admin->email}}</td>
+                        <td>{{ $admin->email }}</td>
                     </tr>
                     <tr>
                         <th>Password </th>
-                        <td>{{ $admin->password}}</td>
+                        <td>{{ $admin->password }}</td>
                     </tr>
                 </table>
             @endempty
-            <a href="{{ url('admin') }}" class="btn btn-sm btn-default mt 2">Kembali</a>
+            <a href="{{ url('admin') }}" class="btn-gradient">Kembali</a>
         </div>
     </div>
 @endsection

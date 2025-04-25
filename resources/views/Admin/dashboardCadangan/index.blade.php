@@ -440,7 +440,7 @@
             const iconMapping = {
                 'Cad Batugamping': 'images/Cadbatugamping.png',
                 'Cad Tanah Liat': 'images/Cadtanahliat.png',
-                'Pot Batugamping': 'images/PotBatugamping.png',
+                'Pot Batugamping': 'images/PotBatugampings.png',
                 'Pot Pasirkuarsa': 'images/PotPasirkuarsa.png',
                 'Cad Shale': 'images/CadShale.png',
                 'Pot Tanah Liat': 'images/PotTanahLiat.png',

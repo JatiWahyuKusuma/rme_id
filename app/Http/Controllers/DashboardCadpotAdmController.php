@@ -162,7 +162,7 @@ class DashboardCadpotAdmController extends Controller
         if ($opcoId == null) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
@@ -175,7 +175,7 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 1) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tana hLiat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
@@ -183,7 +183,7 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 2) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/CadTanahLiat.png',
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
@@ -199,7 +199,7 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 4) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahLiat.png',
                 'Pot Pasirkuarsa' => 'images/PotPasirkuarsa.png',
@@ -207,7 +207,7 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 5) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Cad Tanah Liat' => 'images/CadTanahLiat.png',
                 'Pot Tras' => 'images/PotTras.png',
@@ -215,14 +215,14 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 6) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
         } elseif ($opcoId == 7) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Pot Tras' => 'images/PotTras.png',
@@ -230,7 +230,7 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 8) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
                 'Cad Tras' => 'images/CadTras.png',
@@ -241,7 +241,7 @@ class DashboardCadpotAdmController extends Controller
         } elseif ($opcoId == 9) {
             $iconsLegend = [
                 'Cad Batugamping' => 'images/Cadbatugamping.png',
-                'Pot Batugamping' => 'images/PotBatugamping.png',
+                'Pot Batugamping' => 'images/PotBatugampings.png',
                 'Cad Tanah Liat' => 'images/Cadtanahliat.png',
                 'Pot Tanah Liat' => 'images/PotTanahliat.png',
             ];
