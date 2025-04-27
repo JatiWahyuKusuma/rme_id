@@ -5,7 +5,7 @@
         .card.card-outline.card-primary {
             margin: auto;
             background-color: rgb(245, 245, 245);
-            border-top-color:  #800000;
+            border-top-color: #800000;
             border-top: 4px solid #800000;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -37,6 +37,17 @@
 
         .btn-gradient {
             background: linear-gradient(to right, #800000, #c81b1b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-gradientu {
+            background: linear-gradient(to right, #a0a0a0, #535353);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -131,8 +142,12 @@
                     <strong>{{ isset($detailAlternatif[0]) ? $detailAlternatif[0]->lokasi_iup : 'N/A' }}</strong>.
                 </p>
                 <button type="button" class="btn-gradient" id="btn_detail_perhitungan">Detail Perhitungan</button>
+                <button type="button" class="btn-gradientu" id="btn_cetak_pdf">
+                    <i class="fas fa-print mr-2"></i> Cetak PDF
+                </button>
             </div>
         </div>
+    </div>
     </div>
 @endsection
 
@@ -145,11 +160,72 @@
         .card-body {
             overflow-x: hidden;
         }
+
+        /* Tambahkan style untuk icon */
+        .btn-gradientu i {
+            margin-right: 8px;
+        }
+
+        /* Style khusus untuk cetak */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #rekomendasi_section,
+            #rekomendasi_section * {
+                visibility: visible;
+            }
+
+            #rekomendasi_section {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .btn-gradient,
+            .btn-gradientu {
+                display: none !important;
+            }
+        }
     </style>
 @endpush
 
 @push('js')
     <script>
+        document.getElementById("btn_cetak_pdf").addEventListener("click", function(e) {
+            e.preventDefault(); // Mencegah perilaku default
+
+            // Menggunakan metode fetch untuk memanggil route cetak PDF
+            fetch("{{ route('rekomendasi.cetak') }}")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    // Membuat URL objek dari blob
+                    const url = window.URL.createObjectURL(blob);
+
+                    // Membuat elemen <a> untuk memicu download
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'hasil rekomendasi perluasan lahan';
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // Membersihkan
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Gagal mengunduh PDF. Silakan coba lagi.');
+                });
+        });
+
         document.getElementById("btn_detail_perhitungan").addEventListener("click", function() {
             window.location.href = "{{ url('/detailrekomendasi') }}";
         });

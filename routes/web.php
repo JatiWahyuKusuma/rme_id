@@ -139,7 +139,9 @@ Route::group(['prefix' => 'rekomendasi'], function () {
     Route::get('/', [HasilRekomendasiController::class, 'index']);
     Route::post('/list', [HasilRekomendasiController::class, 'list']);
     Route::get('/rekomendasi', [HasilRekomendasiController::class, 'index']);
+    Route::get('/cetak-pdf', [HasilRekomendasiController::class, 'cetakPdf'])->name('rekomendasi.cetak');
 });
+
 //Route Detail Hasil Rekomendasi
 Route::group(['prefix' => 'detailrekomendasi'], function () {
     Route::get('/', [DetailHasilRekomendasiController::class, 'index']);

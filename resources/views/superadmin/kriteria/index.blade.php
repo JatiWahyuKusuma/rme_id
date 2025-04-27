@@ -5,7 +5,7 @@
         .card.card-outline.card-primary {
             margin: auto;
             background-color: rgb(245, 245, 245);
-            border-top-color:  #800000;
+            border-top-color: #800000;
             border-top: 4px solid #800000;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -20,6 +20,7 @@
             border-radius: 8px;
             transition: opacity 0.3s ease;
         }
+
         th {
             text-align: center;
             background-color: #800000;
@@ -27,7 +28,6 @@
             color: white;
             /* Set font color to white */
         }
-
     </style>
 @endsection
 
@@ -57,6 +57,21 @@
                     </tr>
                 </thead>
             </table>
+        </div>
+    </div>
+    <div class="card card-primary card-outline mt-4">
+        <h5 class="m-0">Keterangan</h5>
+        <div class="d-flex flex-column align-items-start pt-3">
+            <div class="d-flex mb-2">
+                <span class="ms-4">
+                    Masa berlaku izin kurang dari 1 tahun
+                </span>
+            </div>
+            <div class="d-flex mb-2">
+                <span class="ms-3">
+                    Masa berlaku izin 1 hingga 2 tahun
+                </span>
+            </div>
         </div>
     </div>
 @endsection

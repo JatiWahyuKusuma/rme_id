@@ -57,6 +57,14 @@ class DetailHasilRekomendasiController extends Controller
                 ->where('nama_subkriteria', $cadangan->status_pembebasan)
                 ->value('bobot_subkriteria');
         }
+        $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?: 0;
+        $maxC1 = $detailAlternatif->max('umur_cadangan_bobot') ?: 0;
+
+        $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?: 0;
+        $maxC2 = $detailAlternatif->max('umur_masa_berlaku_izin_bobot') ?: 0;
+
+        $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?: 0;
+        $maxC3 = $detailAlternatif->max('status_pembebasan_bobot') ?: 0;
 
         //Tahap Normalisasi
         $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?: 1;
@@ -101,6 +109,12 @@ class DetailHasilRekomendasiController extends Controller
             'opco' => $opco,
             'kriteria' => $kriteria,
             'detailAlternatif' => $detailAlternatif,
+            'minC1' => $minC1,
+            'maxC1' => $maxC1,
+            'minC2' => $minC2,
+            'maxC2' => $maxC2,
+            'minC3' => $minC3,
+            'maxC3' => $maxC3
         ]);
     }
 
