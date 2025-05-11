@@ -26,6 +26,26 @@
         .form-group.row {
             margin-top: 20px;
         }
+
+        #reset-filter {
+            border-color: #000000;
+            background-color: #ffffff;
+        }
+
+        #reset-filter:hover {
+            background-color: #000000;
+        }
+
+        .btn-gradientu {
+            background: linear-gradient(to right, #a0a0a0, #535353);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -86,7 +106,6 @@
             xaxis: {
                 categories: @json($komoditiLabels),
                 min: 1000000,
-                // Set the minimum value to 1,000,000
                 // Ensure this matches the data length
                 labels: {
                     formatter: function(val) {
@@ -132,7 +151,7 @@
                             <label class="col-1 control-label col-form-label">Filter: </label>
                             <div class="col-3">
                                 <select class="form-control" name="opco_id" id="opco_id">
-                                    <option value="">-- Semua --</option>
+                                    <option value="">-- Semua Opco --</option>
                                     @foreach ($opco as $opcoItem)
                                         <option value="{{ $opcoItem->opco_id }}"
                                             {{ request('opco_id') == $opcoItem->opco_id ? 'selected' : '' }}>
@@ -142,8 +161,30 @@
                                 </select>
                                 <small class="form-text text-muted">Opco</small>
                             </div>
+                            <div class="col-3">
+                                <div class="input-group">
+                                    <select class="form-control" name="lokasi_iup" id="lokasi_iup">
+                                        <option value="">-- Semua Lokasi IUP --</option>
+                                        @foreach ($lokasiOptions as $lokasi)
+                                            <option value="{{ $lokasi }}"
+                                                {{ request('lokasi_iup') == $lokasi ? 'selected' : '' }}>
+                                                {{ $lokasi }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="input-group-append ml-2">
+                                        <button class="btn-gradientu" type="button" id="reset-filter"
+                                            style="padding: 6px 15px;">
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">Lokasi IUP</small>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-3 col-4" style="margin-top: 10px;">
                         <div class="small-box bg-success" style="height: 130px;">
                             <div class="inner d-flex align-items-center" style="font-size: 30px;">
@@ -273,7 +314,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
                 <!-- ./col -->
@@ -319,7 +359,7 @@
 
                         {{-- DETAIL TABLE --}}
                         <div class="container mt-4">
-                            <div class="p-6 m-20 bg-white rounded shadow" style=" max-height: 392px; overflow-y: auto;">
+                            <div class="p-6 m-20 bg-white rounded shadow" style="max-height: 392px; overflow-y: auto;">
                                 <table class="table table-bordered">
                                     <thead style="position: sticky; top: 0; background-color: white; z-index: 10;">
                                         <tr>
@@ -337,27 +377,33 @@
                                                 <td>{{ $data->komoditi }}</td>
                                                 <td>{{ $data->lokasi_iup }}</td>
                                                 <td>{{ number_format($data->sd_cadangan_ton, 0, '.', '.') }}</td>
-                                                <td class="{{ $data->warning ? 'bg-warning' : '' }}">
+                                                <!-- Tanda warna kuning untuk Masa Berlaku IUP -->
+                                                <td class="{{ $data->warning_iup ? 'bg-warning' : '' }}">
                                                     {{ $data->masa_berlaku_iup }}
                                                 </td>
-                                                <td>{{ $data->masa_berlaku_ppkh }}</td>
+                                                <!-- Tanda warna kuning untuk Masa Berlaku PPKH -->
+                                                <td class="{{ $data->warning_ppkh ? 'bg-warning' : '' }}">
+                                                    {{ $data->masa_berlaku_ppkh }}
+                                                </td>
                                                 <td>{{ $data->luas_ha }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
-                            <style>
-                                .bg-warning {
-                                    background-color: yellow;
-                                    /* or any other color you prefer */
-                                }
-                            </style>
                         </div>
+                        <style>
+                            .bg-warning {
+                                background-color: yellow;
+                                /* Sesuaikan warna jika diperlukan */
+                            }
+                        </style>
+
                     </section>
                     <!-- right col -->
                 </div>
             </div>
+        </div>
         </div>
     </section>
 @endsection
@@ -366,7 +412,6 @@
         document.getElementById('opco_id').addEventListener('change', function() {
             let selectedOpco = this.value;
             // Redirect to the same page with query parameter ?opco_id=
-
             window.location.href = `?opco_id=${selectedOpco}`;
         });
     </script>
@@ -376,6 +421,74 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Reset filter button functionality
+            document.getElementById('reset-filter').addEventListener('click', function() {
+                // Clear both select elements
+                document.getElementById('opco_id').value = '';
+                document.getElementById('lokasi_iup').value = '';
+
+                // Submit the form (or redirect) with empty filters
+                window.location.href = window.location.pathname; // This will remove all query params
+            });
+
+            // Existing filter change handlers
+            document.getElementById('opco_id').addEventListener('change', updateFilters);
+            document.getElementById('lokasi_iup').addEventListener('change', updateFilters);
+
+            function updateFilters() {
+                const opcoId = document.getElementById('opco_id').value;
+                const lokasiIup = document.getElementById('lokasi_iup').value;
+
+                // Build URL with both filters
+                let url = '?';
+                if (opcoId) url += `opco_id=${opcoId}`;
+                if (lokasiIup) {
+                    if (opcoId) url += '&';
+                    url += `lokasi_iup=${encodeURIComponent(lokasiIup)}`;
+                }
+
+                // Reload page with new filters
+                window.location.href = url;
+            }
+
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current filter values from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const opcoId = urlParams.get('opco_id');
+            const lokasiIup = urlParams.get('lokasi_iup');
+
+            // Update both select elements
+            if (opcoId) {
+                document.getElementById('opco_id').value = opcoId;
+            }
+            if (lokasiIup) {
+                document.getElementById('lokasi_iup').value = lokasiIup;
+            }
+
+            // Add event listeners to both filters
+            document.getElementById('opco_id').addEventListener('change', updateFilters);
+            document.getElementById('lokasi_iup').addEventListener('change', updateFilters);
+
+            function updateFilters() {
+                const opcoId = document.getElementById('opco_id').value;
+                const lokasiIup = document.getElementById('lokasi_iup').value;
+
+                // Build URL with both filters
+                let url = '?';
+                if (opcoId) url += `opco_id=${opcoId}`;
+                if (lokasiIup) {
+                    if (opcoId) url += '&';
+                    url += `lokasi_iup=${encodeURIComponent(lokasiIup)}`;
+                }
+
+                // Reload page with new filters
+                window.location.href = url;
+            }
+
+            // Rest of your existing JavaScript...
+        });
+        document.addEventListener('DOMContentLoaded', function() {
             const map = L.map('map').setView([-3.160237881740241, 111.97376353377497], 5);
 
             const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
@@ -383,7 +496,6 @@
                 id: 'mapbox/streets-v11',
                 accessToken: 'your.mapbox.access.token'
             }).addTo(map);
-
             const zoomLevels = {
                 1: {
                     lat: -6.8638896542228105,
@@ -419,7 +531,7 @@
                     lat: 5.451535421962084,
                     lon: 95.24642980917199,
                     zoom: 10
-                }, // SBI Lhoknga 
+                }, // SBI Lhoknga
                 8: {
                     lat: -0.9538889782848652,
                     lon: 100.46975045278182,
@@ -430,8 +542,8 @@
                     lon: 104.16263540642808,
                     zoom: 10
                 } // Semen Baturaja
-
             };
+
             // Data lokasi dari backend (laravel) locations dalam format JSON
             const locations = @json($locations);
             const iconsLegend = @json($iconsLegend);
@@ -453,7 +565,6 @@
                 'Pabrik SBI Lhoknga ': 'images/solusibangunindonesia.png',
                 'Pabrik Semen Padang ': 'images/SemenPadang.png',
                 'Pabrik Semen Baturaja ': 'images/SemenBaturaja.png',
-
                 // Add other commodities and their corresponding icons as needed
             };
 
@@ -521,6 +632,7 @@
                         .addTo(map);
                 }
             });
+
             @if ($OpcoId)
                 const selectedOpco = zoomLevels[{{ $OpcoId }}];
                 if (selectedOpco) {
@@ -529,7 +641,7 @@
             @endif
 
             @if ($OpcoId == null)
-                // Admin for GHOPO Tuban (opco_id = 1)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
                     iconUrl: 'images/ghopotuban.png',
                     iconSize: [50, 50],
@@ -544,7 +656,7 @@
             <h5>PT. Semen Indonesia (Persero) Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SG Rembang (opco_id = 2)
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
                 const rembangIcon = L.icon({
                     iconUrl: 'images/sgrembang.png',
                     iconSize: [50, 50],
@@ -559,7 +671,7 @@
             <h5>PT. Semen Gresik Rembang. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Tuban (opco_id = 3)
+                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
                 const sbitubicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -574,7 +686,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Tuban. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for Semen Tonasa (opco_id = 4)
+                // Admin for Semen Tonasa (opco_id = 4), show only the SBI Tuban icon
                 const sticon = L.icon({
                     iconUrl: 'images/semenTonasa.png',
                     iconSize: [50, 50],
@@ -589,7 +701,7 @@
             <h5>PT. Semen Tonasa(Persero). Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Narogong (opco_id = 5)
+                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
                 const sbinaricon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -604,7 +716,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Narogong. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Cilacap (opco_id = 6)
+                // Admin for SBI Cilacap (opco_id = 6), show only the SBI Tuban icon
                 const sbicilicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -619,7 +731,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Cilacap. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for SBI Lhoknga (opco_id = 7)
+                // Admin for SBI Lhoknga (opco_id = 7), show only the SBI Tuban icon
                 const sbilhokicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -634,7 +746,7 @@
             <h5>PT. Solusi Bangun Indonesia Pabrik Lhoknga. Tbk</h5>
         </div>
     `).addTo(map);
-                // Admin for Semen Padang (opco_id = 8)
+                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
                 const spicon = L.icon({
                     iconUrl: 'images/SemenPadang.png',
                     iconSize: [50, 50],
@@ -665,7 +777,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 1)
-                // Admin for GHOPO Tuban (opco_id = 1)
+                // Admin for GHOPO Tuban (opco_id = 1), show only the Tuban icon
                 const tubanIcon = L.icon({
                     iconUrl: 'images/ghopotuban.png',
                     iconSize: [50, 50],
@@ -681,7 +793,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 2)
-                // Admin for SG Rembang (opco_id = 2)
+                // Admin for SG Rembang (opco_id = 2), show only the Rembang icon
                 const rembangIcon = L.icon({
                     iconUrl: 'images/sgrembang.png',
                     iconSize: [50, 50],
@@ -697,7 +809,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 3)
-                // Admin for SBI Tuban (opco_id = 3)
+                // Admin for SBI Tuban (opco_id = 3), show only the SBI Tuban icon
                 const sbitubicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -713,7 +825,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 4)
-                // Admin for Semen Tonasa (opco_id = 4)
+                // Admin for Semen Tonasa (opco_id = 4), show only the SBI Tuban icon
                 const sticon = L.icon({
                     iconUrl: 'images/semenTonasa.png',
                     iconSize: [50, 50],
@@ -729,7 +841,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 5)
-                // Admin for SBI Narogong (opco_id = 5)
+                // Admin for SBI Narogong (opco_id = 5), show only the SBI Tuban icon
                 const sbinaricon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -745,7 +857,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 6)
-                // Admin for SBI Cilacap (opco_id = 6)
+                // Admin for SBI Cilacap (opco_id = 6), show only the SBI Tuban icon
                 const sbicilicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -761,7 +873,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 7)
-                // Admin for SBI Lhoknga (opco_id = 7)
+                // Admin for SBI Lhoknga (opco_id = 7), show only the SBI Tuban icon
                 const sbilhokicon = L.icon({
                     iconUrl: 'images/solusibangunindonesia.png',
                     iconSize: [90, 30],
@@ -777,7 +889,7 @@
         </div>
     `).addTo(map);
             @elseif ($OpcoId == 8)
-                // Admin for Semen Padang (opco_id = 8)
+                // Admin for Semen Padang (opco_id = 8), show only the SBI Tuban icon
                 const spicon = L.icon({
                     iconUrl: 'images/SemenPadang.png',
                     iconSize: [50, 50],

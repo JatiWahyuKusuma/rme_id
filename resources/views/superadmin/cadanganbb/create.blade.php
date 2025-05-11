@@ -223,10 +223,12 @@
                         @enderror
                     </div>
                 </div>
-                <div class="form-group row">
+              <div class="form-group row">
                     <label class="col-1 control-label col-form-label"></label>
                     <div class="col-11">
-                        <button type="submit" class="btn-gradient">Simpan</button>
+                        <button type="submit" class="btn-gradient" id="submitBtn">
+                            Simpan
+                        </button>
                         <a class="btn-gradientu" href="{{ url('cadanganbb') }}">Kembali</a>
                     </div>
                 </div>
@@ -286,6 +288,33 @@
 
             document.getElementById('masa_berlaku_iup').addEventListener('change',
                 calculateUmurMasaBerlakuIzin); // Event saat input tanggal berubah
+        });
+
+        // Validasi form sebelum submit
+        $('#myForm').on('submit', function(e) {
+            let isValid = true;
+            $('[required]').each(function() {
+                if (!$(this).val()) {
+                    $(this).addClass('is-invalid');
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Harap isi semua field yang wajib diisi!',
+                });
+            }
+        });
+
+        // Hapus validasi saat user mulai mengisi
+        $('[required]').on('input', function() {
+            if ($(this).val()) {
+                $(this).removeClass('is-invalid');
+            }
         });
     </script>
 @endpush

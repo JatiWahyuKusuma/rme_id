@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\OpcoModel;
 use Yajra\DataTables\DataTables;
 use App\Models\CadanganbbModel;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SuperadminCadanganbbController extends Controller
 {
@@ -54,7 +54,7 @@ class SuperadminCadanganbbController extends Controller
             ->addSelect('m_opco.nama_opco');
 
         if ($request->opco_id) {
-            $cadanganbb->where('opco_id', $request->opco_id);
+            $cadanganbb->where('m_cadangan_bb.opco_id', $request->opco_id); // Specify the table name
         }
         return Datatables::of($cadanganbb)
             ->addIndexColumn()
@@ -230,6 +230,58 @@ class SuperadminCadanganbbController extends Controller
             return redirect('/cadanganbb')->with('success', 'Data berhasil dihapus');
         } catch (\Exception $e) {
             return redirect('/cadanganbb')->with('error', 'Data gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+        }
+    }
+
+    // Add this method to SuperadminCadanganbbController
+    public function exportPDF(Request $request)
+    {
+        try {
+            $cadanganbb = CadanganbbModel::select(
+                'm_cadangan_bb.cadanganbb_id',
+                'm_cadangan_bb.opco_id',
+                'latitude',
+                'longitude',
+                'jarak',
+                'luas_ha',
+                'kebutuhan_pertahun_ton',
+                'komoditi',
+                'lokasi_iup',
+                'sd_cadangan_ton',
+                'status_penyelidikan',
+                'status_pembebasan',
+                'catatan',
+                'kabupaten',
+                'kecamatan',
+                'masa_berlaku_iup',
+                'masa_berlaku_ppkh',
+                'umur_cadangan_thn',
+                'umur_masa_berlaku_izin'
+            )->leftJoin('m_opco', 'm_cadangan_bb.opco_id', '=', 'm_opco.opco_id')
+                ->addSelect('m_opco.nama_opco');
+
+            if ($request->has('opco_id') && $request->opco_id) {
+                $cadanganbb->where('m_cadangan_bb.opco_id', $request->opco_id);
+            }
+
+            $data = $cadanganbb->get();
+
+            if ($data->isEmpty()) {
+                return redirect()->back()->with('error', 'Tidak ada data yang ditemukan untuk diekspor');
+            }
+
+            $filterOpco = $request->opco_id ? OpcoModel::find($request->opco_id)->nama_opco : 'Semua';
+
+            $pdf = PDF::loadView('superadmin.cadanganbb.pdf', [
+                'data' => $data,
+                'filterOpco' => $filterOpco,
+                'tahun' => $request->tahun,
+                'periode' => $request->periode
+            ])->setPaper('a4', 'landscape');
+
+            return $pdf->download('cadangan_bahan_baku_' . $request->tahun . '_' . $request->periode . '_' . date('YmdHis') . '.pdf');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mengekspor PDF: ' . $e->getMessage());
         }
     }
 }

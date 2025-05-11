@@ -28,6 +28,8 @@
             overflow: hidden;
             background-color: #ffffff;
             flex-direction: row-reverse;
+            position: relative;
+            overflow: auto;
         }
 
         /* Right side with background image - takes 60% width */
@@ -37,13 +39,16 @@
             background-size: cover;
             background-position: center;
             position: relative;
+            min-height: 100vh;
         }
 
         /* Logo in top left corner */
         .logo {
-            position: absolute;
+            position: fixed;
+            /* Ubah dari absolute ke fixed */
             top: 20px;
             left: 20px;
+            z-index: 1000;
         }
 
         .logo img {
@@ -59,26 +64,31 @@
             justify-content: center;
             padding: 0 150px;
             background-color: white;
+            min-height: 100vh;
         }
 
         /* Login header */
         .login-header {
             margin-bottom: 30px;
-            text-align: center; /* Memposisikan teks di tengah */
+            text-align: center;
+            /* Memposisikan teks di tengah */
         }
 
         .login-header h1 {
-            font-size: 50px; /* Ukuran font diperbesar */
+            font-size: 50px;
+            /* Ukuran font diperbesar */
             font-weight: 700;
             letter-spacing: 0.5px;
         }
 
         .login-header h1 span:first-child {
-            color: #800000; /* Warna merah untuk "LOGIN" */
+            color: #800000;
+            /* Warna merah untuk "LOGIN" */
         }
 
         .login-header h1 span:last-child {
-            color: #000000; /* Warna hitam untuk "PAGE" */
+            color: #000000;
+            /* Warna hitam untuk "PAGE" */
         }
 
         /* Form styling */
@@ -188,13 +198,36 @@
             margin-top: 5px;
             font-weight: 400;
         }
+
+        .swal2-container {
+            z-index: 2000 !important;
+        }
+
+        /* SweetAlert Custom Styles */
+        .swal2-popup.role-superadmin {
+            border: 3px solid #800000;
+        }
+
+        .swal2-popup.role-admin {
+            border: 3px solid #2e2e2e;
+        }
+
+        .swal2-title {
+            color: #800000 !important;
+            font-weight: 700 !important;
+        }
+
+        .swal2-html-container {
+            font-size: 18px !important;
+            font-weight: 500 !important;
+        }
     </style>
 </head>
 
 <body>
     <!-- Right side with background image (60% width) -->
     <div class="login-right"></div>
-    
+
     <!-- Logo in top left corner -->
     <div class="logo">
         <img src="{{ asset('images/logoSIG.png') }}" alt="SIG Logo">
@@ -226,7 +259,8 @@
             <div class="form-group">
                 <label>Password</label>
                 <div class="input-group">
-                    <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                    <input type="password" name="password" class="form-control" placeholder="Enter your password"
+                        required>
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
                     </div>
@@ -256,10 +290,19 @@
         @if (session('success'))
             Swal.fire({
                 icon: "success",
-                title: "Login Berhasil",
-                text: '{{ session('success') }}',
+                title: "{{ session('success.title') }}",
+                html: `<div style="font-size:18px;">{{ session('success.text') }}</div>`,
                 showConfirmButton: true,
-                timer: 1500,
+                timer: 3000,
+                customClass: {
+                    popup: 'role-{{ session('success.role') }}'
+                }
+            }).then(() => {
+                @if (session('success.role') == 'superadmin')
+                    window.location.href = '/dashboardcadbb';
+                @else
+                    window.location.href = '/dashboardcad';
+                @endif
             });
         @elseif (session('failed'))
             Swal.fire({
@@ -267,8 +310,16 @@
                 title: 'Login Gagal',
                 text: '{{ session('failed') }}',
                 timer: 3000,
-                showConfirmButton: true
+                showConfirmButton: true,
+                allowOutsideClick: false
             });
+        @endif
+        @if (session('failed'))
+            <
+            div class = "alert alert-danger" >
+            {{ session('failed') }}
+                <
+                /div>
         @endif
     </script>
 </body>

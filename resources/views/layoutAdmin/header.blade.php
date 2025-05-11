@@ -1,59 +1,97 @@
 <style>
-    /* Mengatur ukuran dropdown agar tidak terlalu panjang */
+    /* Navbar Background Color */
+    .main-header {
+        background-color: #880000 !important;
+        /* Set header background to red */
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        /* Tinggi tetap */
+        margin-left: 250px;
+        /* Sesuaikan dengan lebar sidebar */
+        z-index: 1000;
+    }
+
+    /* Dropdown Menu Settings */
     .dropdown-menu {
         width: 350px;
-        /* Atur lebar dropdown */
+        /* Set the dropdown width */
         max-height: 400px;
-        /* Batasi tinggi dropdown */
+        /* Limit dropdown height */
         overflow-y: auto;
-        /* Tambahkan scroll jika konten melebihi batas */
+        /* Add scroll if content exceeds limit */
     }
 
-    /* Mengatur padding dan wrapping agar teks tidak keluar dari kotak */
+    /* Header Text Styling */
+    .nav-header {
+        color: #fff !important;
+        /* Ensure text in header is white */
+        border-bottom: 1px solid #fff !important;
+        /* White border on bottom */
+        padding-bottom: 8px;
+        margin: 15px 15px 10px 15px;
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    /* Dropdown Item Settings */
     .dropdown-item {
         white-space: normal !important;
-        /* Pastikan teks tidak terpotong */
+        /* Prevent text clipping */
         word-wrap: break-word;
-        /* Izinkan teks pindah baris jika terlalu panjang */
+        /* Allow text to wrap */
         padding: 10px;
-        /* Beri ruang lebih agar lebih rapi */
+        /* Add padding for visual consistency */
     }
 
+    /* Navbar Item Styles */
     .navbar-nav .nav-item .nav-link {
         position: relative;
     }
 
+    /* Notification Icon Styles */
+    .navbar-nav .nav-item .nav-link i.fa-bell,
+    .navbar-nav .nav-item .nav-link i.fa-bars,
+    .navbar-nav .nav-item .nav-link i.fa-expand-arrows-alt {
+        color: white;
+        /* Change icon color to white */
+    }
+
+    /* Notification Icon Styles */
     .navbar-nav .nav-item .nav-link i.fa-bell {
         font-size: 27px;
-        /* Perbesar ikon notifikasi */
+        /* Increase notification icon size */
         position: relative;
     }
 
     .navbar-nav .nav-item .nav-link i.fa-expand-arrows-alt {
         font-size: 25px;
-        /* Sesuaikan ukuran */
+        /* Adjust size */
         margin-left: 10px;
-        /* Beri jarak dari ikon notifikasi */
+        /* Space from notification icon */
     }
 
+    /* Notification Badge Styles */
     .navbar-nav .navbar-badge {
         position: absolute;
         top: -5px;
-        /* Geser ke atas */
+        /* Move up */
         right: -3px;
-        /* Geser ke kanan */
+        /* Move right */
         font-size: 14px;
-        /* Perbesar angka notifikasi */
+        /* Increase badge number font size */
         font-weight: bold;
-        /* Buat angka lebih tebal */
+        /* Make number bolder */
         padding: 5px 8px;
-        /* Sesuaikan ukuran */
+        /* Adjust size */
         border-radius: 50%;
-        /* Agar tetap berbentuk lingkaran */
-        background-color: red;
-        /* Pastikan warna background merah tetap terlihat */
-        color: white;
-        /* Warna angka */
+        /* Keep circular shape */
+        background-color: rgb(250, 250, 250);
+        /* Ensure background color is visible */
+        color: rgb(3, 3, 3);
+        /* Badge number color */
     }
 </style>
 

@@ -4,7 +4,7 @@
         background-color: #880000 !important;
         /* Set header background to red */
         position: relative;
-         bottom: 0;
+        bottom: 0;
         left: 0;
         right: 0;
         height: 60px;
@@ -50,11 +50,17 @@
     .navbar-nav .nav-item .nav-link {
         position: relative;
     }
+
+    .navbar-nav .nav-item.d-none.d-sm-inline-block .nav-link {
+        color: white !important;
+    }
+
     /* Notification Icon Styles */
     .navbar-nav .nav-item .nav-link i.fa-bell,
     .navbar-nav .nav-item .nav-link i.fa-bars,
     .navbar-nav .nav-item .nav-link i.fa-expand-arrows-alt {
-        color: white; /* Change icon color to white */
+        color: white;
+        /* Change icon color to white */
     }
 
     /* Notification Icon Styles */
@@ -99,6 +105,12 @@
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="https://www.sig.id/" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="https://www.sig.id/tentang-kami" class="nav-link">About</a>
         </li>
     </ul>
 

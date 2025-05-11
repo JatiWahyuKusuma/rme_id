@@ -20,6 +20,7 @@
             border-radius: 8px;
             transition: opacity 0.3s ease;
         }
+
         th {
             text-align: center;
             background-color: #800000;
@@ -28,10 +29,36 @@
             /* Set font color to white */
         }
 
+        /* Custom styles for DataTables controls */
+        .dataTables_wrapper .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .dataTables_length {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .dataTables_filter {
+            margin-left: auto;
+        }
+
+        .export-btn-container {
+            margin-left: 15px;
+        }
+
+        .dt-buttons {
+            display: flex;
+            align-items: center;
+        }
 
         /* <div class="col-12 text-left mt-4">
-            <button type="submit" class="btn-gradient">Hasil Rekomendasi</button>
-        </div */
+                                            <button type="submit" class="btn-gradient">Hasil Rekomendasi</button>
+                                        </div */
     </style>
 @endsection
 
@@ -50,6 +77,7 @@
             @if (session('error'))
                 <div class="alert alert-danger">{{ session('error') }}</div> <!-- Change class to 'alert-danger' -->
             @endif
+
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
@@ -87,11 +115,50 @@
             </table>
         </div>
     </div>
+    <!-- Modal Input Tahun dan Periode -->
+    <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">Pilih Tahun dan Periode</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="exportForm" method="GET" action="{{ route('cadanganbb.exportPDF') }}" target="_blank">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="tahun">Tahun</label>
+                            <select class="form-control" id="tahun" name="tahun" required>
+                                @for ($i = date('Y'); $i >= date('Y') - 5; $i--)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="periode">Periode</label>
+                            <select class="form-control" id="periode" name="periode" required>
+                                <option value="Quarter 1">Quarter 1</option>
+                                <option value="Quarter 2">Quarter 2</option>
+                                <option value="Quarter 3">Quarter 3</option>
+                                <option value="Quarter 4">Quarter 4</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Export PDF</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('css')
     <style>
-
         .aksi-buttons {
             display: flex;
             gap: 2px;
@@ -118,6 +185,45 @@
                         d._token = '{{ csrf_token() }}';
                         d.opco_id = $('#opco_id').val(); // Use the correct filter value
                     }
+                },
+                dom: '<"top"lf>rt<"bottom"ip>',
+                initComplete: function() {
+                    // Add export button next to the length menu
+                    $('.dataTables_length').after(
+                        '<div class="export-btn-container"><button type="button" class="btn-gradient" id="exportPdfBtn" data-toggle="modal" data-target="#exportModal">Export PDF</button></div>'
+                    );
+                    // Handle export button click - show modal only
+                    $('#exportPdfBtn').on('click', function(e) {
+                        e.preventDefault();
+                        $('#exportModal').modal('show');
+                    });
+
+                    // Add event listener for PDF export
+                    // $('#exportPdfBtn').on('click', function(e) {
+                    //     e.preventDefault();
+                    //     var opcoId = $('#opco_id').val();
+                    //     var form = $('<form>', {
+                    //         action: "{{ route('cadanganbb.exportPDF') }}",
+                    //         method: "GET",
+                    //         target: "_blank"
+                    //     });
+
+                    //     if (opcoId) {
+                    //         $('<input>').attr({
+                    //             type: 'hidden',
+                    //             name: 'opco_id',
+                    //             value: opcoId
+                    //         }).appendTo(form);
+                    //     }
+
+                    //     $('<input>').attr({
+                    //         type: 'hidden',
+                    //         name: '_token',
+                    //         value: '{{ csrf_token() }}'
+                    //     }).appendTo(form);
+
+                    //     form.appendTo('body').submit().remove();
+                    // });
                 },
                 columns: [{
                         data: "DT_RowIndex",
@@ -201,12 +307,34 @@
                         searchable: false,
                         width: "170px"
                     }
-                ]
-            });
+                ],
 
+            });
             // Event listener for filter
             $('#opco_id').on('change', function() {
                 dataTable.ajax.reload(); // Reload data when filter changes
+            });
+            // Handle form submission for PDF export
+            $('#exportForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var opcoId = $('#opco_id').val();
+
+                // Add opco_id to the form if it exists
+                if (opcoId) {
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'opco_id',
+                        value: opcoId
+                    }).appendTo(form);
+                }
+
+                // Submit the form
+                form.off('submit').submit();
+
+                // Close the modal after submission
+                $('#exportModal').modal('hide');
             });
         });
     </script>

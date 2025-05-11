@@ -262,7 +262,7 @@
                     <p style="margin-left: 5px;">Data Sub Kriteria</p>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{ url('/level') }}" class="nav-link {{ $activeMenu == 'level' ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
                         width="25" height="25" x="0" y="0" viewBox="0 0 32 32"
@@ -275,7 +275,7 @@
                     </svg>
                     <p style="margin-left: 5px;">Data Level</p>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a href="{{ url('/opco') }}" class="nav-link {{ $activeMenu == 'opco' ? 'active' : '' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"

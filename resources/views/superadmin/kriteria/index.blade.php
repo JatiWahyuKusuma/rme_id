@@ -59,21 +59,6 @@
             </table>
         </div>
     </div>
-    <div class="card card-primary card-outline mt-4">
-        <h5 class="m-0">Keterangan</h5>
-        <div class="d-flex flex-column align-items-start pt-3">
-            <div class="d-flex mb-2">
-                <span class="ms-4">
-                    Masa berlaku izin kurang dari 1 tahun
-                </span>
-            </div>
-            <div class="d-flex mb-2">
-                <span class="ms-3">
-                    Masa berlaku izin 1 hingga 2 tahun
-                </span>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @push('css')

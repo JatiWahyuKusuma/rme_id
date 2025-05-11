@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('css')
     <style>
@@ -39,26 +39,6 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        th {
-            text-align: center;
-        }
-
-        .table td,
-        .table th {
-            white-space: nowrap;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .table td:nth-child(3),
-        .table th:nth-child(3),
-        .table td:nth-child(4),
-        .table th:nth-child(4) {
-            max-width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
         /* Add these new styles for Select2 */
         .select2-container--default .select2-selection--single {
             height: 38px;
@@ -89,7 +69,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-body">
-            <form action="{{ url('umurcadangan') }}" method="GET" class="row mb-4 gx-5 align-items-end" id="filterForm">
+            <form action="{{ url('umurizinadmin') }}" method="GET" class="row mb-4 gx-5 align-items-end" id="filterForm">
                 @csrf
                 <input type="hidden" id="current_lokasi_iup" value="{{ request('lokasi_iup') }}">
                 <div class="col-md-4">
@@ -116,12 +96,14 @@
                     </select>
                 </div>
                 <div class="col-md-4">
+                    <label class="fw-bold d-block invisible">Tombol</label>
                     <div class="d-flex justify-content-between gap-1">
                         <button type="submit" class="btn-gradient btn-lg w-25">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
+
         @if (request()->filled('opco_id') || request()->filled('lokasi_iup'))
             <table class="table table-bordered table-striped table-hover table-sm mt-4">
                 <thead>
@@ -129,7 +111,7 @@
                         <th>No</th>
                         <th>Nama Opco</th>
                         <th>Lokasi IUP</th>
-                        <th>Umur Cadangan (thn)</th>
+                        <th>Umur Masa Berlaku Izin</th>
                         <th>Umur Habis</th>
                         <th>Status</th>
                     </tr>
@@ -140,21 +122,21 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $item->nama_opco }}</td>
                             <td>{{ $item->lokasi_iup }}</td>
-                            <td>{{ $item->umur_cadangan_thn }}</td>
+                            <td>{{ $item->umur_masa_berlaku_izin }}</td>
                             <td>{{ $item->tahun_habis }}</td>
                             <td
                                 style="
-                        background-color: {{ $item->status === 'Critical'
-                            ? '#dc0b0b'
-                            : ($item->status === 'Prioritas 1'
-                                ? '#e85d00'
-                                : ($item->status === 'Prioritas 2'
-                                    ? '#ffff00'
-                                    : ($item->status === 'Aman'
-                                        ? '#08ff00'
-                                        : 'transparent'))) }};
-                        color: {{ in_array($item->status, ['Critical', 'Prioritas 1']) ? 'white' : 'black' }};
-                        font-weight: bold">
+                            background-color: {{ $item->status === 'Critical'
+                                ? '#dc0b0b'
+                                : ($item->status === 'Prioritas 1'
+                                    ? '#e85d00'
+                                    : ($item->status === 'Prioritas 2'
+                                        ? '#ffff00'
+                                        : ($item->status === 'Aman'
+                                            ? '#08ff00'
+                                            : 'transparent'))) }};
+                            color: {{ in_array($item->status, ['Critical', 'Prioritas 1']) ? 'white' : 'black' }};
+                            font-weight: bold">
                                 {{ $item->status }}
                             </td>
                         </tr>
@@ -164,7 +146,7 @@
             <div class="col-md-4">
                 <label class="fw-bold d-block invisible">Tombol</label>
                 <div class="d-flex justify-content-between gap-1">
-                    <a href="{{ url('umurcadangan') }}" class="teal-lime-btn btn-lg w-25">Reset</a>
+                    <a href="{{ url('umurizinadmin') }}" class="teal-lime-btn btn-lg w-25">Reset</a>
                 </div>
             </div>
         @endif
@@ -176,32 +158,22 @@
                     <button type="button" class="btn btn-sm"
                         style="background-color: #dc0b0b; color: white; width: 150px;">Critical</button>
                     <span class="ms-4">
-                        : Umur cadangan kurang dari 5 tahun, KONDISI CRITICAL, aktivitas segera melakukan
-                        percepatan perluasan lahan dan paralel melaksanakan strategi exit penanganan krisis cadangan.
+                        : Masa berlaku izin kurang dari 1 tahun
                     </span>
                 </div>
                 <div class="d-flex mb-2">
                     <button type="button" class="btn btn-sm"
                         style="background-color: #e85d00; color: white; width: 150px;">Prioritas 1</button>
                     <span class="ms-3">
-                        : Umur Cadangan kurang dari 15 tahun, TINDAKAN Prioritas 1, aktivitas REALISASI pemenuhan
-                        cadangan
-                        mulai tahun 2024, dan selesai maksimal dalam 24 bulan terbit IUP
-                    </span>
-                </div>
-                <div class="d-flex mb-2">
-                    <button type="button" class="btn btn-sm"
-                        style="background-color: #ffff00; color: black; width: 150px;">Prioritas 2</button>
-                    <span class="ms-3">
-                        : Umur cadangan kurang dari 30 tahun, TINDAKAN Prioritas 2, aktivitas IDENTIFIKASI pemenuhan
-                        cadangan mulai tahun 2024, dan aktivitas realisasi pemenuhan cadangan berjalan tahun 2025
+                        : Masa berlaku izin 1 hingga 2 tahun
+
                     </span>
                 </div>
                 <div class="d-flex mb-2">
                     <button type="button" class="btn btn-sm"
                         style="background-color: #08ff00; color: black; width: 150px;">Aman</button>
                     <span class="ms-3">
-                        : Umur cadangan lebih dari 30 tahun, AMAN
+                        : Masa berlaku izin lebih dari 2 tahun
                     </span>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('css')
     <style>
@@ -89,7 +89,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-body">
-            <form action="{{ url('umurcadangan') }}" method="GET" class="row mb-4 gx-5 align-items-end" id="filterForm">
+            <form action="{{ url('umurcadanganadmin') }}" method="GET" class="row mb-4 gx-5 align-items-end" id="filterForm">
                 @csrf
                 <input type="hidden" id="current_lokasi_iup" value="{{ request('lokasi_iup') }}">
                 <div class="col-md-4">
@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="lokasi_iup" class="fw-bold">Lokasi IUP</label>
-                    <select class="form-control select2 select2-hidden-accessible"" name="lokasi_iup" id="lokasi_iup">
+                    <select class="form-control select2 select2-hidden-accessible" name="lokasi_iup" id="lokasi_iup">
                         <option value="">Pilih Lokasi IUP</option>
                         @foreach ($lokasi_iup_all as $lokasi)
                             <option value="{{ $lokasi }}" {{ request('lokasi_iup') == $lokasi ? 'selected' : '' }}>
@@ -164,7 +164,7 @@
             <div class="col-md-4">
                 <label class="fw-bold d-block invisible">Tombol</label>
                 <div class="d-flex justify-content-between gap-1">
-                    <a href="{{ url('umurcadangan') }}" class="teal-lime-btn btn-lg w-25">Reset</a>
+                    <a href="{{ url('umurcadanganadmin') }}" class="teal-lime-btn btn-lg w-25">Reset</a>
                 </div>
             </div>
         @endif

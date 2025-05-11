@@ -1,5 +1,32 @@
 @extends('layoutAdmin.template')
+<style>
+    .card.card-outline.card-primary {
+        margin: auto;
+        background-color: rgb(245, 245, 245);
+        border-top-color: #800000;
+        border-top: 4px solid #800000;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
+    .btn-gradient {
+        background: linear-gradient(to right, #800000, #800000);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 15px;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: opacity 0.3s ease;
+        display: inline-block;
+        /* Ensure it behaves as a block element */
+        margin-top: 20px;
+        /* Space above the button */
+        width: 200px;
+        /* Adjust width automatically */
+        text-align: center;
+        /* Center text */
+    }
+</style>
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
@@ -36,11 +63,11 @@
                     </tr>
                     <tr>
                         <th>Luas(ha)</th>
-                        <td>{{ $admincadanganbb->luas_ha}}</td>
+                        <td>{{ $admincadanganbb->luas_ha }}</td>
                     </tr>
                     <tr>
                         <th>Kebutuhan pertahun (ton)</th>
-                        <td>{{ $admincadanganbb->kebutuhan_pertahun_ton}}</td>
+                        <td>{{ $admincadanganbb->kebutuhan_pertahun_ton }}</td>
                     </tr>
                     <tr>
                         <th>Komoditi</th>
@@ -92,28 +119,29 @@
                     </tr>
                 </table>
             @endempty
-            <a href="{{ url('admincadanganbb') }}" class="btn btn-sm btn-primary mt-4 mb-2">Kembali</a>
+            <a href="{{ url('admincadanganbb') }}" class="btn-gradient">Kembali</a>
         </div>
     </div>
 @endsection
 
 @push('css')
-<style>
-    /* Add spacing and improve button styling */
-    .btn {
-        padding: 10px 20px;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-    
-    /* Adjust margin and spacing for better layout */
-    .mt-4 {
-        margin-top: 1.5rem !important;
-    }
-    .mb-2 {
-        margin-bottom: 0.75rem !important;
-    }
-</style>
+    <style>
+        /* Add spacing and improve button styling */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* Adjust margin and spacing for better layout */
+        .mt-4 {
+            margin-top: 1.5rem !important;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.75rem !important;
+        }
+    </style>
 @endpush
 
 @push('js')

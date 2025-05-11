@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('css')
     <style>
@@ -71,7 +71,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-body">
-            <h4 class="text-center">Data Umur Cadangan Bahan Baku < 5 Tahun</h4>
+            <h4 class="text-center">Data Alternatif</h4>
             <div class="separator"></div>
             @if (session('success'))
                 <div class="alert alert-success">{{ session('success') }}</div>
@@ -101,7 +101,7 @@
     <div id="rekomendasi_section">
         <div class="card card-outline card-primary mt-4">
             <div class="card-body">
-                <h4 class="text-center">Tabel Hasil Perangkingan</h4>
+                <h4 class="text-center">Tabel Perangkingan</h4>
                 <div class="separator"></div>
                 <table class="table table-bordered table-striped" id="table_perangkingan">
                     <thead>
@@ -227,7 +227,7 @@
         });
 
         document.getElementById("btn_detail_perhitungan").addEventListener("click", function() {
-            window.location.href = "{{ url('/detailrekomendasi') }}";
+            window.location.href = "{{ url('/detailrekomendasiadmin') }}";
         });
         $(document).ready(function() {
             var dataTable = $('#table_m_cadangan_bb').DataTable({

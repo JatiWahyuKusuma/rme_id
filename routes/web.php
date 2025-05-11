@@ -14,7 +14,9 @@ use App\Http\Controllers\DashboardVendorSprAdmController;
 use App\Http\Controllers\DashboardCadpotAdmController;
 use App\Http\Controllers\DashboardSuperadminController;
 use App\Http\Controllers\DashboardVendorAdmController;
+use App\Http\Controllers\DetailHasilRekomendasiAdminController;
 use App\Http\Controllers\DetailHasilRekomendasiController;
+use App\Http\Controllers\HasilRekomendasiAdminController;
 use App\Http\Controllers\HasilRekomendasiController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LoginController;
@@ -25,7 +27,9 @@ use App\Http\Controllers\PetaGeologiController;
 use App\Http\Controllers\PetaRTRWController;
 use App\Http\Controllers\SubKriteriaController;
 use App\Http\Controllers\SuperadminCadanganbbController;
+use App\Http\Controllers\UmurCadanganAdminController;
 use App\Http\Controllers\UmurCadanganController;
+use App\Http\Controllers\UmurIzinAdminController;
 use App\Http\Controllers\UmurIzinController;
 use App\Models\CadanganbbModel;
 
@@ -54,9 +58,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
         return view('user.dashboard');
     });
 });
-Route::group(['middleware' => ['auth:superadmin']], function () {
-    Route::get('/cadpot', [CadangandanPotensiController::class, 'index'])->name('superadmin.cadangan');
-});
+// Route::group(['middleware' => ['auth:superadmin']], function () {
+//     Route::get('/cadpot', [CadangandanPotensiController::class, 'index'])->name('superadmin.cadangan');
+// });
 
 //Route Logout
 Route::post('/logout', [LogoutController::class, 'index'])->name('logout');
@@ -95,6 +99,7 @@ Route::group(['prefix' => 'opco'], function () {
     Route::delete('/{id}', [OpcoController::class, 'destroy']);
 });
 Route::group(['prefix' => 'cadanganbb'], function () {
+    Route::get('cadanganbb/export-pdf', [SuperadminCadanganbbController::class, 'exportPDF'])->name('cadanganbb.exportPDF');
     Route::get('/', [SuperadminCadanganbbController::class, 'index']);
     Route::post('/list', [SuperadminCadanganbbController::class, 'list']);
     Route::get('/create', [SuperadminCadanganbbController::class, 'create']);
@@ -104,6 +109,7 @@ Route::group(['prefix' => 'cadanganbb'], function () {
     Route::put('/{id}', [SuperadminCadanganbbController::class, 'update']);
     Route::delete('/{id}', [SuperadminCadanganbbController::class, 'destroy']);
 });
+
 Route::group(['prefix' => 'kriteria'], function () {
     Route::get('/', [KriteriaController::class, 'index']);
     Route::post('/list', [KriteriaController::class, 'list']);
@@ -182,35 +188,7 @@ Route::group(['prefix' => 'umurizin'], function () {
 // });
 
 
-Route::get('/dashboard', [DashboardCadpotSprAdmController::class, 'index'])->name('dashboard');
-Route::get('/maps', [DashboardCadpotSprAdmController::class, 'map'])->name('maps');
-
-Route::group(['prefix' => 'dashboardvendor'], function () {
-    Route::get('/', [DashboardVendorSprAdmController::class, 'index']);
-    Route::post('/list', [DashboardVendorSprAdmController::class, 'list']);
-});
-
 //Route Admin
-Route::group(['prefix' => 'admincadpot'], function () {
-    Route::get('/', [AdminCadpotController::class, 'index']);
-    Route::post('/list', [AdminCadpotController::class, 'list']);
-    Route::get('/create', [AdminCadpotController::class, 'create']);
-    Route::post('/', [AdminCadpotController::class, 'store']);
-    Route::get('/{id}', [AdminCadpotController::class, 'show']);
-    Route::get('/{id}/edit', [AdminCadpotController::class, 'edit']);
-    Route::put('/{id}', [AdminCadpotController::class, 'update']);
-    Route::delete('/{id}', [AdminCadpotController::class, 'destroy']);
-});
-Route::group(['prefix' => 'adminvendorbb'], function () {
-    Route::get('/', [AdminVendorController::class, 'index']);
-    Route::post('/list', [AdminVendorController::class, 'list']);
-    Route::get('/create', [AdminVendorController::class, 'create']);
-    Route::post('/', [AdminVendorController::class, 'store']);
-    Route::get('/{id}', [AdminVendorController::class, 'show']);
-    Route::get('/{id}/edit', [AdminVendorController::class, 'edit']);
-    Route::put('/{id}', [AdminVendorController::class, 'update']);
-    Route::delete('/{id}', [AdminVendorController::class, 'destroy']);
-});
 
 Route::group(['prefix' => 'admincadanganbb'], function () {
     Route::get('/', [AdminCadanganbbController::class, 'index']);
@@ -222,23 +200,37 @@ Route::group(['prefix' => 'admincadanganbb'], function () {
     Route::put('/{id}', [AdminCadanganbbController::class, 'update']);
     Route::delete('/{id}', [AdminCadanganbbController::class, 'destroy']);
 });
+Route::group(['prefix' => 'umurcadanganadmin'], function () {
+    Route::get('/', [UmurCadanganAdminController::class, 'index']);
+    Route::post('/list', [UmurCadanganAdminController::class, 'list']);
+    // Route::get('/get-lokasi_iup', [CadanganbbModel::class, 'getLokasiIUP']);
+
+});
+Route::group(['prefix' => 'umurizinadmin'], function () {
+    Route::get('/', [UmurIzinAdminController::class, 'index']);
+    Route::post('/list', [UmurIzinAdminController::class, 'list']);
+    Route::get('/rekomendasi', [UmurIzinAdminController::class, 'index']);
+});
+
+//Route Hasil Rekomendasi
+Route::group(['prefix' => 'rekomendasiadmin'], function () {
+    Route::get('/', [HasilRekomendasiAdminController::class, 'index']);
+    Route::post('/list', [HasilRekomendasiAdminController::class, 'list']);
+    Route::get('/rekomendasi', [HasilRekomendasiAdminController::class, 'index']);
+    Route::get('/cetak-pdf', [HasilRekomendasiAdminController::class, 'cetakPdf'])->name('rekomendasi.cetak');
+});
+//Route Detail Hasil Rekomendasi
+Route::group(['prefix' => 'detailrekomendasiadmin'], function () {
+    Route::get('/', [DetailHasilRekomendasiAdminController::class, 'index']);
+    Route::post('/list', [DetailHasilRekomendasiAdminController::class, 'list']);
+    Route::get('/rekomendasi', [DetailHasilRekomendasiAdminController::class, 'index']);
+});
+
 
 //Route Notifikasi Admin
 Route::get('/notifikasi', [NotifikasiAdminController::class, 'getNotifikasi'])->name('notifikasi');
 
 //Routes Dashboard Admin
-Route::group(['prefix' => 'dashboardcadpot'], function () {
-    Route::get('/', [DashboardCadpotAdmController::class, 'index']);
-    Route::post('/list', [DashboardCadpotAdmController::class, 'list']);
-});
-Route::get('/dashboard', [DashboardCadpotAdmController::class, 'index'])->name('dashboard');
-Route::get('/maps', [DashboardCadpotAdmController::class, 'map'])->name('maps');
-
-Route::group(['prefix' => 'dashboardvendorbb'], function () {
-    Route::get('/', [DashboardVendorAdmController::class, 'index']);
-    Route::post('/list', [DashboardVendorAdmController::class, 'list']);
-});
-
 Route::group(['prefix' => 'dashboardcad'], function () {
     Route::get('/', [DashboardAdminController::class, 'index']);
     Route::post('/list', [DashboardAdminController::class, 'list']);

@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .main-footer {
+        position: flex;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        /* Tinggi tetap */
+        margin-left: 250px;
+        /* Sesuaikan dengan lebar sidebar */
+        z-index: 1000;
+        background-color: #f4f6f9;
+        border-top: 1px solid #dee2e6;
+        padding: 15px;
+    }
+</style>
 
 <head>
     <meta charset="utf-8">
@@ -20,9 +36,29 @@
     <link rel="stylesheet" href="{{ asset('template/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('template/dist/css/adminlte.min.css') }}">
-    
 
+    {{-- font --}}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     @stack('css')
+    <style>
+        :root {
+            --font-family-sans-serif: 'Poppins', sans-serif;
+        }
+
+        body,
+        .main-header .navbar,
+        .main-sidebar,
+        .brand-link,
+        .nav-sidebar>.nav-item>.nav-link,
+        .card,
+        .table,
+        .btn,
+        .form-control,
+        .dropdown-menu {
+            font-family: 'Poppins', sans-serif !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini">

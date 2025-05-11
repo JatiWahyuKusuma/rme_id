@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Raw Material Expansion'),
 
     /*
     |--------------------------------------------------------------------------
@@ -186,7 +186,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
      'PDF' => Barryvdh\DomPDF\Facade\Pdf::class
-    ])->toArray(),
+    ])->toArray(), 
     
 
 ];
