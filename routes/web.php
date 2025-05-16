@@ -18,6 +18,7 @@ use App\Http\Controllers\DetailHasilRekomendasiAdminController;
 use App\Http\Controllers\DetailHasilRekomendasiController;
 use App\Http\Controllers\HasilRekomendasiAdminController;
 use App\Http\Controllers\HasilRekomendasiController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -161,6 +162,12 @@ Route::group(['prefix' => 'umurcadangan'], function () {
     // Route::get('/get-lokasi_iup', [CadanganbbModel::class, 'getLokasiIUP']);
 
 });
+Route::group(['prefix' => 'history'], function () {
+    Route::get('/', [HasilRekomendasiController::class, 'riwayat']);
+    Route::post('/list', [HasilRekomendasiController::class, 'list']);
+    // Route::get('/get-lokasi_iup', [CadanganbbModel::class, 'getLokasiIUP']);
+
+});
 // routes/web.php
 Route::get('/get-lokasi-iup/{opco_id}', [App\Http\Controllers\UmurCadanganController::class, 'getLokasiIUP']);
 
@@ -189,7 +196,6 @@ Route::group(['prefix' => 'umurizin'], function () {
 
 
 //Route Admin
-
 Route::group(['prefix' => 'admincadanganbb'], function () {
     Route::get('/', [AdminCadanganbbController::class, 'index']);
     Route::post('/list', [AdminCadanganbbController::class, 'list']);

@@ -18,8 +18,8 @@
 </style>
 
 <head>
-    <link rel="shortcut icon" href="{{ asset('images/semunsss.png') }}" type="image/x-icon">
-    <link rel="icon" type="image/png" href="{{ asset('images/semunsss.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/sigmerah.png') }}" type="image/x-icon">
+    <link rel="icon" type="image/png" href="{{ asset('images/sigmerah.png') }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'PWL Laravel Starter Code') }}</title>

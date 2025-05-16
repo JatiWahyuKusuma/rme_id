@@ -145,6 +145,9 @@
                 <button type="button" class="btn-gradientu" id="btn_cetak_pdf">
                     <i class="fas fa-print mr-2"></i> Cetak PDF
                 </button>
+                <button type="button" class="btn-gradient" id="btn_cetak_pdf">
+                    <i class="fas fa-print mr-2"></i> Simpan 
+                </button>
             </div>
         </div>
     </div>

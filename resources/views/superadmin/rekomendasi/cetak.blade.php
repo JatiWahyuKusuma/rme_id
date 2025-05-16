@@ -6,14 +6,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            /* font-family: 'Poppins'; */
-            background: url("{{ asset('images/logoSIG.png') }}") no-repeat center center;
-            background-size: 60%;
-            background-position: center;
-            background-attachment: fixed;
-            background-color: #ffffff
-
+            font-family: 'Poppins';
+            position: relative;
         }
+
+        .watermark {
+            position: absolute;
+            opacity: 0.1;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            /* background-image: url("{{ asset('images/logoSIG.png') }}"); */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50%;
+        }
+
 
         .header {
             text-align: center;
@@ -36,6 +46,7 @@
             font-size: 14px;
             /* font-weight: 500; */
             font-family: 'Poppins';
+            color: #2e2e2e;
         }
 
         table {
@@ -106,7 +117,7 @@
 </head>
 
 <body>
-    <!-- Watermark Background -->
+    <div class="watermark"></div>
     <div class="container-wrapper " style="width: 100%; max-width: 1000px; margin: 0 auto;">
         <div class="date">
             Dicetak pada
@@ -114,9 +125,6 @@
         </div>
         <div class="header">
             <h1>Laporan Hasil Rekomendasi Prioritas Perluasan Lahan Bahan Baku</h1>
-        </div>
-        <div class="logo">
-            <img src="{{ asset('images/logoSIG.png') }}" >
         </div>
         <table>
             <thead>

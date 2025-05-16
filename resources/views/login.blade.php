@@ -2,12 +2,15 @@
 <html lang="en">
 
 <head>
+    <link rel="shortcut icon" href="{{ asset('images/sigmerah.png') }}" type="image/x-icon">
+    <link rel="icon" type="image/png" href="{{ asset('images/sigmerah.png') }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
 
     <!-- Google Font: Poppins -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('template/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- SweetAlert2 -->

@@ -182,4 +182,22 @@ class HasilRekomendasiController extends Controller
             ->addIndexColumn()
             ->make(true);
     }
+
+    public function riwayat()
+    {
+        $breadcrumb = (object) [
+            'title' => 'Riwayat Penilaian Penerbitan Prioritas Perluasan Lahan ',
+            'list' => ['Home', 'history']
+        ];
+
+        $page = (object)[
+            'title' => ''
+        ];
+
+        $activeMenu = 'history';
+        $history = CadanganbbModel::all();
+        $opco = OpcoModel::all();
+
+        return view('superadmin.history.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'history' => $history, 'activeMenu' => $activeMenu, 'opco' => $opco]);
+    }
 }

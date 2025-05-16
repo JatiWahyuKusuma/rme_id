@@ -71,7 +71,7 @@ class AdminCadanganbbController extends Controller
 
         $opco = OpcoModel::all();
 
-        return view('admin.cadanganbb.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadanganbb' => $admincadanganbb, 'activeMenu' => $activeMenu, 'opco' => $opco]);
+        return view('admin.cadanganbb.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'admincadnaganbb' => $admincadanganbb, 'activeMenu' => $activeMenu, 'opco' => $opco]);
     }
 
     public function list(Request $request)

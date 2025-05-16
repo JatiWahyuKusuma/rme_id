@@ -3,8 +3,8 @@
     .main-header {
         background-color: #880000 !important;
         /* Set header background to red */
-        position: relative;
-        bottom: 0;
+        position: fixed;
+        top: 0;
         left: 0;
         right: 0;
         height: 60px;
@@ -12,6 +12,10 @@
         margin-left: 250px;
         /* Sesuaikan dengan lebar sidebar */
         z-index: 1000;
+    }
+
+    body{
+        padding-top: 50px;
     }
 
     /* Dropdown Menu Settings */
@@ -112,6 +116,7 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="https://www.sig.id/tentang-kami" class="nav-link">About</a>
         </li>
+        </li>
     </ul>
 
     <!-- Right navbar links -->
@@ -203,4 +208,6 @@
         fetchNotifications();
         setInterval(fetchNotifications, 60000); // Perbarui setiap 1 menit
     });
+
+
 </script>
