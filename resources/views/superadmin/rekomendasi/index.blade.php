@@ -19,7 +19,6 @@
             width: 100%;
             max-width: 100%;
             overflow-x: hidden;
-
         }
 
         table {
@@ -63,7 +62,6 @@
 
         #rekomendasi_section {
             display: none;
-            /* Sembunyikan tabel perangkingan & kesimpulan secara default */
         }
     </style>
 @endsection
@@ -72,27 +70,27 @@
     <div class="card card-outline card-primary">
         <div class="card-body">
             <h4 class="text-center">Data Umur Cadangan Bahan Baku < 5 Tahun</h4>
-            <div class="separator"></div>
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-danger">{{ session('error') }}</div>
-            @endif
+                    <div class="separator"></div>
+                    @if (session('success'))
+                        <div class="alert alert-success">{{ session('success') }}</div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
 
-            <div class="table-container">
-                <table class="table table-bordered table-striped table-hover table-sm" id="table_m_cadangan_bb">
-                    <thead>
-                        <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 30%;">Lokasi/IUP</th>
-                            <th style="width: 15%;">Umur Cadangan (thn)</th>
-                            <th style="width: 20%;">Umur Masa Berlaku Izin</th>
-                            <th style="width: 20%;">Status Pembebasan</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
+                    <div class="table-container">
+                        <table class="table table-bordered table-striped table-hover table-sm" id="table_m_cadangan_bb">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">No</th>
+                                    <th style="width: 30%;">Lokasi/IUP</th>
+                                    <th style="width: 15%;">Umur Cadangan (thn)</th>
+                                    <th style="width: 20%;">Umur Masa Berlaku Izin</th>
+                                    <th style="width: 20%;">Status Pembebasan</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
         </div>
     </div>
     <div class="col-12 text-left mt-4">
@@ -145,12 +143,11 @@
                 <button type="button" class="btn-gradientu" id="btn_cetak_pdf">
                     <i class="fas fa-print mr-2"></i> Cetak PDF
                 </button>
-                <button type="button" class="btn-gradient" id="btn_cetak_pdf">
-                    <i class="fas fa-print mr-2"></i> Simpan 
+                <button type="button" class="btn-gradient" id="btn_simpan_penilaian">
+                    <i class="fas fa-save mr-2"></i> Simpan Penilaian
                 </button>
             </div>
         </div>
-    </div>
     </div>
 @endsection
 
@@ -164,12 +161,10 @@
             overflow-x: hidden;
         }
 
-        /* Tambahkan style untuk icon */
         .btn-gradientu i {
             margin-right: 8px;
         }
 
-        /* Style khusus untuk cetak */
         @media print {
             body * {
                 visibility: hidden;
@@ -198,9 +193,8 @@
 @push('js')
     <script>
         document.getElementById("btn_cetak_pdf").addEventListener("click", function(e) {
-            e.preventDefault(); // Mencegah perilaku default
+            e.preventDefault();
 
-            // Menggunakan metode fetch untuk memanggil route cetak PDF
             fetch("{{ route('rekomendasi.cetak') }}")
                 .then(response => {
                     if (!response.ok) {
@@ -209,17 +203,12 @@
                     return response.blob();
                 })
                 .then(blob => {
-                    // Membuat URL objek dari blob
                     const url = window.URL.createObjectURL(blob);
-
-                    // Membuat elemen <a> untuk memicu download
                     const a = document.createElement('a');
                     a.href = url;
                     a.download = 'hasil rekomendasi perluasan lahan';
                     document.body.appendChild(a);
                     a.click();
-
-                    // Membersihkan
                     window.URL.revokeObjectURL(url);
                     document.body.removeChild(a);
                 })
@@ -232,6 +221,7 @@
         document.getElementById("btn_detail_perhitungan").addEventListener("click", function() {
             window.location.href = "{{ url('/detailrekomendasi') }}";
         });
+
         $(document).ready(function() {
             var dataTable = $('#table_m_cadangan_bb').DataTable({
                 serverSide: true,
@@ -303,8 +293,69 @@
             $('#opco_id').on('change', function() {
                 dataTable.ajax.reload();
             });
+
             $('#btn_hasil_rekomendasi').on('click', function() {
                 $('#rekomendasi_section').fadeIn();
+            });
+        });
+        document.getElementById("btn_simpan_penilaian").addEventListener("click", function() {
+            Swal.fire({
+                title: 'Simpan Penilaian',
+                html: 'Anda yakin ingin menyimpan penilaian ini ke riwayat?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#800000',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Simpan!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('rekomendasi.simpan') }}",
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Menyimpan...',
+                                html: 'Sedang menyimpan penilaian',
+                                allowOutsideClick: false,
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                }
+                            });
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonColor: '#800000'
+                                }).then(() => {
+                                    window.location.href = response.redirect;
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    text: response.message,
+                                    icon: 'error',
+                                    confirmButtonColor: '#800000'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Terjadi kesalahan saat menyimpan data.',
+                                icon: 'error',
+                                confirmButtonColor: '#800000'
+                            });
+                        }
+                    });
+                }
             });
         });
     </script>

@@ -1,7 +1,7 @@
 <style>
     /* Sidebar Background Color */
     .main-sidebar {
-        position: fixed;
+        position: fixed !important;
         width: 260px;
         /* Increased from default 250px */
         background-color: #f5f5f5;
@@ -210,7 +210,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/umurcadanganadmin') }}" class="nav-link {{ $activeMenu == 'umurcadanganadmin' ? 'active' : '' }}">
+                    <a href="{{ url('/umurcadanganadmin') }}"
+                        class="nav-link {{ $activeMenu == 'umurcadanganadmin' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0"
                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"
@@ -226,7 +227,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url('/umurizinadmin') }}" class="nav-link {{ $activeMenu == 'umurizinadmin' ? 'active' : '' }}">
+                    <a href="{{ url('/umurizinadmin') }}"
+                        class="nav-link {{ $activeMenu == 'umurizinadmin' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0"
                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"
@@ -264,6 +266,22 @@
                             </g>
                         </svg>
                         <p style="margin-left: 5px;">Hasil Rekomendasi</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('/history') }}" class="nav-link {{ $activeMenu == 'history' ? 'active' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0"
+                            viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve"
+                            class="">
+                            <g>
+                                <path
+                                    d="M58.25 26.71c-4.88-3.23.35-8-2.38-12-1.87-2.74-6.54-1.81-9-3.17-2-1.9-2.59-6.63-5.78-7.55C38 2.84 34.78 6.37 32 6.65c-2.78-.27-6-3.82-9.12-2.71-3.19.92-3.75 5.64-5.78 7.55-2.43 1.37-7.1.43-9 3.17-2 2.61.32 6.77-.25 9.5-1.2 2.51-5.5 4.5-5.38 7.84-.11 3.34 4.17 5.33 5.38 7.84.57 2.73-1.77 6.89.25 9.5 1.87 2.74 6.54 1.81 9 3.17 3.63 4.8 3.67 10.67 11.6 6.14 2.6-1.63 4-1.62 6.6 0 4.6 2.9 7.8 1.74 9.8-3.27 1.63-5.74 7.66-2.13 10.77-6 2-2.61-.32-6.77.25-9.5a8.1 8.1 0 0 1 2.13-2.55c4.24-3.55 4.27-7.1 0-10.62zm-9.81 3.55-2.19 9.84a4.59 4.59 0 0 1-4.51 3.61 56.78 56.78 0 0 1-14-1.76 4.69 4.69 0 0 1-4.41 2.69H19a1.5 1.5 0 0 1-1.5-1.5v-17a1.5 1.5 0 0 1 1.5-1.5h7.6a1.5 1.5 0 0 1 1.4 1.05 22.62 22.62 0 0 0 7.83-8.47c1.86-3.54 7.33-1.55 7.1 2.2a10.74 10.74 0 0 1-1.39 5.22h2.37a4.66 4.66 0 0 1 4.53 5.62z"
+                                    data-name="Layer 57" fill="#00000" opacity="1" data-original="#000000"
+                                    class=""></path>
+                            </g>
+                        </svg>
+                        <p style="margin-left: 5px;">Riwayat</p>
                     </a>
                 </li>
                 <li class="nav-header">

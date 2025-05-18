@@ -57,8 +57,8 @@
         }
 
         /* <div class="col-12 text-left mt-4">
-                                            <button type="submit" class="btn-gradient">Hasil Rekomendasi</button>
-                                        </div */
+                                                <button type="submit" class="btn-gradient">Hasil Rekomendasi</button>
+                                            </div */
     </style>
 @endsection
 
@@ -198,32 +198,6 @@
                         $('#exportModal').modal('show');
                     });
 
-                    // Add event listener for PDF export
-                    // $('#exportPdfBtn').on('click', function(e) {
-                    //     e.preventDefault();
-                    //     var opcoId = $('#opco_id').val();
-                    //     var form = $('<form>', {
-                    //         action: "{{ route('cadanganbb.exportPDF') }}",
-                    //         method: "GET",
-                    //         target: "_blank"
-                    //     });
-
-                    //     if (opcoId) {
-                    //         $('<input>').attr({
-                    //             type: 'hidden',
-                    //             name: 'opco_id',
-                    //             value: opcoId
-                    //         }).appendTo(form);
-                    //     }
-
-                    //     $('<input>').attr({
-                    //         type: 'hidden',
-                    //         name: '_token',
-                    //         value: '{{ csrf_token() }}'
-                    //     }).appendTo(form);
-
-                    //     form.appendTo('body').submit().remove();
-                    // });
                 },
                 columns: [{
                         data: "DT_RowIndex",

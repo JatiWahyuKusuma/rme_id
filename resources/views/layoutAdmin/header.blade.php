@@ -3,8 +3,8 @@
     .main-header {
         background-color: #880000 !important;
         /* Set header background to red */
-        position: relative;
-        bottom: 0;
+        position: fixed;
+        top: 0;
         left: 0;
         right: 0;
         height: 60px;
@@ -12,6 +12,10 @@
         margin-left: 250px;
         /* Sesuaikan dengan lebar sidebar */
         z-index: 1000;
+    }
+
+    body {
+        padding-top: 50px;
     }
 
     /* Dropdown Menu Settings */
@@ -49,6 +53,10 @@
     /* Navbar Item Styles */
     .navbar-nav .nav-item .nav-link {
         position: relative;
+    }
+
+    .navbar-nav .nav-item.d-none.d-sm-inline-block .nav-link {
+        color: white !important;
     }
 
     /* Notification Icon Styles */
@@ -94,13 +102,18 @@
         /* Badge number color */
     }
 </style>
-
 {{-- @include('layout.header') --}}
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="https://www.sig.id/" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="https://www.sig.id/tentang-kami" class="nav-link">About</a>
         </li>
     </ul>
 

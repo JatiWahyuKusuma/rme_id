@@ -116,7 +116,6 @@
         <li class="nav-item d-none d-sm-inline-block">
             <a href="https://www.sig.id/tentang-kami" class="nav-link">About</a>
         </li>
-        </li>
     </ul>
 
     <!-- Right navbar links -->

@@ -1,39 +1,27 @@
 <?php
 
 use App\Http\Controllers\AdminCadanganbbController;
-use App\Http\Controllers\AdminCadpotController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminVendorController;
 use App\Http\Controllers\OpcoController;
-use App\Http\Controllers\CadangandanPotensiController;
 use App\Http\Controllers\DashboardAdminController;
-use App\Http\Controllers\DashboardCadpotSprAdmController;
-use App\Http\Controllers\DashboardVendorSprAdmController;
-use App\Http\Controllers\DashboardCadpotAdmController;
 use App\Http\Controllers\DashboardSuperadminController;
-use App\Http\Controllers\DashboardVendorAdmController;
 use App\Http\Controllers\DetailHasilRekomendasiAdminController;
 use App\Http\Controllers\DetailHasilRekomendasiController;
 use App\Http\Controllers\HasilRekomendasiAdminController;
 use App\Http\Controllers\HasilRekomendasiController;
-use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\NotifikasiAdminController;
 use App\Http\Controllers\NotifikasiSuperadminController;
-use App\Http\Controllers\PetaGeologiController;
-use App\Http\Controllers\PetaRTRWController;
 use App\Http\Controllers\SubKriteriaController;
 use App\Http\Controllers\SuperadminCadanganbbController;
 use App\Http\Controllers\UmurCadanganAdminController;
 use App\Http\Controllers\UmurCadanganController;
 use App\Http\Controllers\UmurIzinAdminController;
 use App\Http\Controllers\UmurIzinController;
-use App\Models\CadanganbbModel;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -147,13 +135,7 @@ Route::group(['prefix' => 'rekomendasi'], function () {
     Route::post('/list', [HasilRekomendasiController::class, 'list']);
     Route::get('/rekomendasi', [HasilRekomendasiController::class, 'index']);
     Route::get('/cetak-pdf', [HasilRekomendasiController::class, 'cetakPdf'])->name('rekomendasi.cetak');
-});
-
-//Route Detail Hasil Rekomendasi
-Route::group(['prefix' => 'detailrekomendasi'], function () {
-    Route::get('/', [DetailHasilRekomendasiController::class, 'index']);
-    Route::post('/list', [DetailHasilRekomendasiController::class, 'list']);
-    Route::get('/rekomendasi', [DetailHasilRekomendasiController::class, 'index']);
+    Route::get('/history/detail/{index}', [HasilRekomendasiController::class, 'showDetail'])->name('history.detail');
 });
 
 Route::group(['prefix' => 'umurcadangan'], function () {
@@ -162,12 +144,28 @@ Route::group(['prefix' => 'umurcadangan'], function () {
     // Route::get('/get-lokasi_iup', [CadanganbbModel::class, 'getLokasiIUP']);
 
 });
-Route::group(['prefix' => 'history'], function () {
-    Route::get('/', [HasilRekomendasiController::class, 'riwayat']);
-    Route::post('/list', [HasilRekomendasiController::class, 'list']);
-    // Route::get('/get-lokasi_iup', [CadanganbbModel::class, 'getLokasiIUP']);
-
+Route::group(['prefix' => 'detailrekomendasi'], function () {
+    Route::get('/', [DetailHasilRekomendasiController::class, 'index']);
+    Route::post('/list', [DetailHasilRekomendasiController::class, 'list']);
+    Route::get('/rekomendasi', [DetailHasilRekomendasiController::class, 'index']);
 });
+
+//Route Hasil Rekomendasi
+Route::group(['prefix' => 'rekomendasi'], function () {
+    Route::get('/', [HasilRekomendasiController::class, 'index']);
+    Route::post('/list', [HasilRekomendasiController::class, 'list']);
+    Route::get('/rekomendasi', [HasilRekomendasiController::class, 'index']);
+    Route::get('/cetak-pdf', [HasilRekomendasiController::class, 'cetakPdf'])->name('rekomendasi.cetak');
+    Route::post('/rekomendasi/simpan-penilaian', [HasilRekomendasiController::class, 'simpanPenilaian'])->name('rekomendasi.simpan');
+    Route::get('/history/cetak-pdf/{index}', [HasilRekomendasiController::class, 'cetakPdfRiwayat'])->name('history.cetak-pdf');
+});
+//Route History
+Route::group(['prefix' => 'history'], function () {
+    Route::get('/', [HasilRekomendasiController::class, 'riwayat'])->name('superadmin.history.index');
+    Route::post('/list', [HasilRekomendasiController::class, 'list']);
+    Route::delete('/hapus/{index}', [HasilRekomendasiController::class, 'hapusRiwayat'])->name('history.hapus');
+});
+
 // routes/web.php
 Route::get('/get-lokasi-iup/{opco_id}', [App\Http\Controllers\UmurCadanganController::class, 'getLokasiIUP']);
 
@@ -205,6 +203,7 @@ Route::group(['prefix' => 'admincadanganbb'], function () {
     Route::get('/{id}/edit', [AdminCadanganbbController::class, 'edit']);
     Route::put('/{id}', [AdminCadanganbbController::class, 'update']);
     Route::delete('/{id}', [AdminCadanganbbController::class, 'destroy']);
+    Route::get('admincadanganbb/export-pdf', [AdminCadanganbbController::class, 'exportPDF'])->name('admincadanganbb.exportPDF');
 });
 Route::group(['prefix' => 'umurcadanganadmin'], function () {
     Route::get('/', [UmurCadanganAdminController::class, 'index']);
