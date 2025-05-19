@@ -162,7 +162,6 @@
                     @foreach ($history as $index => $item)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            {{-- <td>{{ $item['nama_opco'] ?? 'N/A' }}</td> --}}
                             <td>{{ $item['lokasi_iup'] }}</td>
                             <td>{{ $item['total_skor'] }}</td>
                             <td>{{ $item['tanggal_simpan'] }}</td>
@@ -178,10 +177,6 @@
                                 <button class="btn-gradient" data-index="{{ $index }}"
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Hapus
-                                </button>
-                                <button class="btn-gradient-restore" data-index="{{ $index }}"
-                                    data-lokasi="{{ $item['lokasi_iup'] }}">
-                                    Restore
                                 </button>
                             </td>
                         </tr>
@@ -206,7 +201,7 @@
                             Hasil penilaian penerbitan prioritas perluasan lahan bahan baku ini hanya sebagai rekomendasi.
                             Keputusan utama penerbitan perluasan lahan tetap berada di tangan stakeholder.
                         </p>
-                    </div>
+                    </div>    
                 </div>
             </div>
         </div>

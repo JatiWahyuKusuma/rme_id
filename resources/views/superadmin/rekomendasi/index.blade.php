@@ -139,10 +139,6 @@
                     Baku adalah
                     <strong>{{ isset($detailAlternatif[0]) ? $detailAlternatif[0]->lokasi_iup : 'N/A' }}</strong>.
                 </p>
-                {{-- <button type="button" class="btn-gradient" id="btn_detail_perhitungan">Detail Perhitungan</button>
-                <button type="button" class="btn-gradientu" id="btn_cetak_pdf">
-                    <i class="fas fa-print mr-2"></i> Cetak PDF
-                </button> --}}
                 <button type="button" class="btn-gradient" id="btn_simpan_penilaian">
                     <i class="fas fa-save mr-2"></i> Simpan Penilaian
                 </button>
@@ -192,36 +188,6 @@
 
 @push('js')
     <script>
-        document.getElementById("btn_cetak_pdf").addEventListener("click", function(e) {
-            e.preventDefault();
-
-            fetch("{{ route('rekomendasi.cetak') }}")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'hasil rekomendasi perluasan lahan';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Gagal mengunduh PDF. Silakan coba lagi.');
-                });
-        });
-
-        document.getElementById("btn_detail_perhitungan").addEventListener("click", function() {
-            window.location.href = "{{ url('/detailrekomendasi') }}";
-        });
-
         $(document).ready(function() {
             var dataTable = $('#table_m_cadangan_bb').DataTable({
                 serverSide: true,
