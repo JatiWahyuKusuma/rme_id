@@ -157,13 +157,14 @@ Route::group(['prefix' => 'rekomendasi'], function () {
     Route::get('/rekomendasi', [HasilRekomendasiController::class, 'index']);
     Route::get('/cetak-pdf', [HasilRekomendasiController::class, 'cetakPdf'])->name('rekomendasi.cetak');
     Route::post('/rekomendasi/simpan-penilaian', [HasilRekomendasiController::class, 'simpanPenilaian'])->name('rekomendasi.simpan');
-    Route::get('/history/cetak-pdf/{index}', [HasilRekomendasiController::class, 'cetakPdfRiwayat'])->name('history.cetak-pdf');
 });
 //Route History
 Route::group(['prefix' => 'history'], function () {
     Route::get('/', [HasilRekomendasiController::class, 'riwayat'])->name('superadmin.history.index');
     Route::post('/list', [HasilRekomendasiController::class, 'list']);
     Route::delete('/hapus/{index}', [HasilRekomendasiController::class, 'hapusRiwayat'])->name('history.hapus');
+    Route::get('/history/cetak-pdf/{index}', [HasilRekomendasiController::class, 'cetakPdfRiwayat'])->name('history.cetak-pdf');
+    Route::post('/history/restore/{index}', [HasilRekomendasiController::class, 'restorePenilaian'])->name('history.restore');
 });
 
 // routes/web.php

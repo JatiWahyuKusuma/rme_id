@@ -174,6 +174,10 @@
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Cetak PDF
                                 </button>
+                                <button class="btn-gradient-restore" data-index="{{ $index }}"
+                                    data-lokasi="{{ $item['lokasi_iup'] }}">
+                                    Restore
+                                </button>
                                 <button class="btn-gradient" data-index="{{ $index }}"
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Hapus
@@ -201,7 +205,7 @@
                             Hasil penilaian penerbitan prioritas perluasan lahan bahan baku ini hanya sebagai rekomendasi.
                             Keputusan utama penerbitan perluasan lahan tetap berada di tangan stakeholder.
                         </p>
-                    </div>    
+                    </div>
                 </div>
             </div>
         </div>
@@ -215,6 +219,63 @@
 @push('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Pada history/index.blade.php
+        $('.btn-gradient-restore').click(function() {
+            const index = $(this).data('index');
+            const lokasi = $(this).data('lokasi');
+
+            Swal.fire({
+                title: 'Restore Data?',
+                html: `Anda yakin ingin mengembalikan data <b>${lokasi}</b> ke halaman rekomendasi?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Restore!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('history.restore', '') }}/" + index,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    confirmButtonColor: '#800000'
+                                }).then(() => {
+                                    window.location.href = response.redirect;
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal!',
+                                    text: response.message || 'Terjadi kesalahan',
+                                    icon: 'error',
+                                    confirmButtonColor: '#800000'
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            let errorMsg = 'Terjadi kesalahan saat merestore data';
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMsg = xhr.responseJSON.message;
+                            }
+                            Swal.fire({
+                                title: 'Error!',
+                                text: errorMsg,
+                                icon: 'error',
+                                confirmButtonColor: '#800000'
+                            });
+                        }
+                    });
+                }
+            });
+        });
         $('.btn-gradientu').click(function() {
             const index = $(this).data('index');
             window.location.href = "{{ route('history.detail', '') }}/" + index;
