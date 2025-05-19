@@ -93,13 +93,13 @@ class DetailHasilRekomendasiController extends Controller
                 ($cadangan->normalisasi_c2 * $bobotC2) +
                 ($cadangan->normalisasi_c3 * $bobotC3);
         }
-        $detailAlternatifRanked = $detailAlternatif->sortByDesc('total_bobot')->values();
+        // Ubah ini untuk sorting ascending (kriteria cost)
+        $detailAlternatifRanked = $detailAlternatif->sortBy('total_bobot')->values();
 
-        // Tambahkan ranking (1 sampai N meskipun ada nilai yang sama)
+        // Tambahkan ranking
         foreach ($detailAlternatifRanked as $index => $cadangan) {
             $cadangan->ranking = $index + 1;
         }
-
 
         return view('superadmin.detailrekomendasi.index', [
             'breadcrumb' => $breadcrumb,

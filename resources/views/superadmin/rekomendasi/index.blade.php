@@ -139,10 +139,10 @@
                     Baku adalah
                     <strong>{{ isset($detailAlternatif[0]) ? $detailAlternatif[0]->lokasi_iup : 'N/A' }}</strong>.
                 </p>
-                <button type="button" class="btn-gradient" id="btn_detail_perhitungan">Detail Perhitungan</button>
+                {{-- <button type="button" class="btn-gradient" id="btn_detail_perhitungan">Detail Perhitungan</button>
                 <button type="button" class="btn-gradientu" id="btn_cetak_pdf">
                     <i class="fas fa-print mr-2"></i> Cetak PDF
-                </button>
+                </button> --}}
                 <button type="button" class="btn-gradient" id="btn_simpan_penilaian">
                     <i class="fas fa-save mr-2"></i> Simpan Penilaian
                 </button>

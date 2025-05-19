@@ -49,6 +49,17 @@
             transition: opacity 0.3s ease;
         }
 
+        .btn-gradient-restore {
+            background: linear-gradient(to right, #008000, #00a000);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: opacity 0.3s ease;
+        }
+
         .alert-note {
             border-radius: 8px;
             padding: 15px;
@@ -167,6 +178,10 @@
                                 <button class="btn-gradient" data-index="{{ $index }}"
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Hapus
+                                </button>
+                                <button class="btn-gradient-restore" data-index="{{ $index }}"
+                                    data-lokasi="{{ $item['lokasi_iup'] }}">
+                                    Restore
                                 </button>
                             </td>
                         </tr>
