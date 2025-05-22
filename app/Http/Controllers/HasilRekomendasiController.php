@@ -587,4 +587,204 @@ class HasilRekomendasiController extends Controller
 
         return $pdf->download('rekomendasi_perluasan_lahan_' . $history[$index]['lokasi_iup'] . '.pdf');
     }
+
+    //Controller Admin
+    public function riwayatAdmin()
+    {
+        $breadcrumb = (object) [
+            'title' => '',
+            'list' => ['Home', 'history']
+        ];
+
+        $page = (object)[
+            'title' => ''
+        ];
+
+        $activeMenu = 'historyadmin';
+        $history = Cache::get('penilaian_history', []);
+        $opco = OpcoModel::all();
+
+        return view('admin.history.index', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'history' => $history,
+            'activeMenu' => $activeMenu,
+            'opco' => $opco
+        ]);
+    }
+    public function cetakPdfadmin($index)
+    {
+        $history = Cache::get('penilaian_history', []);
+
+        // Validasi index
+        if (!isset($history[$index])) {
+            abort(404, 'Data history tidak ditemukan');
+        }
+
+        // Ambil semua alternatif untuk perhitungan ranking
+        $detailAlternatif = CadanganbbModel::where('umur_cadangan_thn', '<', 5)->get();
+        $savedItems = Cache::get('saved_items', []);
+        $currentItemId = $history[$index]['data']->cadanganbb_id;
+
+        $detailAlternatif = $detailAlternatif->filter(function ($item) use ($savedItems, $currentItemId) {
+            // Include current item and items not saved
+            return $item->cadanganbb_id == $currentItemId || !in_array($item->cadanganbb_id, $savedItems);
+        });
+        // Proses perhitungan SPK seperti pada showDetail
+        foreach ($detailAlternatif as $cadangan) {
+            $cadangan->umur_cadangan_bobot = SubKriteriaModel::where('kriteria_id', 1)
+                ->whereRaw('? <= CAST(REPLACE(nama_subkriteria, "<", "") AS SIGNED)', [$cadangan->umur_cadangan_thn])
+                ->orderBy('bobot_subkriteria', 'desc')
+                ->value('bobot_subkriteria') ?? 1;
+
+            $cadangan->umur_masa_berlaku_izin_bobot = SubKriteriaModel::where('kriteria_id', 2)
+                ->whereRaw('? >= CAST(REPLACE(nama_subkriteria, "> ", "") AS SIGNED)', [$cadangan->umur_masa_berlaku_izin])
+                ->orderBy('bobot_subkriteria', 'asc')
+                ->value('bobot_subkriteria') ?? 1;
+
+            $cadangan->status_pembebasan_bobot = SubKriteriaModel::where('kriteria_id', 3)
+                ->where('nama_subkriteria', $cadangan->status_pembebasan)
+                ->value('bobot_subkriteria') ?? 1;
+        }
+
+        // Normalisasi dan perhitungan total bobot
+        $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?? 1;
+        $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?? 1;
+        $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?? 1;
+
+        $bobotC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('bobot_kriteria') ?? 0;
+        $bobotC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('bobot_kriteria') ?? 0;
+        $bobotC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('bobot_kriteria') ?? 0;
+
+        foreach ($detailAlternatif as $cadangan) {
+            $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
+                ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
+                ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
+                ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+
+            $cadangan->total_bobot =
+                ($cadangan->normalisasi_c1 * $bobotC1) +
+                ($cadangan->normalisasi_c2 * $bobotC2) +
+                ($cadangan->normalisasi_c3 * $bobotC3);
+        }
+
+        // Ranking
+        $detailAlternatifRanked = $detailAlternatif->sortBy('total_bobot')->values();
+        foreach ($detailAlternatifRanked as $idx => $cadangan) {
+            $cadangan->ranking = $idx + 1;
+        }
+
+        $pdf = Pdf::loadView('admin.history.cetakpdf', [
+            'detailAlternatif' => $detailAlternatifRanked,
+            'historyItem' => $history[$index],
+            'tanggalCetak' => now()->format('Y-m-d H:i:s')
+        ]);
+
+        return $pdf->download('rekomendasi_perluasan_lahan_' . $history[$index]['lokasi_iup'] . '.pdf');
+    }
+    public function showDetailAdmin($index)
+    {
+        $history = Cache::get('penilaian_history', []);
+
+        // Convert index to integer and validate
+        $index = (int)$index;
+        if ($index < 0 || !isset($history[$index])) {
+            return redirect()->route('admin.history.index')->with('error', 'Data history tidak ditemukan');
+        }
+
+        $breadcrumb = (object) [
+            'title' => 'Detail Perhitungan Hasil Rekomendasi',
+            'list' => ['Home', 'History', 'Detail']
+        ];
+
+        $page = (object)['title' => ''];
+        $activeMenu = 'history';
+
+        // Get all alternatives where umur_cadangan_thn < 5
+        $detailAlternatif = CadanganbbModel::where('umur_cadangan_thn', '<', 5)->get();
+
+        // Filter out items that have been saved EXCEPT the current one being viewed
+        $savedItems = Cache::get('saved_items', []);
+        $currentItemId = $history[$index]['data']->cadanganbb_id;
+
+        $detailAlternatif = $detailAlternatif->filter(function ($item) use ($savedItems, $currentItemId) {
+            // Include current item and items not saved
+            return $item->cadanganbb_id == $currentItemId || !in_array($item->cadanganbb_id, $savedItems);
+        });
+
+        // Process SPK calculation
+        foreach ($detailAlternatif as $cadangan) {
+            $cadangan->umur_cadangan_bobot = SubKriteriaModel::where('kriteria_id', 1)
+                ->whereRaw('? <= CAST(REPLACE(nama_subkriteria, "<", "") AS SIGNED)', [$cadangan->umur_cadangan_thn])
+                ->orderBy('bobot_subkriteria', 'desc')
+                ->value('bobot_subkriteria') ?? 1; // Default to 1 if null
+
+            $cadangan->umur_masa_berlaku_izin_bobot = SubKriteriaModel::where('kriteria_id', 2)
+                ->whereRaw('? >= CAST(REPLACE(nama_subkriteria, "> ", "") AS SIGNED)', [$cadangan->umur_masa_berlaku_izin])
+                ->orderBy('bobot_subkriteria', 'asc')
+                ->value('bobot_subkriteria') ?? 1; // Default to 1 if null
+
+            $cadangan->status_pembebasan_bobot = SubKriteriaModel::where('kriteria_id', 3)
+                ->where('nama_subkriteria', $cadangan->status_pembebasan)
+                ->value('bobot_subkriteria') ?? 1; // Default to 1 if null
+        }
+
+        // Calculate min and max values with proper defaults
+        $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?? 1;
+        $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?? 1;
+        $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?? 1;
+        $maxC1 = $detailAlternatif->max('umur_cadangan_bobot') ?? 1;
+        $maxC2 = $detailAlternatif->max('umur_masa_berlaku_izin_bobot') ?? 1;
+        $maxC3 = $detailAlternatif->max('status_pembebasan_bobot') ?? 1;
+
+        // Get criteria weights
+        $bobotC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('bobot_kriteria') ?? 0;
+        $bobotC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('bobot_kriteria') ?? 0;
+        $bobotC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('bobot_kriteria') ?? 0;
+
+        // Normalization and total weight calculation
+        foreach ($detailAlternatif as $cadangan) {
+            $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
+                ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot)
+                : 0;
+
+            $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
+                ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot)
+                : 0;
+
+            $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
+                ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot)
+                : 0;
+
+            $cadangan->total_bobot =
+                ($cadangan->normalisasi_c1 * $bobotC1) +
+                ($cadangan->normalisasi_c2 * $bobotC2) +
+                ($cadangan->normalisasi_c3 * $bobotC3);
+        }
+
+        // Ranking
+        $detailAlternatifRanked = $detailAlternatif->sortBy('total_bobot')->values();
+        foreach ($detailAlternatifRanked as $idx => $cadangan) {
+            $cadangan->ranking = $idx + 1;
+        }
+
+        $kriteria = KriteriaModel::all();
+
+        return view('admin.history.detail', [
+            'breadcrumb' => $breadcrumb,
+            'page' => $page,
+            'activeMenu' => $activeMenu,
+            'detailAlternatif' => $detailAlternatifRanked,
+            'kriteria' => $kriteria,
+            'minC1' => $minC1,
+            'minC2' => $minC2,
+            'minC3' => $minC3,
+            'maxC1' => $maxC1,
+            'maxC2' => $maxC2,
+            'maxC3' => $maxC3,
+            'historyItem' => $history[$index]
+        ]);
+    }
 }

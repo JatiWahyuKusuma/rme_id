@@ -135,6 +135,7 @@ Route::group(['prefix' => 'rekomendasi'], function () {
     Route::post('/list', [HasilRekomendasiController::class, 'list']);
     Route::get('/rekomendasi', [HasilRekomendasiController::class, 'index']);
     Route::get('/cetak-pdf', [HasilRekomendasiController::class, 'cetakPdf'])->name('rekomendasi.cetak');
+    Route::post('/rekomendasi/simpan-penilaian', [HasilRekomendasiController::class, 'simpanPenilaian'])->name('rekomendasi.simpan');
     Route::get('/history/detail/{index}', [HasilRekomendasiController::class, 'showDetail'])->name('history.detail');
 });
 
@@ -150,14 +151,7 @@ Route::group(['prefix' => 'detailrekomendasi'], function () {
     Route::get('/rekomendasi', [DetailHasilRekomendasiController::class, 'index']);
 });
 
-//Route Hasil Rekomendasi
-Route::group(['prefix' => 'rekomendasi'], function () {
-    Route::get('/', [HasilRekomendasiController::class, 'index']);
-    Route::post('/list', [HasilRekomendasiController::class, 'list']);
-    Route::get('/rekomendasi', [HasilRekomendasiController::class, 'index']);
-    Route::get('/cetak-pdf', [HasilRekomendasiController::class, 'cetakPdf'])->name('rekomendasi.cetak');
-    Route::post('/rekomendasi/simpan-penilaian', [HasilRekomendasiController::class, 'simpanPenilaian'])->name('rekomendasi.simpan');
-});
+
 //Route History
 Route::group(['prefix' => 'history'], function () {
     Route::get('/', [HasilRekomendasiController::class, 'riwayat'])->name('superadmin.history.index');
@@ -165,6 +159,13 @@ Route::group(['prefix' => 'history'], function () {
     Route::delete('/hapus/{index}', [HasilRekomendasiController::class, 'hapusRiwayat'])->name('history.hapus');
     Route::get('/history/cetak-pdf/{index}', [HasilRekomendasiController::class, 'cetakPdfRiwayat'])->name('history.cetak-pdf');
     Route::post('/history/restore/{index}', [HasilRekomendasiController::class, 'restorePenilaian'])->name('history.restore');
+});
+
+//Route History Admin
+Route::group(['prefix' => 'historyadmin'], function () {
+    Route::get('/', [HasilRekomendasiController::class, 'riwayatadmin'])->name('admin.history.index');
+    Route::get('/history/cetak-pdf/{index}', [HasilRekomendasiController::class, 'cetakpdfAdmin'])->name('history.cetak-pdf');
+        Route::get('/history/detail/{index}', [HasilRekomendasiController::class, 'showDetailAdmin'])->name('history.detail');
 });
 
 // routes/web.php

@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layoutAdmin.template')
 
 @section('css')
     <style>
@@ -174,14 +174,7 @@
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Cetak PDF
                                 </button>
-                                {{-- <button class="btn-gradient-restore" data-index="{{ $index }}"
-                                    data-lokasi="{{ $item['lokasi_iup'] }}">
-                                    Restore
-                                </button> --}}
-                                <button class="btn-gradient" data-index="{{ $index }}"
-                                    data-lokasi="{{ $item['lokasi_iup'] }}">
-                                    Hapus
-                                </button>
+                            
                             </td>
                         </tr>
                     @endforeach

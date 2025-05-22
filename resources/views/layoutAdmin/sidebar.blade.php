@@ -251,7 +251,7 @@
                         <p style="margin-left: 5px;">Masa Berlaku Izin</p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ url('/rekomendasiadmin') }}"
                         class="nav-link {{ $activeMenu == 'rekomendasiadmin' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
@@ -267,9 +267,9 @@
                         </svg>
                         <p style="margin-left: 5px;">Hasil Rekomendasi</p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
-                    <a href="{{ url('/history') }}" class="nav-link {{ $activeMenu == 'history' ? 'active' : '' }}">
+                    <a href="{{ url('/historyadmin') }}" class="nav-link {{ $activeMenu == 'historyadmin' ? 'active' : '' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
                             xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="22" x="0" y="0"
                             viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve"
