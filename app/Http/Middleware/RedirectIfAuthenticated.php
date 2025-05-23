@@ -2,11 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\SuperadminModel;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
+
+use function PHPUnit\Framework\isEmpty;
 
 class RedirectIfAuthenticated
 {
@@ -21,7 +24,11 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+                if ( auth()->user()->id != 3) {
+                    return redirect('dashboardcad');
+                } else {
+                    return redirect('dashboardcadbb')->with('error', 'Logout Terlebih dahulu');;
+                }
             }
         }
 

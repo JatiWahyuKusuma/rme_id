@@ -35,22 +35,22 @@ return [
     |
     */
 
-   'guards' => [
-    'web' => [
-        'driver' => 'session',
-        'provider' => 'users',
-    ],
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
 
-    'superadmin' => [
-        'driver' => 'session',
-        'provider' => 'm_superadmin', // Ensure this provider matches your Superadmin model
-    ],
+        'superadmin' => [
+            'driver' => 'session',
+            'provider' => 'users', // Ensure this provider matches your Superadmin model
+        ],
 
-    'admin' => [
-        'driver' => 'session',
-        'provider' => 'm_admin', // Ensure this provider matches your Admin model
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users', // Ensure this provider matches your Admin model
+        ],
     ],
-],
 
 
     /*
@@ -77,7 +77,7 @@ return [
         ],
         'superadmins' => [
             'driver' => 'eloquent',
-           'model' => App\Models\SuperadminModel::class, 
+            'model' => App\Models\SuperadminModel::class,
         ],
 
         'admins' => [
@@ -108,6 +108,20 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'superadmins' => [
+            'provider' => 'superadmins',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

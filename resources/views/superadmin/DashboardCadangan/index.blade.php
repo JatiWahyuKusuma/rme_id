@@ -126,6 +126,9 @@
     <!-- Main content -->
     <section class="content">
         <div class="card card-outline card-primary">
+              @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div> <!-- Change class to 'alert-danger' -->
+            @endif
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
