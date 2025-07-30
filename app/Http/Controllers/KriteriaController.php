@@ -39,7 +39,6 @@ class KriteriaController extends Controller
         return Datatables::of($kriteria)
             ->addIndexColumn()
             ->addColumn('aksi', function ($kriteria) {
-                // $btn  = '<a href="' . url('/subkriteria?kriteria_id=' . $kriteria->kriteria_id) . '" class="btn btn-info btn-sm">Detail</a> ';
                 $btn = '<a href="' . url('/kriteria/' . $kriteria->kriteria_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
                 $btn .= '<form class="d-inline-block" method="POST" action="' . url('/kriteria/' . $kriteria->kriteria_id) . '">'
                     . csrf_field() . method_field('DELETE') .
@@ -73,7 +72,7 @@ class KriteriaController extends Controller
         $request->validate([
             'nama_kriteria' => 'required|string',
             'jenis_kriteria' => 'nullable|in:Benefit,Cost',
-            'bobot_kriteria' => 'nullable|integer',
+            'bobot_kriteria' => 'nullable|',
         ]);
         KriteriaModel::create([
             'nama_kriteria' => $request->nama_kriteria,
@@ -126,7 +125,7 @@ class KriteriaController extends Controller
         $request->validate([
             'nama_kriteria' => 'required|string',
             'jenis_kriteria' => 'nullable|in:Benefit,Cost',
-            'bobot_kriteria' => 'nullable|integer',
+            'bobot_kriteria' => 'nullable|',
         ]);
 
         KriteriaModel::find($id)->update([

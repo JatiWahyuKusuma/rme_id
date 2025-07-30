@@ -53,13 +53,16 @@
                                 </option>
                             @endforeach
                         </select>
+                        @error('kriteria_id')
+                            <small class="form-text text-danger">{{ $message }}</small>
+                        @enderror
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Nama Sub Kriteria</label>
                     <div class="col-11">
                         <input type="text" class="form-control" id="nama_subkriteria" name="nama_subkriteria"
-                            value="{{ old('nama_subkriteria') }}">
+                            value="{{ old('nama_subkriteria') }}" required>
                         @error('nama_subkriteria')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
@@ -68,28 +71,23 @@
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label">Bobot Sub Kriteria</label>
                     <div class="col-11">
-                        <input type="text" class="form-control" id="bobot_subkriteria" name="bobot_subkriteria"
-                            value="{{ old('bobot_subkriteria') }}">
+                        <input type="number" step="0.01" class="form-control" id="bobot_subkriteria"
+                            name="bobot_subkriteria" value="{{ old('bobot_subkriteria') }}" required>
                         @error('bobot_subkriteria')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                 </div>
-                <input type="hidden" name="kriteria_id" id="hidden_kriteria_id"
-                    value="{{ old('kriteria_id', request('kriteria_id')) }}">
 
                 <div class="form-group row">
                     <label class="col-1 control-label col-form-label"></label>
                     <div class="col-11">
                         <button type="submit" class="btn-gradient">Simpan</button>
-
-                        <!-- Tombol Kembali dengan Kriteria ID yang dipilih -->
                         <a id="btn-kembali" class="btn-gradientu" href="{{ url('/subkriteria') }}">
                             Kembali
                         </a>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>

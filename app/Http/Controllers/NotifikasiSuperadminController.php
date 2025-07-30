@@ -17,7 +17,7 @@ class NotifikasiSuperadminController extends Controller
         // Ambil data dengan umur masa berlaku izin kurang dari 1 tahun atau sudah lewat
         $UmurizinNotifikasi = CadanganbbModel::select('opco_id', 'lokasi_iup', 'umur_masa_berlaku_izin')
             ->where('umur_masa_berlaku_izin', '<', 1)
-            ->orWhereNull('umur_masa_berlaku_izin') // Jika ada data izin yang kosong/null
+            ->orWhereNull('umur_masa_berlaku_izin') 
             ->get();
 
         return response()->json([

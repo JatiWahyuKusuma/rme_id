@@ -49,15 +49,19 @@ class SuperadminCadanganbbController extends Controller
             'masa_berlaku_iup',
             'masa_berlaku_ppkh',
             'umur_cadangan_thn',
-            'umur_masa_berlaku_izin'
-        )->leftJoin('m_opco', 'm_cadangan_bb.opco_id', '=', 'm_opco.opco_id')
-            ->addSelect('m_opco.nama_opco');
+            'umur_masa_berlaku_izin',
+            'm_opco.nama_opco' // pastikan ini ditambahkan di sini
+        )->leftJoin('m_opco', 'm_cadangan_bb.opco_id', '=', 'm_opco.opco_id');
 
         if ($request->opco_id) {
-            $cadanganbb->where('m_cadangan_bb.opco_id', $request->opco_id); // Specify the table name
+            $cadanganbb->where('m_cadangan_bb.opco_id', $request->opco_id);
         }
-        return Datatables::of($cadanganbb)
+
+        return DataTables::of($cadanganbb)
             ->addIndexColumn()
+            ->filterColumn('nama_opco', function ($query, $keyword) {
+                $query->where('m_opco.nama_opco', 'LIKE', "%{$keyword}%");
+            })
             ->addColumn('aksi', function ($cadanganbb) {
                 $btn  = '<a href="' . url('/cadanganbb/' . $cadanganbb->cadanganbb_id) . '" class="btn btn-info btn-sm">Detail</a> ';
                 $btn .= '<a href="' . url('/cadanganbb/' . $cadanganbb->cadanganbb_id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
@@ -69,6 +73,7 @@ class SuperadminCadanganbbController extends Controller
             ->rawColumns(['aksi'])
             ->make(true);
     }
+
 
     public function create()
     {

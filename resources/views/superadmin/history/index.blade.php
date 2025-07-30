@@ -151,7 +151,6 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        {{-- <th>Nama OPCO</th> --}}
                         <th>Lokasi/IUP</th>
                         <th>Total Skor</th>
                         <th>Tanggal Simpan</th>
@@ -174,10 +173,10 @@
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Cetak PDF
                                 </button>
-                                {{-- <button class="btn-gradient-restore" data-index="{{ $index }}"
+                                <button class="btn-gradient-restore" data-index="{{ $index }}"
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Restore
-                                </button> --}}
+                                </button>
                                 <button class="btn-gradient" data-index="{{ $index }}"
                                     data-lokasi="{{ $item['lokasi_iup'] }}">
                                     Hapus

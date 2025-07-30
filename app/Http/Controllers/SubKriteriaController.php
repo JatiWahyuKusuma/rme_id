@@ -13,12 +13,12 @@ class SubKriteriaController extends Controller
     public function index(Request $request)
     {
         $breadcrumb = (object) [
-            'title' => 'Data Kriteria Penerbitan Prioritas Perluasan Lahan',
-            'list' => ['Home', 'Kriteria']
+            'title' => 'Data Sub Kriteria Penerbitan Prioritas Perluasan Lahan',
+            'list' => ['Home', 'SubKriteria']
         ];
 
         $page = (object)[
-            'title' => 'Daftar Kriteria yang terdaftar dalam sistem'
+            'title' => ''
         ];
 
         $activeMenu = 'subkriteria';
@@ -66,7 +66,7 @@ class SubKriteriaController extends Controller
         ];
 
         $page = (object)[
-            'title' => 'Tambah data kriteria Bahan Baku baru'
+            'title' => ''
         ];
 
         $kriteria = KriteriaModel::all();
@@ -89,7 +89,7 @@ class SubKriteriaController extends Controller
             'bobot_subkriteria' => $request->bobot_subkriteria,
         ]);
 
-        return redirect('/kriteria')->with('success', 'Data berhasil ditambahkan');
+        return redirect('/subkriteria')->with('success', 'Data berhasil ditambahkan');
     }
 
 
@@ -116,7 +116,7 @@ class SubKriteriaController extends Controller
         $request->validate([
             'kriteria_id' => 'required|integer',
             'nama_subkriteria' => 'required|string',
-            'bobot_subkriteria' => 'required|integer',
+            'bobot_subkriteria' => 'required|',
         ]);
 
         SubKriteriaModel::find($id)->update([
@@ -131,7 +131,7 @@ class SubKriteriaController extends Controller
         $check = SubKriteriaModel::find($id);
 
         if (!$check) {
-            return redirect('/kriteria')->with('error', 'Data tidak ditemukan');
+            return redirect('/subkriteria')->with('error', 'Data tidak ditemukan');
         }
 
         try {

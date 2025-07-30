@@ -112,7 +112,7 @@
                         // d.kriteria_id = kriteriaID; // Use the correct filter value
                     }
                 },
-                dom: 't',
+             
                 columns: [{
                         data: "DT_RowIndex",
                         className: "text-center",

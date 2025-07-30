@@ -29,7 +29,7 @@ class HasilRekomendasiController extends Controller
         $opco = OpcoModel::all();
         $kriteria = KriteriaModel::all();
 
-        // Ambil data alternatif yang memenuhi syarat
+        // Ambil data alternatif 
         $detailAlternatif = CadanganbbModel::select(
             'cadanganbb_id',
             'lokasi_iup',
@@ -38,13 +38,12 @@ class HasilRekomendasiController extends Controller
             'status_pembebasan'
         )->where('umur_cadangan_thn', '<', 5)->get();
 
-        // Filter out items that have been saved
         $savedItems = Cache::get('saved_items', []);
         $detailAlternatif = $detailAlternatif->reject(function ($item) use ($savedItems) {
             return in_array($item->cadanganbb_id, $savedItems);
         });
 
-        // Perhitungan Bobot & Normalisasi seperti pada DetailHasilRekomendasiController
+        // Perhitungan Bobot & Normalisasi 
         foreach ($detailAlternatif as $cadangan) {
             $cadangan->umur_cadangan_bobot = SubKriteriaModel::where('kriteria_id', 1)
                 ->whereRaw('? <= CAST(REPLACE(nama_subkriteria, "<", "") AS SIGNED)', [$cadangan->umur_cadangan_thn])
@@ -62,9 +61,12 @@ class HasilRekomendasiController extends Controller
         }
 
         // Normalisasi dan Perangkingan
-        $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?: 1;
-        $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?: 1;
-        $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?: 1;
+        $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?? 1;
+        $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?? 1;
+        $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?? 1;
+        $maxC1 = $detailAlternatif->max('umur_cadangan_bobot') ?? 1;
+        $maxC2 = $detailAlternatif->max('umur_masa_berlaku_izin_bobot') ?? 1;
+        $maxC3 = $detailAlternatif->max('status_pembebasan_bobot') ?? 1;
 
         $bobotC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('bobot_kriteria');
         $bobotC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('bobot_kriteria');
@@ -82,25 +84,40 @@ class HasilRekomendasiController extends Controller
         }
 
         $detailAlternatifRanked = $detailAlternatif->sortBy('total_bobot')->values();
-        // Tambahkan ranking (1 sampai N meskipun ada nilai yang sama)
         foreach ($detailAlternatif as $cadangan) {
-            $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
-                ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            // Dapatkan jenis kriteria dari database
+            $jenisC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('jenis_kriteria');
+            $jenisC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('jenis_kriteria');
+            $jenisC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('jenis_kriteria');
 
-            $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
-                ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            // Normalisasi C1 (Umur Cadangan)
+            if ($jenisC1 == 'Benefit') {
+                $cadangan->normalisasi_c1 = ($maxC1 > 0) ? floatval($cadangan->umur_cadangan_bobot) / floatval($maxC1) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0) ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            }
 
-            $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
-                ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            // Normalisasi C2 (Umur Masa Berlaku Izin)
+            if ($jenisC2 == 'Benefit') {
+                $cadangan->normalisasi_c2 = ($maxC2 > 0) ? floatval($cadangan->umur_masa_berlaku_izin_bobot) / floatval($maxC2) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0) ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            }
 
-            // Perhitungan total bobot
+            // Normalisasi C3 (Status Pembebasan)
+            if ($jenisC3 == 'Benefit') {
+                $cadangan->normalisasi_c3 = ($maxC3 > 0) ? floatval($cadangan->status_pembebasan_bobot) / floatval($maxC3) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0) ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            }
+
+            // Perhitungan total bobot tetap sama
             $cadangan->total_bobot =
                 ($cadangan->normalisasi_c1 * $bobotC1) +
                 ($cadangan->normalisasi_c2 * $bobotC2) +
                 ($cadangan->normalisasi_c3 * $bobotC3);
         }
 
-        // Ubah ini untuk sorting ascending (kriteria cost)
         $detailAlternatifRanked = $detailAlternatif->sortBy('total_bobot')->values();
 
         // Tambahkan ranking
@@ -116,6 +133,41 @@ class HasilRekomendasiController extends Controller
             'detailAlternatif' => $detailAlternatifRanked
         ]);
     }
+    public function list(Request $request)
+    {
+
+        $rekomcadanganbb = CadanganbbModel::select(
+            'cadanganbb_id',
+            'opco_id',
+            'latitude',
+            'longitude',
+            'jarak',
+            'luas_ha',
+            'kebutuhan_pertahun_ton',
+            'komoditi',
+            'lokasi_iup',
+            'sd_cadangan_ton',
+            'status_penyelidikan',
+            'status_pembebasan',
+            'catatan',
+            'kabupaten',
+            'kecamatan',
+            'luas_ha',
+            'masa_berlaku_iup',
+            'masa_berlaku_ppkh',
+            'umur_cadangan_thn',
+            'umur_masa_berlaku_izin'
+        )
+            ->where('umur_cadangan_thn', '<', 5);
+
+        if ($request->opco_id) {
+            $rekomcadanganbb->where('opco_id', $request->opco_id);
+        }
+        return Datatables::of($rekomcadanganbb)
+            ->addIndexColumn()
+            ->make(true);
+    }
+
     public function cetakPdf()
     {
         // Ambil data alternatif
@@ -164,17 +216,33 @@ class HasilRekomendasiController extends Controller
         $bobotC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('bobot_kriteria');
 
         foreach ($detailAlternatif as $cadangan) {
-            $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
-                ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            // Dapatkan jenis kriteria dari database
+            $jenisC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('jenis_kriteria');
+            $jenisC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('jenis_kriteria');
+            $jenisC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('jenis_kriteria');
 
-            $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
-                ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            // Normalisasi C1 (Umur Cadangan)
+            if ($jenisC1 == 'Benefit') {
+                $cadangan->normalisasi_c1 = ($maxC1 > 0) ? floatval($cadangan->umur_cadangan_bobot) / floatval($maxC1) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0) ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            }
 
-            $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
-                ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            // Normalisasi C2 (Umur Masa Berlaku Izin)
+            if ($jenisC2 == 'Benefit') {
+                $cadangan->normalisasi_c2 = ($maxC2 > 0) ? floatval($cadangan->umur_masa_berlaku_izin_bobot) / floatval($maxC2) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0) ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            }
 
-            //PERANGKINGAN
-            // Perhitungan total bobot
+            // Normalisasi C3 (Status Pembebasan)
+            if ($jenisC3 == 'Benefit') {
+                $cadangan->normalisasi_c3 = ($maxC3 > 0) ? floatval($cadangan->status_pembebasan_bobot) / floatval($maxC3) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0) ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            }
+
+            // Perhitungan total bobot tetap sama
             $cadangan->total_bobot =
                 ($cadangan->normalisasi_c1 * $bobotC1) +
                 ($cadangan->normalisasi_c2 * $bobotC2) +
@@ -195,40 +263,7 @@ class HasilRekomendasiController extends Controller
         return $pdf->download('rekomendasi_perluasan_lahan.pdf');
     }
 
-    public function list(Request $request)
-    {
-
-        $rekomcadanganbb = CadanganbbModel::select(
-            'cadanganbb_id',
-            'opco_id',
-            'latitude',
-            'longitude',
-            'jarak',
-            'luas_ha',
-            'kebutuhan_pertahun_ton',
-            'komoditi',
-            'lokasi_iup',
-            'sd_cadangan_ton',
-            'status_penyelidikan',
-            'status_pembebasan',
-            'catatan',
-            'kabupaten',
-            'kecamatan',
-            'luas_ha',
-            'masa_berlaku_iup',
-            'masa_berlaku_ppkh',
-            'umur_cadangan_thn',
-            'umur_masa_berlaku_izin'
-        )
-            ->where('umur_cadangan_thn', '<', 5);
-
-        if ($request->opco_id) {
-            $rekomcadanganbb->where('opco_id', $request->opco_id);
-        }
-        return Datatables::of($rekomcadanganbb)
-            ->addIndexColumn()
-            ->make(true);
-    }
+    
 
     public function riwayat()
     {
@@ -291,22 +326,45 @@ class HasilRekomendasiController extends Controller
             }
 
             // Normalisasi dan perhitungan total bobot
-            $minC1 = $filteredAlternatif->min('umur_cadangan_bobot') ?? 1;
-            $minC2 = $filteredAlternatif->min('umur_masa_berlaku_izin_bobot') ?? 1;
-            $minC3 = $filteredAlternatif->min('status_pembebasan_bobot') ?? 1;
+            $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?? 1;
+            $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?? 1;
+            $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?? 1;
+            $maxC1 = $detailAlternatif->max('umur_cadangan_bobot') ?? 1;
+            $maxC2 = $detailAlternatif->max('umur_masa_berlaku_izin_bobot') ?? 1;
+            $maxC3 = $detailAlternatif->max('status_pembebasan_bobot') ?? 1;
 
             $bobotC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('bobot_kriteria') ?? 0;
             $bobotC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('bobot_kriteria') ?? 0;
             $bobotC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('bobot_kriteria') ?? 0;
 
-            foreach ($filteredAlternatif as $cadangan) {
-                $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
-                    ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
-                $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
-                    ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
-                $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
-                    ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            foreach ($detailAlternatif as $cadangan) {
+                // Dapatkan jenis kriteria dari database
+                $jenisC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('jenis_kriteria');
+                $jenisC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('jenis_kriteria');
+                $jenisC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('jenis_kriteria');
 
+                // Normalisasi C1 (Umur Cadangan)
+                if ($jenisC1 == 'Benefit') {
+                    $cadangan->normalisasi_c1 = ($maxC1 > 0) ? floatval($cadangan->umur_cadangan_bobot) / floatval($maxC1) : 0;
+                } else { // Cost
+                    $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0) ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+                }
+
+                // Normalisasi C2 (Umur Masa Berlaku Izin)
+                if ($jenisC2 == 'Benefit') {
+                    $cadangan->normalisasi_c2 = ($maxC2 > 0) ? floatval($cadangan->umur_masa_berlaku_izin_bobot) / floatval($maxC2) : 0;
+                } else { // Cost
+                    $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0) ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+                }
+
+                // Normalisasi C3 (Status Pembebasan)
+                if ($jenisC3 == 'Benefit') {
+                    $cadangan->normalisasi_c3 = ($maxC3 > 0) ? floatval($cadangan->status_pembebasan_bobot) / floatval($maxC3) : 0;
+                } else { // Cost
+                    $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0) ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+                }
+
+                // Perhitungan total bobot tetap sama
                 $cadangan->total_bobot =
                     ($cadangan->normalisasi_c1 * $bobotC1) +
                     ($cadangan->normalisasi_c2 * $bobotC2) +
@@ -453,18 +511,33 @@ class HasilRekomendasiController extends Controller
 
         // Normalization and total weight calculation
         foreach ($detailAlternatif as $cadangan) {
-            $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
-                ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot)
-                : 0;
+            // Dapatkan jenis kriteria dari database
+            $jenisC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('jenis_kriteria');
+            $jenisC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('jenis_kriteria');
+            $jenisC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('jenis_kriteria');
 
-            $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
-                ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot)
-                : 0;
+            // Normalisasi C1 (Umur Cadangan)
+            if ($jenisC1 == 'Benefit') {
+                $cadangan->normalisasi_c1 = ($maxC1 > 0) ? floatval($cadangan->umur_cadangan_bobot) / floatval($maxC1) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0) ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            }
 
-            $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
-                ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot)
-                : 0;
+            // Normalisasi C2 (Umur Masa Berlaku Izin)
+            if ($jenisC2 == 'Benefit') {
+                $cadangan->normalisasi_c2 = ($maxC2 > 0) ? floatval($cadangan->umur_masa_berlaku_izin_bobot) / floatval($maxC2) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0) ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            }
 
+            // Normalisasi C3 (Status Pembebasan)
+            if ($jenisC3 == 'Benefit') {
+                $cadangan->normalisasi_c3 = ($maxC3 > 0) ? floatval($cadangan->status_pembebasan_bobot) / floatval($maxC3) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0) ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            }
+
+            // Perhitungan total bobot tetap sama
             $cadangan->total_bobot =
                 ($cadangan->normalisasi_c1 * $bobotC1) +
                 ($cadangan->normalisasi_c2 * $bobotC2) +
@@ -554,19 +627,42 @@ class HasilRekomendasiController extends Controller
         $minC1 = $detailAlternatif->min('umur_cadangan_bobot') ?? 1;
         $minC2 = $detailAlternatif->min('umur_masa_berlaku_izin_bobot') ?? 1;
         $minC3 = $detailAlternatif->min('status_pembebasan_bobot') ?? 1;
+        $maxC1 = $detailAlternatif->max('umur_cadangan_bobot') ?? 1;
+        $maxC2 = $detailAlternatif->max('umur_masa_berlaku_izin_bobot') ?? 1;
+        $maxC3 = $detailAlternatif->max('status_pembebasan_bobot') ?? 1;;
 
         $bobotC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('bobot_kriteria') ?? 0;
         $bobotC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('bobot_kriteria') ?? 0;
         $bobotC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('bobot_kriteria') ?? 0;
 
         foreach ($detailAlternatif as $cadangan) {
-            $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0)
-                ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
-            $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0)
-                ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
-            $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0)
-                ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            // Dapatkan jenis kriteria dari database
+            $jenisC1 = KriteriaModel::where('nama_kriteria', 'Umur Cadangan')->value('jenis_kriteria');
+            $jenisC2 = KriteriaModel::where('nama_kriteria', 'Umur Masa Berlaku Izin')->value('jenis_kriteria');
+            $jenisC3 = KriteriaModel::where('nama_kriteria', 'Status Pembebasan')->value('jenis_kriteria');
 
+            // Normalisasi C1 (Umur Cadangan)
+            if ($jenisC1 == 'Benefit') {
+                $cadangan->normalisasi_c1 = ($maxC1 > 0) ? floatval($cadangan->umur_cadangan_bobot) / floatval($maxC1) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c1 = ($cadangan->umur_cadangan_bobot > 0) ? floatval($minC1) / floatval($cadangan->umur_cadangan_bobot) : 0;
+            }
+
+            // Normalisasi C2 (Umur Masa Berlaku Izin)
+            if ($jenisC2 == 'Benefit') {
+                $cadangan->normalisasi_c2 = ($maxC2 > 0) ? floatval($cadangan->umur_masa_berlaku_izin_bobot) / floatval($maxC2) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c2 = ($cadangan->umur_masa_berlaku_izin_bobot > 0) ? floatval($minC2) / floatval($cadangan->umur_masa_berlaku_izin_bobot) : 0;
+            }
+
+            // Normalisasi C3 (Status Pembebasan)
+            if ($jenisC3 == 'Benefit') {
+                $cadangan->normalisasi_c3 = ($maxC3 > 0) ? floatval($cadangan->status_pembebasan_bobot) / floatval($maxC3) : 0;
+            } else { // Cost
+                $cadangan->normalisasi_c3 = ($cadangan->status_pembebasan_bobot > 0) ? floatval($minC3) / floatval($cadangan->status_pembebasan_bobot) : 0;
+            }
+
+            // Perhitungan total bobot tetap sama
             $cadangan->total_bobot =
                 ($cadangan->normalisasi_c1 * $bobotC1) +
                 ($cadangan->normalisasi_c2 * $bobotC2) +

@@ -267,7 +267,8 @@
                         </div>
                     </div>
                     <span class="ms-4"style="font-size: 20px;">
-                        pada tahap perhitungan nilai preferensi ini didapat dari hasil jumlah perkalian baris matrik dari proses normalisasi dengan nilai bobot setiap kriteria
+                        pada tahap perhitungan nilai preferensi ini didapat dari hasil jumlah perkalian baris matrik dari
+                        proses normalisasi dengan nilai bobot setiap kriteria
                     </span>
                     <span class="ms-4"style="font-size: 20px;">
                         contoh pada alternatif IUP Clay Tlogowaru yaitu rumus perhitunganya meliputi :
